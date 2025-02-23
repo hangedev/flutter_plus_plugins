@@ -13,7 +13,7 @@ dependencies:
   plugin_platform_interface: ^2.1.4
   path_provider: 
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: master
       path: packages/path_provider/path_provider
 

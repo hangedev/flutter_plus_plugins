@@ -37,7 +37,7 @@ dependencies:
     sdk: flutter
   share_plus_platform_interface:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       ref: master
       path: packages/share_plus/share_plus_platform_interface
   file: ">=6.1.4 <8.0.0"
