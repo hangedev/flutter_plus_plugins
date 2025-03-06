@@ -99,7 +99,7 @@ export default class NetworkInfoPlusOhosPlugin implements FlutterPlugin, MethodC
   getBroadcastIP() {
     const ipInt:number = this.ipToInt(this.getWifiIPAddress() as string);
     const subnetMaskInt = this.ipToInt(this.getWifiSubnetMask() as string);
-    const broadcastInt = (ipInt & subnetMaskInt) | (~subnetMaskInt + 1);
+    const broadcastInt = (ipInt & subnetMaskInt) | (~subnetMaskInt);
     if (broadcastInt === 0) {
       return null;
     }
