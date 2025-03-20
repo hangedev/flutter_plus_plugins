@@ -8,34 +8,34 @@ dependencies:
     path: ../
   image_picker:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: master
       path: packages/image_picker/image_picker
   file_selector:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: master
       path: packages/file_selector/file_selector
   path_provider:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: master
       path: packages/path_provider/path_provider
 
 dependency_overrides:
   image_picker_ohos:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: br_optimize_har_structure
       path: packages/image_picker/image_picker_ohos
   file_selector_ohos:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: br_optimize_har_structure
       path: packages/file_selector/file_selector_ohos
   path_provider_ohos:
     git:
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
       ref: br_optimize_har_structure
       path: packages/path_provider/path_provider_ohos
 
