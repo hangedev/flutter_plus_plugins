@@ -27,47 +27,51 @@ export class DeviceMethodHandler implements MethodCallHandler {
     Log.d(TAG, 'onMethodCall step in');
     switch (call.method) {
       case "getDeviceInfo":
-        let data: Map<String, ESObject> = new Map();
-        data.set('deviceType', deviceInfo.deviceType);
-        data.set('manufacture', deviceInfo.manufacture);
-        data.set('brand', deviceInfo.brand);
-        data.set('marketName', deviceInfo.marketName);
-        data.set('productSeries', deviceInfo.productSeries);
-        data.set('productModel', deviceInfo.productModel);
-        data.set('softwareModel', deviceInfo.softwareModel);
-        data.set('hardwareModel', deviceInfo.hardwareModel);
-        data.set('hardwareProfile', deviceInfo.hardwareProfile);
-        data.set('serial', deviceInfo.serial);
-        data.set('bootloaderVersion', deviceInfo.bootloaderVersion);
-        data.set('abiList', deviceInfo.abiList);
-        data.set('securityPatchTag', deviceInfo.securityPatchTag);
-        data.set('displayVersion', deviceInfo.displayVersion);
-        data.set('incrementalVersion', deviceInfo.incrementalVersion);
-        data.set('osReleaseType', deviceInfo.osReleaseType);
-        data.set('osFullName', deviceInfo.osFullName);
-        data.set('majorVersion', deviceInfo.majorVersion);
-        data.set('seniorVersion', deviceInfo.seniorVersion);
-        data.set('featureVersion', deviceInfo.featureVersion);
-        data.set('buildVersion', deviceInfo.buildVersion);
-        data.set('sdkApiVersion', deviceInfo.sdkApiVersion);
-        data.set('firstApiVersion', deviceInfo.firstApiVersion);
-        data.set('versionId', deviceInfo.versionId);
-        data.set('buildType', deviceInfo.buildType);
-        data.set('buildUser', deviceInfo.buildUser);
-        data.set('buildHost', deviceInfo.buildHost);
-        data.set('buildTime', deviceInfo.buildTime);
-        data.set('buildRootHash', deviceInfo.buildRootHash);
-        data.set('udid', deviceInfo.udid);
-        data.set('distributionOSName', deviceInfo.distributionOSName);
-        data.set('distributionOSVersion', deviceInfo.distributionOSVersion);
-        data.set('distributionOSApiVersion', deviceInfo.distributionOSApiVersion);
-        data.set('distributionOSReleaseType', deviceInfo.distributionOSReleaseType);
-        data.set('ODID', deviceInfo.ODID);
-        result.success(data);
+        this.DeviceInfoAssemble().then((data: Map<String, ESObject>) => {
+          result.success(data);
+        });
         break;
       default:
         result.notImplemented();
         break;
     }
+  }
+
+  async DeviceInfoAssemble(): Promise<Map<String, ESObject>> {
+    let data: Map<String, ESObject> = new Map();
+    data.set('deviceType', deviceInfo.deviceType);
+    data.set('manufacture', deviceInfo.manufacture);
+    data.set('brand', deviceInfo.brand);
+    data.set('marketName', deviceInfo.marketName);
+    data.set('productSeries', deviceInfo.productSeries);
+    data.set('productModel', deviceInfo.productModel);
+    data.set('softwareModel', deviceInfo.softwareModel);
+    data.set('hardwareModel', deviceInfo.hardwareModel);
+    data.set('hardwareProfile', deviceInfo.hardwareProfile);
+    data.set('bootloaderVersion', deviceInfo.bootloaderVersion);
+    data.set('abiList', deviceInfo.abiList);
+    data.set('securityPatchTag', deviceInfo.securityPatchTag);
+    data.set('displayVersion', deviceInfo.displayVersion);
+    data.set('incrementalVersion', deviceInfo.incrementalVersion);
+    data.set('osReleaseType', deviceInfo.osReleaseType);
+    data.set('osFullName', deviceInfo.osFullName);
+    data.set('majorVersion', deviceInfo.majorVersion);
+    data.set('seniorVersion', deviceInfo.seniorVersion);
+    data.set('featureVersion', deviceInfo.featureVersion);
+    data.set('buildVersion', deviceInfo.buildVersion);
+    data.set('sdkApiVersion', deviceInfo.sdkApiVersion);
+    data.set('firstApiVersion', deviceInfo.firstApiVersion);
+    data.set('versionId', deviceInfo.versionId);
+    data.set('buildType', deviceInfo.buildType);
+    data.set('buildUser', deviceInfo.buildUser);
+    data.set('buildHost', deviceInfo.buildHost);
+    data.set('buildTime', deviceInfo.buildTime);
+    data.set('buildRootHash', deviceInfo.buildRootHash);
+    data.set('distributionOSName', deviceInfo.distributionOSName);
+    data.set('distributionOSVersion', deviceInfo.distributionOSVersion);
+    data.set('distributionOSApiVersion', deviceInfo.distributionOSApiVersion);
+    data.set('distributionOSReleaseType', deviceInfo.distributionOSReleaseType);
+    data.set('ODID', deviceInfo.ODID);
+    return data;
   }
 }
