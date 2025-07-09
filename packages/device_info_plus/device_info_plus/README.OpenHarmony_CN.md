@@ -1,5 +1,3 @@
-> 模板版本: v0.0.1
-
 <p align="center">
   <h1 align="center"> <code>device_info_plus</code> </h1>
 </p>
@@ -25,7 +23,6 @@ dependencies:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       ref: br_device_info_plus-v11.1.0_ohos
-
 ...
 ```
 
@@ -49,7 +46,6 @@ flutter pub get
 
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 
-
 ## 3. API
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
@@ -68,16 +64,17 @@ flutter pub get
 
 ---
 
+### BaseDeviceInfo API 
+| Name                | Description                         | Type     | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|----------|-------|---------|--------------|
+| toMap             | Returns the raw device information data map (deprecated) | function | / | Map<String, dynamic> | yes |
+| toString          | Returns string representation of the device info | function | / | String | yes |
+
+---
+
 ## 4. 属性
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
-
-### BaseDeviceInfo Filters 
-| Name                | Description                         | Type               | Input | Output  | ohos Support |
-|---------------------|-------------------------------------|--------------------|-------|---------|--------------|
-| data                | 获取原始设备信息数据字典 | Map<String, dynamic> | /     | /       | yes          |
-
----
 
 ### OhosDeviceInfo Filters 
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
@@ -107,6 +104,13 @@ flutter pub get
 | buildType           | 获取构建类型（如 "user/debug"） | String   | /     | /       | yes          |
 | buildTime           | 获取构建时间戳字符串 | String   | /     | /       | yes          |
 | odID                | 获取 ODID（OpenHarmony 设备 ID） | String   | /     | /       | yes          |
+
+---
+
+### BaseDeviceInfo Filters 
+| Name                | Description                         | Type               | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|--------------------|-------|---------|--------------|
+| data                | 获取原始设备信息数据字典 | Map<String, dynamic> | /     | /       | yes          |
 
 ---
 

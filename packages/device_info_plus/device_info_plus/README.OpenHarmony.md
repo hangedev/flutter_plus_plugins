@@ -1,5 +1,3 @@
-> Template version: v0.0.1
-
 <p align="center">
   <h1 align="center"> <code>device_info_plus</code> </h1>
 </p>
@@ -25,7 +23,6 @@ dependencies:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       ref: br_device_info_plus-v11.1.0_ohos
-      
 ...
 ```
 
@@ -49,7 +46,6 @@ This document is verified based on the following versions:
 
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 
-
 ## 3. API
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
@@ -68,17 +64,18 @@ This document is verified based on the following versions:
 
 ---
 
+### BaseDeviceInfo API 
+| Name                | Description                         | Type     | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|----------|-------|---------|--------------|
+| toMap             | Returns the raw device information data map (deprecated) | function | / | Map<String, dynamic> | yes |
+| toString          | Returns string representation of the device info | function | / | String | yes |
+
+---
+
 ## 4. Properties
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
  
-### BaseDeviceInfo Filters 
-| Name                | Description                         | Type               | Input | Output  | ohos Support |
-|---------------------|-------------------------------------|--------------------|-------|---------|--------------|
-| data                | Gets the raw device information data map | Map<String, dynamic> | /     | /       | yes          |
-
----
-
 ### OhosDeviceInfo Filters 
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
@@ -107,6 +104,13 @@ This document is verified based on the following versions:
 | buildType           | Gets build type (e.g. "user/debug") | String   | /     | /       | yes          |
 | buildTime           | Gets build timestamp string         | String   | /     | /       | yes          |
 | odID                | Gets ODID (OpenHarmony Device ID)   | String   | /     | /       | yes          |
+
+---
+
+### BaseDeviceInfo Filters 
+| Name                | Description                         | Type               | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|--------------------|-------|---------|--------------|
+| data                | Gets the raw device information data map | Map<String, dynamic> | /     | /       | yes          |
 
 ---
 
