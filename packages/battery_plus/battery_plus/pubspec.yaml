@@ -22,6 +22,8 @@ flutter:
         fileName: src/battery_plus_web.dart
       windows:
         pluginClass: BatteryPlusWindowsPlugin
+      ohos:
+        pluginClass: BatteryPlusPlugin
 
 dependencies:
   flutter:
