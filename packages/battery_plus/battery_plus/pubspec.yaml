@@ -14,6 +14,8 @@ flutter:
       android:
         package: dev.fluttercommunity.plus.battery
         pluginClass: BatteryPlusPlugin
+      ohos:
+        pluginClass: BatteryPlusPlugin
       ios:
         pluginClass: FPPBatteryPlusPlugin
       linux:
