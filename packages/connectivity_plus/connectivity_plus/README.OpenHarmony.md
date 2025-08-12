@@ -1,5 +1,3 @@
-> Template version: v0.0.1
-
 <p align="center">
   <h1 align="center"> <code>connectivity_plus</code> </h1>
 </p>
@@ -24,7 +22,7 @@ dependencies:
     git: 
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
-      ref: br_sensors_plus-v6.1.0_ohos
+      ref: br_connectivity_plus-v6.1.0_ohos
       
 ...
 ```
