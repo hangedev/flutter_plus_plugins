@@ -37,7 +37,7 @@ export default class Share {
     this.ability = ability;
   }
 
-  public async share(text: string, subject: string | null, withResult: boolean, result: MethodResult,): Promise<void> {
+  public async share(text: string, subject: string | null, withResult: boolean, result: MethodResult): Promise<void> {
     Log.i(TAG, "share");
     let record: systemShare.SharedRecord = {
       utd: uniformTypeDescriptor.getUniformDataTypeByMIMEType('text/plain'),
@@ -48,8 +48,7 @@ export default class Share {
     this.startShare(data, withResult, result);
   }
 
-  public async shareFiles(paths: List<string>, mimeTypes: List<string> | null, text: string, subject: string | null,
-    fileNameOverrides: string | null, withResult: boolean, result: MethodResult): Promise<void> {
+  public async shareFiles(paths: List<string>, mimeTypes: List<string> | null, text: string, subject: string | null, withResult: boolean, result: MethodResult): Promise<void> {
     Log.i(TAG, "shareFiles");
     this.clearShareCacheFolder()
     let fileUris = await this.getUrisForPaths(paths)
@@ -63,7 +62,7 @@ export default class Share {
           utd: this.getUniformTypeDescriptor(fileUris![0]),
           uri: fileUris[0],
           content: text,
-          title: fileNameOverrides?.toString(),
+          title: subject!
         }
         data = new systemShare.SharedData(record);
       } else {
@@ -101,13 +100,11 @@ export default class Share {
         controller.on('dismiss', () => {
           result.success('');
         });
-        withResult = false;
       }
       controller.show(this.ability?.context, {
         previewMode: systemShare.SharePreviewMode.DETAIL,
         selectionMode: systemShare.SelectionMode.BATCH
       });
-      withResult = true;
     } catch (err) {
       Log.e(TAG, 'err:' + JSON.stringify(err));
     }

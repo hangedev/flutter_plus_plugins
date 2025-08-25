@@ -31,7 +31,7 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
     Log.i(TAG, "onMethodCall step in");
     let method: string = call.method;
     Log.i(TAG, "Received '" + method + "' message.");
-    const isWithResult: boolean = true;
+    const isWithResult: boolean = call.method.endsWith('WithResult');
     try {
       switch (method) {
         case 'shareUri':
@@ -41,23 +41,23 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
           }
           break;
         case 'share':
+        case 'shareWithResult':
           this.share?.share(
             call.argument('text') as string,
             call.argument('subject') as string,
             isWithResult,
-            result,
-          );
+            result);
           if (!isWithResult) {
             result.success("dev.fluttercommunity.plus/share/unavailable");
           }
           break;
         case 'shareFiles':
+        case 'shareFilesWithResult':
           this.share?.shareFiles(
             call.argument('paths'),
             call.argument('mimeTypes'),
             call.argument('text'),
             call.argument('subject'),
-            call.argument('fileNameOverrides'),
             isWithResult,
             result);
           if (!isWithResult) {
