@@ -24,8 +24,7 @@ void main() {
           log.add(methodCall);
           switch (methodCall.method) {
             case 'check':
-              // Simulate returning a list of string of connectivity statuses
-              return ['wifi', 'mobile'];
+              return 'wifi';
             default:
               return null;
           }
@@ -39,13 +38,12 @@ void main() {
         (MethodCall methodCall) async {
           switch (methodCall.method) {
             case 'listen':
-              // Simulate returning a comma-separated string of connectivity statuses
               await TestDefaultBinaryMessengerBinding
                   .instance.defaultBinaryMessenger
                   .handlePlatformMessage(
                 methodChannelConnectivity.eventChannel.name,
                 methodChannelConnectivity.eventChannel.codec
-                    .encodeSuccessEnvelope(['wifi', 'mobile']),
+                    .encodeSuccessEnvelope('wifi'),
                 (_) {},
               );
               break;
@@ -58,19 +56,15 @@ void main() {
       );
     });
 
-    // Test adjusted to handle multiple connectivity types
     test('onConnectivityChanged', () async {
       final result =
           await methodChannelConnectivity.onConnectivityChanged.first;
-      expect(result,
-          containsAll([ConnectivityResult.wifi, ConnectivityResult.mobile]));
+      expect(result, ConnectivityResult.wifi);
     });
 
-    // Test adjusted to handle multiple connectivity types
     test('checkConnectivity', () async {
       final result = await methodChannelConnectivity.checkConnectivity();
-      expect(result,
-          containsAll([ConnectivityResult.wifi, ConnectivityResult.mobile]));
+      expect(result, ConnectivityResult.wifi);
       expect(
         log,
         <Matcher>[

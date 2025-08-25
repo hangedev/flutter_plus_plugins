@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:web/web.dart';
+import 'dart:html' as html show window;
 
 import 'package:connectivity_plus_platform_interface/connectivity_plus_platform_interface.dart';
 
@@ -9,25 +9,25 @@ import '../connectivity_plus_web.dart';
 class DartHtmlConnectivityPlugin extends ConnectivityPlusWebPlugin {
   /// Checks the connection status of the device.
   @override
-  Future<List<ConnectivityResult>> checkConnectivity() async {
-    return (window.navigator.onLine)
-        ? [ConnectivityResult.wifi]
-        : [ConnectivityResult.none];
+  Future<ConnectivityResult> checkConnectivity() async {
+    return (html.window.navigator.onLine ?? false)
+        ? ConnectivityResult.wifi
+        : ConnectivityResult.none;
   }
 
-  StreamController<List<ConnectivityResult>>? _connectivityResult;
+  StreamController<ConnectivityResult>? _connectivityResult;
 
   /// Returns a Stream of ConnectivityResults changes.
   @override
-  Stream<List<ConnectivityResult>> get onConnectivityChanged {
+  Stream<ConnectivityResult> get onConnectivityChanged {
     if (_connectivityResult == null) {
-      _connectivityResult =
-          StreamController<List<ConnectivityResult>>.broadcast();
-      const EventStreamProvider<Event>('online').forTarget(window).listen((_) {
-        _connectivityResult!.add([ConnectivityResult.wifi]);
+      _connectivityResult = StreamController<ConnectivityResult>.broadcast();
+      // Fallback to dart:html window.onOnline / window.onOffline
+      html.window.onOnline.listen((event) {
+        _connectivityResult!.add(ConnectivityResult.wifi);
       });
-      const EventStreamProvider<Event>('offline').forTarget(window).listen((_) {
-        _connectivityResult!.add([ConnectivityResult.none]);
+      html.window.onOffline.listen((event) {
+        _connectivityResult!.add(ConnectivityResult.none);
       });
     }
     return _connectivityResult!.stream;

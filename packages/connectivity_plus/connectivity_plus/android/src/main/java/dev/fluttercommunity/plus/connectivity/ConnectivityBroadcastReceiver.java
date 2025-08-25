@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import io.flutter.plugin.common.EventChannel;
-import java.util.List;
 
 /**
  * The ConnectivityBroadcastReceiver receives the connectivity updates and send them to the UIThread
@@ -47,40 +45,18 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver
           new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(Network network) {
-              // onAvailable is called when the phone switches to a new network
-              // e.g. the phone was offline and gets wifi connection
-              // or the phone was on wifi and now switches to mobile.
-              // The plugin sends the current capability connection to the users.
-              sendEvent(connectivity.getCapabilitiesFromNetwork(network));
-            }
-
-            @Override
-            public void onCapabilitiesChanged(
-                Network network, NetworkCapabilities networkCapabilities) {
-              // This callback is called multiple times after a call to onAvailable
-              // this also causes multiple callbacks to the Flutter layer.
-              sendEvent(connectivity.getCapabilitiesList(networkCapabilities));
+              sendEvent();
             }
 
             @Override
             public void onLost(Network network) {
-              // This callback is called when a capability is lost.
-              //
-              // The provided Network object contains information about the
-              // network capability that has been lost, so we cannot use it.
-              //
-              // Instead, post the current network but with a delay long enough
-              // that we avoid a race condition.
-              sendCurrentStatusWithDelay();
+              sendEvent(Connectivity.CONNECTIVITY_NONE);
             }
           };
       connectivity.getConnectivityManager().registerDefaultNetworkCallback(networkCallback);
     } else {
       context.registerReceiver(this, new IntentFilter(CONNECTIVITY_ACTION));
     }
-    // Need to emit first event with connectivity types without waiting for first change in system
-    // that might happen much later
-    sendEvent(connectivity.getNetworkTypes());
   }
 
   @Override
@@ -94,7 +70,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver
       try {
         context.unregisterReceiver(this);
       } catch (Exception e) {
-        // listen never called, ignore the error
+        //listen never called, ignore the error
       }
     }
   }
@@ -102,20 +78,17 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver
   @Override
   public void onReceive(Context context, Intent intent) {
     if (events != null) {
-      events.success(connectivity.getNetworkTypes());
+      events.success(connectivity.getNetworkType());
     }
   }
 
-  private void sendEvent(List<String> networkTypes) {
-    Runnable runnable = () -> events.success(networkTypes);
-    // Emit events on main thread
+  private void sendEvent() {
+    Runnable runnable = () -> events.success(connectivity.getNetworkType());
     mainHandler.post(runnable);
   }
 
-  private void sendCurrentStatusWithDelay() {
-    Runnable runnable = () -> events.success(connectivity.getNetworkTypes());
-    // Emit events on main thread
-    // 500 milliseconds to avoid race conditions
-    mainHandler.postDelayed(runnable, 500);
+  private void sendEvent(final String networkType) {
+    Runnable runnable = () -> events.success(networkType);
+    mainHandler.post(runnable);
   }
 }

@@ -1,9 +1,21 @@
+# Copyright (c) 2023 Hunan OpenValley Digital Industry Development Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 name: connectivity_plus
 description: Flutter plugin for discovering the state of the network (WiFi & mobile/cellular) connectivity on Android and iOS.
-version: 6.1.0
+version: 5.0.1
 homepage: https://github.com/fluttercommunity/plus_plugins
-repository: https://github.com/fluttercommunity/plus_plugins/tree/main/packages/connectivity_plus/connectivity_plus
-issue_tracker: https://github.com/fluttercommunity/plus_plugins/labels/connectivity_plus
+repository: https://gitcode.com/openharmony-sig/flutter_plus_plugins/tree/master/packages/connectivity_plus/connectivity_plus
+issue_tracker: https://gitcode.com/openharmony-sig/flutter_plus_plugins/issues
 topics:
   - connectivity
   - utils
@@ -22,13 +34,10 @@ flutter:
         pluginClass: ConnectivityPlugin
       ios:
         pluginClass: ConnectivityPlusPlugin
-        sharedDarwinSource: true
-
       linux:
         dartPluginClass: ConnectivityPlusLinuxPlugin
       macos:
-        pluginClass: ConnectivityPlusPlugin
-        sharedDarwinSource: true
+        pluginClass: ConnectivityPlugin
       web:
         pluginClass: ConnectivityPlusWebPlugin
         fileName: src/connectivity_plus_web.dart
@@ -43,7 +52,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  connectivity_plus_platform_interface: ^2.0.1
+  connectivity_plus_platform_interface: ^1.2.4
   web: ">=0.5.0 <2.0.0"
   meta: ^1.8.0
   nm: ^0.5.0
