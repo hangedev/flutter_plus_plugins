@@ -7,10 +7,9 @@
 #include <windows.h>
 
 #include <functional>
-#include <set>
 #include <string>
 
-enum class ConnectivityType { None, Ethernet, WiFi, Other, VPN };
+enum class ConnectivityType { None, Ethernet, WiFi };
 
 class NetworkListener;
 struct IConnectionPoint;
@@ -28,7 +27,7 @@ public:
   bool Init();
   void Cleanup();
 
-  std::set<ConnectivityType> GetConnectivityTypes() const;
+  ConnectivityType GetConnectivityType() const;
 
   bool StartListen(NetworkCallback pCallback);
   void StopListen();

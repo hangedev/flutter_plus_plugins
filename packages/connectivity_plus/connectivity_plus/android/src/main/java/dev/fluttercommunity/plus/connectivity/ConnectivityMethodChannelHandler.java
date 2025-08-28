@@ -29,7 +29,7 @@ class ConnectivityMethodChannelHandler implements MethodChannel.MethodCallHandle
   @Override
   public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
     if ("check".equals(call.method)) {
-      result.success(connectivity.getNetworkTypes());
+      result.success(connectivity.getNetworkType());
     } else {
       result.notImplemented();
     }

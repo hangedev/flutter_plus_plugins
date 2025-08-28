@@ -19,7 +19,7 @@ class ConnectivityPlusLinuxPlugin extends ConnectivityPlatform {
 
   /// Checks the connection status of the device.
   @override
-  Future<List<ConnectivityResult>> checkConnectivity() async {
+  Future<ConnectivityResult> checkConnectivity() async {
     final client = createClient();
     await client.connect();
     final connectivity = _getConnectivity(client);
@@ -28,44 +28,35 @@ class ConnectivityPlusLinuxPlugin extends ConnectivityPlatform {
   }
 
   NetworkManagerClient? _client;
-  StreamController<List<ConnectivityResult>>? _controller;
+  StreamController<ConnectivityResult>? _controller;
 
   /// Returns a Stream of ConnectivityResults changes.
   @override
-  Stream<List<ConnectivityResult>> get onConnectivityChanged {
-    _controller ??= StreamController<List<ConnectivityResult>>.broadcast(
+  Stream<ConnectivityResult> get onConnectivityChanged {
+    _controller ??= StreamController<ConnectivityResult>.broadcast(
       onListen: _startListenConnectivity,
       onCancel: _stopListenConnectivity,
     );
     return _controller!.stream;
   }
 
-  List<ConnectivityResult> _getConnectivity(NetworkManagerClient client) {
-    final List<ConnectivityResult> results = [];
-    if (client.connectivity == NetworkManagerConnectivityState.none) {
-      results.add(ConnectivityResult.none);
-    } else {
-      if (client.primaryConnectionType.contains('wireless')) {
-        results.add(ConnectivityResult.wifi);
-      }
-      if (client.primaryConnectionType.contains('ethernet')) {
-        results.add(ConnectivityResult.ethernet);
-      }
-      if (client.primaryConnectionType.contains('vpn')) {
-        results.add(ConnectivityResult.vpn);
-      }
-      if (client.primaryConnectionType.contains('bluetooth')) {
-        results.add(ConnectivityResult.bluetooth);
-      }
-      if (client.primaryConnectionType.contains('mobile')) {
-        results.add(ConnectivityResult.mobile);
-      }
-      // Assuming 'other' is a catch-all for unspecified types
-      if (results.isEmpty) {
-        results.add(ConnectivityResult.other);
-      }
+  ConnectivityResult _getConnectivity(NetworkManagerClient client) {
+    if (client.connectivity != NetworkManagerConnectivityState.full) {
+      return ConnectivityResult.none;
     }
-    return results;
+    if (client.primaryConnectionType.contains('wireless')) {
+      return ConnectivityResult.wifi;
+    }
+    if (client.primaryConnectionType.contains('ethernet')) {
+      return ConnectivityResult.ethernet;
+    }
+    if (client.primaryConnectionType.contains('vpn')) {
+      return ConnectivityResult.vpn;
+    }
+    if (client.primaryConnectionType.contains('bluetooth')) {
+      return ConnectivityResult.bluetooth;
+    }
+    return ConnectivityResult.mobile;
   }
 
   Future<void> _startListenConnectivity() async {
