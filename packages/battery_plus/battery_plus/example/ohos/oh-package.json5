@@ -6,8 +6,16 @@
   "main": "",
   "author": "",
   "license": "",
-  "dependencies": {},
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har"
+  },
   "devDependencies": {
     "@ohos/hypium": "1.0.6"
+  },
+  "overrides": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "integration_test": "file:./har/integration_test.har",
+    "battery_plus": "file:./har/battery_plus.har",
+    "@ohos/flutter_module": "file:./entry"
   }
 }
