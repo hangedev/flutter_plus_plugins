@@ -45,9 +45,3 @@ build/
 .project
 .classpath
 .settings
-
-**.har
-GeneratedPluginRegistrant.*
-pubspec.lock
-**/oh-package-lock.json5
-ohos/**/BuildProfile.ets
