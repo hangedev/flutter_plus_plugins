@@ -1,5 +1,3 @@
-> 模板版本: v0.0.1
-
 <p align="center">
   <h1 align="center"> <code>connectivity_plus</code> </h1>
 </p>
@@ -24,6 +22,7 @@ dependencies:
     git: 
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
+      ref: br_connectivity_plus-v6.1.0_ohos
 
 ...
 ```
@@ -46,8 +45,7 @@ flutter pub get
 
 在以下版本中已测试通过
 
-1. Flutter: 3.7.12-ohos-1.0.6; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 
 
 ### 2.2 权限要求
