@@ -35,7 +35,7 @@ flutter pub get
 
 ### 1.2 Usage
 
-For use cases [ohos/example](network_info_plus_ohos/example/lib/main.dart).
+For use cases [ohos/example](example/lib/main.dart).
 
 ## 2. Constraints
 
@@ -43,8 +43,8 @@ For use cases [ohos/example](network_info_plus_ohos/example/lib/main.dart).
 
 This document is verified based on the following versions:
 
-1. Flutter: 3.7.12-ohos-1.1.3; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
-2. Flutter: 3.22.1-ohos-1.0.3; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+1. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 ### 2.2 Permission Requirements
 
@@ -82,4 +82,4 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 ## 6. License
 
-This project is licensed under [The BSD-3-Clause (license)](network_info_plus_ohos/LICENSE).
+This project is licensed under [The BSD-3-Clause (license)](LICENSE).

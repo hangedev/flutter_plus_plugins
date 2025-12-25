@@ -35,7 +35,7 @@ flutter pub get
 
 ### 1.2 使用案例
 
-使用案例详见 [ohos/example](network_info_plus_ohos/example/lib/main.dart)。
+使用案例详见 [ohos/example](example/lib/main.dart)。
 
 ## 2. 约束与限制
 
@@ -43,8 +43,8 @@ flutter pub get
 
 在以下版本中已测试通过:
 
-1. Flutter: 3.7.12-ohos-1.1.3; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
-2. Flutter: 3.22.1-ohos-1.0.3; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+1. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 ### 2.2 权限要求
 
@@ -82,4 +82,4 @@ flutter pub get
 
 ## 6. 开源协议
 
-本项目基于 [The BSD-3-Clause (license)](network_info_plus_ohos/LICENSE)，请自由地享受和参与开源。
+本项目基于 [The BSD-3-Clause (license)](LICENSE)，请自由地享受和参与开源。
