@@ -1,6 +1,6 @@
 name: package_info_plus_platform_interface
 description: A common platform interface for the package_info_plus plugin.
-version: 3.0.1
+version: 3.2.1
 homepage: https://github.com/fluttercommunity/plus_plugins
 repository: https://github.com/fluttercommunity/plus_plugins/tree/main/packages/
 
@@ -14,7 +14,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^5.4.0
-  flutter_lints: ">=2.0.1 <6.0.0"
+  flutter_lints: ">=4.0.0 <6.0.0"
 
 environment:
   sdk: ">=2.18.0 <4.0.0"
