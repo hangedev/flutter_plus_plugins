@@ -51,33 +51,40 @@ void main() {
 
   test('sharing empty fails', () {
     expect(
-      () => sharePlatform.share(''),
+      () => sharePlatform.share(ShareParams()),
       throwsA(const TypeMatcher<AssertionError>()),
     );
     expect(
-      () => SharePlatform.instance.share(''),
+      () => SharePlatform.instance.share(ShareParams()),
       throwsA(const TypeMatcher<AssertionError>()),
     );
     verifyZeroInteractions(mockChannel);
   });
 
   test('sharing origin sets the right params', () async {
-    await sharePlatform.shareUri(
-      Uri.parse('https://pub.dev/packages/share_plus'),
-      sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+    await sharePlatform.share(
+      ShareParams(
+        uri: Uri.parse('https://pub.dev/packages/share_plus'),
+        sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+        excludedCupertinoActivities: [CupertinoActivityType.airDrop],
+      ),
     );
-    verify(mockChannel.invokeMethod<String>('shareUri', <String, dynamic>{
+    verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
       'uri': 'https://pub.dev/packages/share_plus',
       'originX': 1.0,
       'originY': 2.0,
       'originWidth': 3.0,
       'originHeight': 4.0,
+      'excludedCupertinoActivities': ['airDrop'],
     }));
 
     await sharePlatform.share(
-      'some text to share',
-      subject: 'some subject to share',
-      sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+      ShareParams(
+        text: 'some text to share',
+        subject: 'some subject to share',
+        sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+        excludedCupertinoActivities: [],
+      ),
     );
     verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
       'text': 'some text to share',
@@ -89,14 +96,17 @@ void main() {
     }));
 
     await withFile('tempfile-83649a.png', (File fd) async {
-      await sharePlatform.shareXFiles(
-        [XFile(fd.path)],
-        subject: 'some subject to share',
-        text: 'some text to share',
-        sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+      await sharePlatform.share(
+        ShareParams(
+          files: [XFile(fd.path)],
+          subject: 'some subject to share',
+          text: 'some text to share',
+          sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+          excludedCupertinoActivities: null,
+        ),
       );
       verify(mockChannel.invokeMethod<String>(
-        'shareFiles',
+        'share',
         <String, dynamic>{
           'paths': [fd.path],
           'mimeTypes': ['image/png'],
@@ -113,8 +123,8 @@ void main() {
 
   test('sharing file sets correct mimeType', () async {
     await withFile('tempfile-83649b.png', (File fd) async {
-      await sharePlatform.shareXFiles([XFile(fd.path)]);
-      verify(mockChannel.invokeMethod<String>('shareFiles', <String, dynamic>{
+      await sharePlatform.share(ShareParams(files: [XFile(fd.path)]));
+      verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
         'paths': [fd.path],
         'mimeTypes': ['image/png'],
       }));
@@ -123,8 +133,12 @@ void main() {
 
   test('sharing file sets passed mimeType', () async {
     await withFile('tempfile-83649c.png', (File fd) async {
-      await sharePlatform.shareXFiles([XFile(fd.path, mimeType: '*/*')]);
-      verify(mockChannel.invokeMethod<String>('shareFiles', <String, dynamic>{
+      await sharePlatform.share(
+        ShareParams(
+          files: [XFile(fd.path, mimeType: '*/*')],
+        ),
+      );
+      verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
         'paths': [fd.path],
         'mimeTypes': ['*/*'],
       }));
@@ -138,23 +152,40 @@ void main() {
     );
 
     expect(
-      sharePlatform.share('some text to share'),
+      sharePlatform.share(
+        ShareParams(text: 'some text to share'),
+      ),
       completion(equals(resultUnavailable)),
     );
 
     await withFile('tempfile-83649d.png', (File fd) async {
       expect(
-        sharePlatform.shareXFiles([XFile(fd.path)]),
+        sharePlatform.share(
+          ShareParams(
+            files: [XFile(fd.path)],
+          ),
+        ),
         completion(equals(resultUnavailable)),
       );
     });
   });
 
   test('withResult methods invoke normal share on non IOS & Android', () async {
-    await sharePlatform.share(
-      'some text to share',
-      subject: 'some subject to share',
-      sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+    // Setup mockito to return a raw result instead of null
+    const success = ShareResult("raw result", ShareResultStatus.success);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(MethodChannelShare.channel,
+            (MethodCall call) async {
+      await mockChannel.invokeMethod<void>(call.method, call.arguments);
+      return success.raw;
+    });
+
+    final result = await sharePlatform.share(
+      ShareParams(
+        text: 'some text to share',
+        subject: 'some subject to share',
+        sharePositionOrigin: const Rect.fromLTWH(1.0, 2.0, 3.0, 4.0),
+      ),
     );
     verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
       'text': 'some text to share',
@@ -164,13 +195,19 @@ void main() {
       'originWidth': 3.0,
       'originHeight': 4.0,
     }));
+    expect(result, success);
 
     await withFile('tempfile-83649e.png', (File fd) async {
-      await sharePlatform.shareXFiles([XFile(fd.path)]);
-      verify(mockChannel.invokeMethod<String>('shareFiles', <String, dynamic>{
+      final result = await sharePlatform.share(
+        ShareParams(
+          files: [XFile(fd.path)],
+        ),
+      );
+      verify(mockChannel.invokeMethod<String>('share', <String, dynamic>{
         'paths': [fd.path],
         'mimeTypes': ['image/png'],
       }));
+      expect(result, success);
     });
   });
 }
