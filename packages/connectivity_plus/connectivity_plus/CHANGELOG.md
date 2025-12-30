@@ -1,3 +1,36 @@
+## 7.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **FEAT**(connectivity_plus): Change Android compile SDK, update Android build config ([#3667](https://github.com/fluttercommunity/plus_plugins/issues/3667)). ([01b596a0](https://github.com/fluttercommunity/plus_plugins/commit/01b596a05204286903451a8d65a9186e4956f065))
+
+## 6.1.5
+
+ - **DOCS**(all): improve documentation across multiple README files ([#3630](https://github.com/fluttercommunity/plus_plugins/issues/3630)). ([643e12df](https://github.com/fluttercommunity/plus_plugins/commit/643e12dfe0389dc21b49bd31ec03e7f38844d339))
+
+## 6.1.4
+
+ - **REFACTOR**(connectivity_plus): removed unused code for web ([#3517](https://github.com/fluttercommunity/plus_plugins/issues/3517)). ([55ac8c5f](https://github.com/fluttercommunity/plus_plugins/commit/55ac8c5fa6f1192cf96e63de1506c82e95b00cda))
+
+## 6.1.3
+
+ - **FIX**(connectivity_plus): Resolve missing privacy manifest issue for iOS and MacOS ([#3458](https://github.com/fluttercommunity/plus_plugins/issues/3458)). ([dab92074](https://github.com/fluttercommunity/plus_plugins/commit/dab92074cbf7dece71a64854b4357eb5b62e2f4f))
+
+## 6.1.2
+
+ - **DOCS**(connectivity_plus): update package requirements ([#3409](https://github.com/fluttercommunity/plus_plugins/issues/3409)). ([cb8c5ead](https://github.com/fluttercommunity/plus_plugins/commit/cb8c5ead41bf8f1d5042a1109eac3e23305d3016))
+
+## 6.1.1
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+ - **FIX**(connectivity_plus): macOS Privacy Manifest ([#3390](https://github.com/fluttercommunity/plus_plugins/issues/3390)). ([170703b5](https://github.com/fluttercommunity/plus_plugins/commit/170703b525c5390682fb558235ce699d29923b29))
+
 ## 6.1.0
 
  - **FEAT**(connectivity_plus): Add Swift Package Manager support ([#3173](https://github.com/fluttercommunity/plus_plugins/issues/3173)). ([036afeeb](https://github.com/fluttercommunity/plus_plugins/commit/036afeeb549f24813256f5049def6a6a3740a4f2))
