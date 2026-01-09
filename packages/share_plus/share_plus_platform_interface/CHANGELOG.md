@@ -1,3 +1,17 @@
+## 6.1.0
+
+ - **FEAT**(share_plus): Added `excludedCupertinoActivities` share parameter ([#3376](https://github.com/fluttercommunity/plus_plugins/issues/3376)). ([f9fdadb4](https://github.com/fluttercommunity/plus_plugins/commit/f9fdadb41242ad2e36ddbf1ade82be6c5bb78ec4))
+
+## 6.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**(share_plus): SharePlus refactor ([#3404](https://github.com/fluttercommunity/plus_plugins/issues/3404)). ([0a19d460](https://github.com/fluttercommunity/plus_plugins/commit/0a19d46010b6ecf5c2f10771e33a39823f7c30b7))
+
+## 5.0.2
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+
 ## 5.0.1
 
  - **FIX**(share_plus): `mime` compatible with v2 (v1 still supported) ([#3309](https://github.com/fluttercommunity/plus_plugins/issues/3309)). ([401db75e](https://github.com/fluttercommunity/plus_plugins/commit/401db75efa24c40fd96a05e79d12801f92666efd))
