@@ -35,7 +35,7 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
     try {
       switch (method) {
         case 'shareUri':
-          this.share?.share(call.argument('uri') as string, null, false, result);
+          this.share?.share(call.argument('uri') as string, null, call.argument('title') as string, false, result);
           if (!isWithResult) {
             result.success(null);
           }
@@ -45,6 +45,7 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
           this.share?.share(
             call.argument('text') as string,
             call.argument('subject') as string,
+            call.argument('title') as string,
             isWithResult,
             result);
           if (!isWithResult) {
@@ -57,6 +58,7 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
             call.argument('paths'),
             call.argument('mimeTypes'),
             call.argument('text'),
+            call.argument('title'),
             call.argument('subject'),
             isWithResult,
             result);

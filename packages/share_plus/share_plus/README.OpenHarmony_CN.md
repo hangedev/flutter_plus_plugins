@@ -21,10 +21,10 @@
 
 dependencies:
   share_plus:
-    git: 
+    git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/share_plus/share_plus
-      ref: br_share_plus-v10.1.1_ohos
+      ref: br_share_plus-v12.0.1_ohos
 
 ...
 ```
@@ -48,18 +48,19 @@ flutter pub get
 在以下版本中已测试通过
 
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-
+2. Flutter: 3.27.5-ohos-0.0.2; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+3. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 ## 3. API
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### Share API 
-| Name                | Description                         | Type     | Input | Output  | ohos Support |
-|---------------------|-------------------------------------|----------|-------|---------|--------------|
-| shareUri            | 调用平台分享面板以分享URI | function | (Uri uri, {Rect? sharePositionOrigin}) | Future<ShareResult> | yes |
-| share               | 调用平台分享面板以分享文本（可选主题/位置） | function | (String text, {String? subject, Rect? sharePositionOrigin}) | Future<ShareResult> | yes |
-| shareXFiles         | 支持MIME类型处理分享多个文件 | function | (List<XFile> files, {String? subject, String? text, Rect? sharePositionOrigin, List<String>? fileNameOverrides}) | Future<ShareResult> | yes |
+### Share API
+| Name                | Description                         | Type     | Input                                                                                                              | Output  | ohos Support |
+|---------------------|-------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------|---------|--------------|
+| shareUri            | 调用平台分享面板以分享URI | function | (Uri uri, String title?, {Rect? sharePositionOrigin})                                                              | Future<ShareResult> | yes |
+| share               | 调用平台分享面板以分享文本（可选主题/位置） | function | (String text, {String? subject, Rect? sharePositionOrigin}, String title?)                                         | Future<ShareResult> | yes |
+| shareXFiles         | 支持MIME类型处理分享多个文件 | function | (List<XFile> files, {String? text, String? subject, String title?, Rect? sharePositionOrigin, List<String>? fileNameOverrides}) | Future<ShareResult> | yes |
 
 ---
 
@@ -67,7 +68,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### ShareResult Filters 
+### ShareResult Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | raw                 | 原始平台返回值（空字符串=用户取消分享，特殊值=功能不可用） | String | / | / | yes |
@@ -75,7 +76,7 @@ flutter pub get
 
 ---
 
-### ShareResultStatus Filters 
+### ShareResultStatus Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | success             | 用户选择了某个分享动作 | enum | / | / | yes |
