@@ -1,3 +1,33 @@
+## 7.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **FEAT**(battery_plus): Change Android compile SDK, update Android build config ([#3666](https://github.com/fluttercommunity/plus_plugins/issues/3666)). ([c2fe29ab](https://github.com/fluttercommunity/plus_plugins/commit/c2fe29ab224d1fca33905fe57110aee106da55e4))
+
+## 6.2.3
+
+ - **FIX**(battery_plus): Do not call hidden flag on Samsung with Android versions >= 12 ([#3641](https://github.com/fluttercommunity/plus_plugins/issues/3641)). ([a8764705](https://github.com/fluttercommunity/plus_plugins/commit/a87647056529ef88d319d9a27c75744c9db9ff53))
+ - **FIX**(battery_plus): batteryMonitoringEnabled should be set false when cancel on iOS ([#3634](https://github.com/fluttercommunity/plus_plugins/issues/3634)). ([9597aab6](https://github.com/fluttercommunity/plus_plugins/commit/9597aab680cc8d9768bca9e491705c60ad302b34))
+
+## 6.2.2
+
+ - **FIX**(battery_plus): Improve battery save mode check on Xiaomi devices ([#3555](https://github.com/fluttercommunity/plus_plugins/issues/3555)). ([32ba69ba](https://github.com/fluttercommunity/plus_plugins/commit/32ba69bafc6cc787eeb8e9df58eb572d22f4d42d))
+
+## 6.2.1
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+ - **FIX**(battery_plus): Incorrect minimum version configuration. ([#3364](https://github.com/fluttercommunity/plus_plugins/issues/3364)). ([56fc9847](https://github.com/fluttercommunity/plus_plugins/commit/56fc98473d29f97ed4a014b85585d06d2356fd9e))
+
+## 6.2.0
+
+ - **FEAT**(battery_plus): Add battery save mode check on MacOS ([#3332](https://github.com/fluttercommunity/plus_plugins/issues/3332)). ([0e8c9223](https://github.com/fluttercommunity/plus_plugins/commit/0e8c9223f00f801abeb203c25a79b8f19259a11c))
+
 ## 6.1.0
 
  - **FEAT**(battery_plus): Add Swift Package Manager support ([#3154](https://github.com/fluttercommunity/plus_plugins/issues/3154)). ([cba3279a](https://github.com/fluttercommunity/plus_plugins/commit/cba3279abf0faaa0b62323af0a33e118186b30fc))
