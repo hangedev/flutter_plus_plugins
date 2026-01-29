@@ -11,52 +11,115 @@ import 'package:test/test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('$accelerometerEvents are streamed', () async {
+  test('accelerometerEvents are streamed', () async {
     const channelName = 'dev.fluttercommunity.plus/sensors/accelerometer';
-    const sensorData = <double>[1.0, 2.0, 3.0];
+    final date = DateTime.now();
+    final sensorData = <double>[
+      1.0,
+      2.0,
+      3.0,
+      date.microsecondsSinceEpoch.toDouble(),
+    ];
+    _initializeFakeMethodChannel('setAccelerationSamplingPeriod');
     _initializeFakeSensorChannel(channelName, sensorData);
 
-    final event = await accelerometerEvents.first;
+    final event = await accelerometerEventStream().first;
 
     expect(event.x, sensorData[0]);
     expect(event.y, sensorData[1]);
     expect(event.z, sensorData[2]);
+    expect(event.timestamp, date);
   });
 
-  test('$gyroscopeEvents are streamed', () async {
+  test('gyroscopeEvents are streamed', () async {
     const channelName = 'dev.fluttercommunity.plus/sensors/gyroscope';
-    const sensorData = <double>[3.0, 4.0, 5.0];
+    final date = DateTime.now();
+    final sensorData = <double>[
+      3.0,
+      4.0,
+      5.0,
+      date.microsecondsSinceEpoch.toDouble(),
+    ];
+    _initializeFakeMethodChannel('setGyroscopeSamplingPeriod');
     _initializeFakeSensorChannel(channelName, sensorData);
 
-    final event = await gyroscopeEvents.first;
+    final event = await gyroscopeEventStream().first;
 
     expect(event.x, sensorData[0]);
     expect(event.y, sensorData[1]);
     expect(event.z, sensorData[2]);
+    expect(event.timestamp, date);
   });
 
-  test('$userAccelerometerEvents are streamed', () async {
+  test('userAccelerometerEvents are streamed', () async {
     const channelName = 'dev.fluttercommunity.plus/sensors/user_accel';
-    const sensorData = <double>[6.0, 7.0, 8.0];
+    final date = DateTime.now();
+    final sensorData = <double>[
+      6.0,
+      7.0,
+      8.0,
+      date.microsecondsSinceEpoch.toDouble(),
+    ];
+    _initializeFakeMethodChannel('setUserAccelerometerSamplingPeriod');
     _initializeFakeSensorChannel(channelName, sensorData);
 
-    final event = await userAccelerometerEvents.first;
+    final event = await userAccelerometerEventStream().first;
 
     expect(event.x, sensorData[0]);
     expect(event.y, sensorData[1]);
     expect(event.z, sensorData[2]);
+    expect(event.timestamp, date);
   });
 
-  test('$magnetometerEvents are streamed', () async {
+  test('magnetometerEvents are streamed', () async {
     const channelName = 'dev.fluttercommunity.plus/sensors/magnetometer';
-    const sensorData = <double>[8.0, 9.0, 10.0];
+    final date = DateTime.now();
+    final sensorData = <double>[
+      8.0,
+      9.0,
+      10.0,
+      date.microsecondsSinceEpoch.toDouble(),
+    ];
+    _initializeFakeMethodChannel('setMagnetometerSamplingPeriod');
     _initializeFakeSensorChannel(channelName, sensorData);
 
-    final event = await magnetometerEvents.first;
+    final event = await magnetometerEventStream().first;
 
     expect(event.x, sensorData[0]);
     expect(event.y, sensorData[1]);
     expect(event.z, sensorData[2]);
+    expect(event.timestamp, date);
+  });
+
+  test('barometerEvents are streamed', () async {
+    const channelName = 'dev.fluttercommunity.plus/sensors/barometer';
+    final date = DateTime.now();
+    final sensorData = <double>[
+      1000.0,
+      date.microsecondsSinceEpoch.toDouble(),
+    ];
+    _initializeFakeMethodChannel('setBarometerSamplingPeriod');
+    _initializeFakeSensorChannel(channelName, sensorData);
+
+    final event = await barometerEventStream().first;
+
+    expect(event.pressure, sensorData[0]);
+    expect(event.timestamp, date);
+  });
+}
+
+void _initializeFakeMethodChannel(String methodName) {
+  const standardMethod = StandardMethodCodec();
+
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMessageHandler('dev.fluttercommunity.plus/sensors/method',
+          (ByteData? message) async {
+    final methodCall = standardMethod.decodeMethodCall(message);
+    if (methodCall.method == methodName) {
+      return standardMethod.encodeSuccessEnvelope(null);
+    } else {
+      fail('Expected $methodName');
+    }
   });
 }
 

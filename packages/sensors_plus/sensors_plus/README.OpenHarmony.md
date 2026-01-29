@@ -23,7 +23,8 @@ dependencies:
   sensors_plus_ohos:
     git: 
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
-      path: packages/sensors_plus/sensors_plus/ohos
+      path: packages/sensors_plus/sensors_plus
+      ref: br_sensors_plus-v6.1.1_ohos
       
 ...
 ```
@@ -46,8 +47,8 @@ For use cases [ohos/example](ohos/example/lib/main.dart)
 
 This document is verified based on the following versions:
 
-1. Flutter: 3.7.12-ohos-1.0.6; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.22.0-ohos; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: oh-3.27.4-dev; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
 
 ### 2.2 Permission Requirements
 
@@ -70,10 +71,11 @@ Open  `entry/src/main/module.json5` and add the following information:
 ### Sensors API 
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
-| accelerometerEvents | A broadcast stream of events from the device accelerometer | function | / | Stream<AccelerometerEvent> | yes |
-| gyroscopeEvents     | A broadcast stream of events from the device gyroscope | function | / | Stream<GyroscopeEvent> | yes |
-| userAccelerometerEvents | Events from the device accelerometer with gravity removed | function | / | Stream<UserAccelerometerEvent> | yes |
-| magnetometerEvents  | A broadcast stream of events from the device magnetometer | function | / | Stream<MagnetometerEvent> | yes |
+| accelerometerEventStream | A broadcast stream of events from the device accelerometer | function | / | Stream<AccelerometerEvent> | yes |
+| gyroscopeEventStream     | A broadcast stream of events from the device gyroscope | function | / | Stream<GyroscopeEvent> | yes |
+| userAccelerometerEventStream | Events from the device accelerometer with gravity removed | function | / | Stream<UserAccelerometerEvent> | yes |
+| magnetometerEventStream  | A broadcast stream of events from the device magnetometer | function | / | Stream<MagnetometerEvent> | yes |
+| barometerEventStream    | A broadcast stream of events from the device barometer | function | / | Stream<BarometerEvent> | yes |
 
 ---
 
@@ -114,6 +116,14 @@ Open  `entry/src/main/module.json5` and add the following information:
 | x                   | Ambient magnetic field along X-axis (μT) | double | / | / | yes |
 | y                   | Ambient magnetic field along Y-axis (μT) | double | / | / | yes |
 | z                   | Ambient magnetic field along Z-axis (μT) | double | / | / | yes |
+
+---
+
+### MagnetometerEvent Filters 
+| Name                | Description                         | Type     | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|----------|-------|---------|--------------|
+| pressure            | Ambient air pressure around the sensor (unit: hPa) | double   | / | / | yes          |
+| timestamp           | Event timestamp                     | DateTime | / | / | yes          |
 
 ---
 
