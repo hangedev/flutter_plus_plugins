@@ -5,11 +5,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.Nullable;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /** Forms and launches intents. */
 public final class IntentSender {
@@ -59,6 +63,23 @@ public final class IntentSender {
     }
   }
 
+  /** Creates an intent and launches it as a Service. */
+  void sendService(Intent intent) {
+    if (applicationContext == null) {
+      Log.wtf(TAG, "Trying to send an intent before the applicationContext was initialized.");
+      return;
+    }
+
+    Log.v(TAG, "Sending service intent " + intent);
+
+    if (activity != null) {
+      activity.startService(intent);
+    } else {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      applicationContext.startService(intent);
+    }
+  }
+
   /**
    * Like with {@code send}, creates and launches an intent with the given params, but wraps the
    * {@code Intent} with {@code Intent.createChooser}.
@@ -99,6 +120,41 @@ public final class IntentSender {
 
     final PackageManager packageManager = applicationContext.getPackageManager();
     return packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null;
+  }
+
+  /**
+   * Get the default activity that will resolve the intent
+   *
+   * <p>This will fail to create and send the intent if {@code applicationContext} hasn't been set *
+   * at the time of calling.
+   *
+   * <p>This currently only supports resolving activities.
+   *
+   * @param intent Fully built intent.
+   * @return Whether the package manager found {@link android.content.pm.ResolveInfo} using its
+   *     {@link PackageManager#resolveActivity(Intent, int)} method.
+   * @see #buildIntent(String, Integer, String, Uri, Bundle, String, ComponentName, String)
+   */
+  @Nullable
+  Map<String, Object> getResolvedActivity(Intent intent) {
+    if (applicationContext == null) {
+      Log.wtf(TAG, "Trying to resolve an activity before the applicationContext was initialized.");
+      return null;
+    }
+
+    final PackageManager packageManager = applicationContext.getPackageManager();
+    ResolveInfo resolveInfo =
+        packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+    if (resolveInfo != null) {
+      Map<String, Object> resultMap = new HashMap<>();
+      resultMap.put("activityName", resolveInfo.activityInfo.name);
+      resultMap.put("packageName", resolveInfo.activityInfo.packageName);
+      resultMap.put("appName", resolveInfo.loadLabel(packageManager));
+      return resultMap;
+    }
+
+    return null;
   }
 
   /** Caches the given {@code activity} to use for {@link #send}. */
@@ -174,5 +230,9 @@ public final class IntentSender {
     }
 
     return intent;
+  }
+
+  public Intent parse(String uri) throws URISyntaxException {
+    return Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
   }
 }
