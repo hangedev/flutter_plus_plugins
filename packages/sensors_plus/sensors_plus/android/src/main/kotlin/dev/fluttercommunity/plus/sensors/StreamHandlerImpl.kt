@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.SystemClock
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 
@@ -15,15 +16,19 @@ internal class StreamHandlerImpl(
 
     private var sensor: Sensor? = null
 
+    private var timestampMicroAtBoot: Long = System.currentTimeMillis() * 1000 - SystemClock.elapsedRealtimeNanos() / 1000
+
+    var samplingPeriod = 200000
+        set(value) {
+            field = value
+            updateRegistration()
+        }
+
     override fun onListen(arguments: Any?, events: EventSink) {
         sensor = sensorManager.getDefaultSensor(sensorType)
         if (sensor != null) {
             sensorEventListener = createSensorEventListener(events)
-            sensorManager.registerListener(
-                sensorEventListener,
-                sensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
+            sensorManager.registerListener(sensorEventListener, sensor, samplingPeriod)
         } else {
             events.error(
                 "NO_SENSOR",
@@ -36,6 +41,14 @@ internal class StreamHandlerImpl(
     override fun onCancel(arguments: Any?) {
         if (sensor != null) {
             sensorManager.unregisterListener(sensorEventListener)
+            sensorEventListener = null
+        }
+    }
+
+    private fun updateRegistration() {
+        if (sensorEventListener != null) {
+            sensorManager.unregisterListener(sensorEventListener)
+            sensorManager.registerListener(sensorEventListener, sensor, samplingPeriod)
         }
     }
 
@@ -45,6 +58,7 @@ internal class StreamHandlerImpl(
             Sensor.TYPE_LINEAR_ACCELERATION -> "User Accelerometer"
             Sensor.TYPE_GYROSCOPE -> "Gyroscope"
             Sensor.TYPE_MAGNETIC_FIELD -> "Magnetometer"
+            Sensor.TYPE_PRESSURE -> "Barometer"
             else -> "Undefined"
         }
     }
@@ -54,10 +68,14 @@ internal class StreamHandlerImpl(
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
 
             override fun onSensorChanged(event: SensorEvent) {
-                val sensorValues = DoubleArray(event.values.size)
+                val sensorValues = DoubleArray(event.values.size + 1)
                 event.values.forEachIndexed { index, value ->
                     sensorValues[index] = value.toDouble()
                 }
+
+                val timestampMicro = timestampMicroAtBoot + (event.timestamp / 1000)
+                sensorValues[event.values.size] = timestampMicro.toDouble()
+
                 events.success(sensorValues)
             }
         }

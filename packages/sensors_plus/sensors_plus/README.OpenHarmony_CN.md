@@ -23,7 +23,8 @@ dependencies:
   sensors_plus_ohos:
     git: 
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
-      path: packages/sensors_plus/sensors_plus/ohos
+      path: packages/sensors_plus/sensors_plus
+      ref: br_sensors_plus-v6.1.1_ohos
 
 ...
 ```
@@ -46,8 +47,8 @@ flutter pub get
 
 在以下版本中已测试通过
 
-1. Flutter: 3.7.12-ohos-1.0.6; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.22.0-ohos; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: oh-3.27.4-dev; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
 
 ### 2.2 权限要求
 
@@ -70,10 +71,11 @@ flutter pub get
 ### Sensors API 
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
-| accelerometerEvents | 获取设备加速度计的广播流事件 | function | / | Stream<AccelerometerEvent> | yes |
-| gyroscopeEvents     | 获取设备陀螺仪的广播流事件 | function | / | Stream<GyroscopeEvent> | yes |
-| userAccelerometerEvents | 获取去除重力影响的设备加速度计事件流 | function | / | Stream<UserAccelerometerEvent> | yes |
-| magnetometerEvents  | 获取设备磁力计的广播流事件 | function | / | Stream<MagnetometerEvent> | yes |
+| accelerometerEventStream | 获取设备加速度计的广播流事件 | function | / | Stream<AccelerometerEvent> | yes |
+| gyroscopeEventStream     | 获取设备陀螺仪的广播流事件 | function | / | Stream<GyroscopeEvent> | yes |
+| userAccelerometerEventStream | 获取去除重力影响的设备加速度计事件流 | function | / | Stream<UserAccelerometerEvent> | yes |
+| magnetometerEventStream  | 获取设备磁力计的广播流事件 | function | / | Stream<MagnetometerEvent> | yes |
+| barometerEventStream  | 获取的设备气压计事件 | function | / | Stream<BarometerEvent> | yes |
 
 ---
 
@@ -114,6 +116,14 @@ flutter pub get
 | x                   | X轴环境磁场强度（单位μT） | double | / | / | yes |
 | y                   | Y轴环境磁场强度（单位μT） | double | / | / | yes |
 | z                   | Z轴环境磁场强度（单位μT） | double | / | / | yes |
+
+---
+
+### MagnetometerEvent Filters 
+| Name                | Description                         | Type     | Input | Output  | ohos Support |
+|---------------------|-------------------------------------|----------|-------|---------|--------------|
+| pressure            | 传感器周围的气压（单位 hPa） | double   | / | / | yes |
+| timestamp           | 事件的时间戳                | DateTime | / | / | yes |
 
 ---
 
