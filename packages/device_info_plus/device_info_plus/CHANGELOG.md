@@ -1,3 +1,83 @@
+## 12.3.0
+
+ - **FEAT**(device_info_plus): Add identifiers for iPad Pro 11-Inch (M5) models ([#3708](https://github.com/fluttercommunity/plus_plugins/issues/3708)). ([61786a1d](https://github.com/fluttercommunity/plus_plugins/commit/61786a1d680d8c3886b4fceb34d689ec94e10d8a))
+
+## 12.2.0
+
+ - **FIX**(device_info_plus): correct Mac model name mappings ([#3690](https://github.com/fluttercommunity/plus_plugins/issues/3690)). ([5040a78e](https://github.com/fluttercommunity/plus_plugins/commit/5040a78e26e2abbc9b9e1e8cbb23b1e6e38ad32a))
+ - **FEAT**(device_info_plus): Add missing device identifiers for Macs on M4 ([#3700](https://github.com/fluttercommunity/plus_plugins/issues/3700)). ([b4dbd144](https://github.com/fluttercommunity/plus_plugins/commit/b4dbd1444c3104bc1f10af941907905d3070edcf))
+ - **FEAT**(device_info_plus): Add identifiers for new Apple devices on M5 chip ([#3698](https://github.com/fluttercommunity/plus_plugins/issues/3698)). ([4cc3f07f](https://github.com/fluttercommunity/plus_plugins/commit/4cc3f07fd4836e5417089630439fcb8a9cdb6bf5))
+
+## 12.1.0
+
+ - **FEAT**(device_info_plus): add mapping for new iPhone 17 series models ([#3676](https://github.com/fluttercommunity/plus_plugins/issues/3676)). ([80eb9815](https://github.com/fluttercommunity/plus_plugins/commit/80eb98156aed96fbc214736964724604e9c80b4f))
+
+## 12.0.0
+
+> Note: This release has breaking changes.
+>
+> Plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **REFACTOR**(device_info_plus): remove `serialNumber` property from AndroidDeviceInfo ([#3663](https://github.com/fluttercommunity/plus_plugins/issues/3663)). ([d0fdc582](https://github.com/fluttercommunity/plus_plugins/commit/d0fdc582e8187f71522678e19b6329221b5f535d))
+ - **BREAKING** **FEAT**(device_info_plus): Change Android compile SDK, update Android build config ([#3668](https://github.com/fluttercommunity/plus_plugins/issues/3668)). ([32528e7f](https://github.com/fluttercommunity/plus_plugins/commit/32528e7f852893dd4448c448096e459e1950c7e4))
+
+## 11.5.0
+
+ - **FIX**(device_info_plus): Specify correct Dart and Flutter version requirements ([#3597](https://github.com/fluttercommunity/plus_plugins/issues/3597)). ([6ebc0ead](https://github.com/fluttercommunity/plus_plugins/commit/6ebc0ead68df477f06c6d4738a69a9e56223cf47))
+ - **FEAT**(device_info_plus): Add identifier for iPhone 16e ([#3596](https://github.com/fluttercommunity/plus_plugins/issues/3596)). ([e1152bb8](https://github.com/fluttercommunity/plus_plugins/commit/e1152bb87d702ff86aaf29e9b7362d8dfd3247e0))
+ - **FEAT**(device_info_plus): Add storage information ([#3536](https://github.com/fluttercommunity/plus_plugins/issues/3536)). ([fefe6ce7](https://github.com/fluttercommunity/plus_plugins/commit/fefe6ce7a04c01c39f0cf0ecd0855bce1d701883))
+
+## 11.4.0
+
+ - **FEAT**(device_info_plus): add ram information ([#3535](https://github.com/fluttercommunity/plus_plugins/issues/3535)). ([160a0182](https://github.com/fluttercommunity/plus_plugins/commit/160a01824cb8a245aec52eb3f5a1fa804ef791eb))
+ - **FEAT**(device_info_plus): allow to mock device info ([#3525](https://github.com/fluttercommunity/plus_plugins/issues/3525)). ([f78f32c4](https://github.com/fluttercommunity/plus_plugins/commit/f78f32c47fef8045f34944899f6082303182b615))
+
+## 11.3.3
+
+ - **FIX**(device_info_plus): handle nullability on getString(DEVICE_NAME) ([#3507](https://github.com/fluttercommunity/plus_plugins/issues/3507)). ([3201e056](https://github.com/fluttercommunity/plus_plugins/commit/3201e056b2a44ce74a3a9218fba59d71d9795379))
+
+## 11.3.2
+
+**Note:** This release bumps dependency `win32_registry` from `1.1.5` to `2.0.1`. It will not compile if you have Dependency Overrides for that package.
+
+ - **FIX**(device_info_plus): tighten dependency constraints ([#3497](https://github.com/fluttercommunity/plus_plugins/issues/3497)). ([c7e2428a](https://github.com/fluttercommunity/plus_plugins/commit/c7e2428a6075df4e37da9ef4934861c7cb0c3bee))
+ - **FIX**(device_info_plus): fix memory leak when calling DeviceInfoPlugin().macOsInfo ([#3474](https://github.com/fluttercommunity/plus_plugins/issues/3474)). ([1cbf2b56](https://github.com/fluttercommunity/plus_plugins/commit/1cbf2b5621465456221b50ade7ac6c2f3266788d))
+
+## 11.3.1
+
+- Retracted release due to [#3496](https://github.com/fluttercommunity/plus_plugins/issues/3496)
+
+## 11.3.0
+
+ - **FEAT**(device_info_plus): Add User Device Name in Android (PR [#3437](https://github.com/fluttercommunity/plus_plugins/issues/3437)) ([#3456](https://github.com/fluttercommunity/plus_plugins/issues/3456)). ([8c38a31d](https://github.com/fluttercommunity/plus_plugins/commit/8c38a31d7c1073d7011ec3e3193f6b99b3851ef1))
+
+## 11.2.2
+
+ - **FIX**(device_info_plus): Replace throwing exception with returning default values on Windows ([#3445](https://github.com/fluttercommunity/plus_plugins/issues/3445)). ([084730f8](https://github.com/fluttercommunity/plus_plugins/commit/084730f82436b474b31b16f6dc2d7b90585e899f))
+ - **DOCS**(device_info_plus): Update the documentation URL for property descriptions. ([#3441](https://github.com/fluttercommunity/plus_plugins/issues/3441)). ([743bec62](https://github.com/fluttercommunity/plus_plugins/commit/743bec626c909fdc8ba6d087006568cca60563d8))
+
+## 11.2.1
+
+ - **FIX**(device_info_plus): Resolve compilation issues with SPM enabled ([#3405](https://github.com/fluttercommunity/plus_plugins/issues/3405)). ([3f098c30](https://github.com/fluttercommunity/plus_plugins/commit/3f098c30320e1595c06b093e8eb9827a44435c5d))
+ - **FIX**(device_info_plus): device memory null error on Safari and Firefox ([#3401](https://github.com/fluttercommunity/plus_plugins/issues/3401)). ([2b7cb088](https://github.com/fluttercommunity/plus_plugins/commit/2b7cb0888cd725dc69e409590861fe8118058c4d))
+ - **FIX**(device_info_plus): add @Suppress(deprecate) to Build.SERIAL ([#3402](https://github.com/fluttercommunity/plus_plugins/issues/3402)). ([8e70d3f3](https://github.com/fluttercommunity/plus_plugins/commit/8e70d3f33d5f1c005dbb1aef733a8a8578989bac))
+
+## 11.2.0
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+ - **FIX**(device_info_plus): fix the error in the e2e test. ([#3382](https://github.com/fluttercommunity/plus_plugins/issues/3382)). ([3d06bf0e](https://github.com/fluttercommunity/plus_plugins/commit/3d06bf0ed8f1029df1230e4be6e75537abfcb19f))
+ - **FIX**(device_info_plus): Set correct Flutter and Dart versions requirements ([#3362](https://github.com/fluttercommunity/plus_plugins/issues/3362)). ([77861523](https://github.com/fluttercommunity/plus_plugins/commit/778615231c376c829d6241e7988f15a77bcaeb55))
+ - **FEAT**(device_info_plus): Return model name for iOS and MacOS devices ([#3358](https://github.com/fluttercommunity/plus_plugins/issues/3358)). ([63ca4cd8](https://github.com/fluttercommunity/plus_plugins/commit/63ca4cd8127e010650468a79532dd3a6047d2b31))
+ - **FEAT**(device_info_plus): Add the isiOSAppOnMac property for the iOS platform. ([#3383](https://github.com/fluttercommunity/plus_plugins/issues/3383)). ([e9077845](https://github.com/fluttercommunity/plus_plugins/commit/e9077845342023d325280985234b6a09d245ac02))
+
+## 11.1.1
+
+ - **FIX**(device_info_plus): Update privacy manifest paths ([#3347](https://github.com/fluttercommunity/plus_plugins/issues/3347)). ([46df2302](https://github.com/fluttercommunity/plus_plugins/commit/46df23023a5ba6c98edd31d5fd06bec5df40bd3b))
+
 ## 11.1.0
 
  - **FIX**(device_info_plus): Ignore `MissingPermission` lint error on Android ([#3317](https://github.com/fluttercommunity/plus_plugins/issues/3317)). ([6469523f](https://github.com/fluttercommunity/plus_plugins/commit/6469523fb14f32f7aa23892183693a8f502992d3))

@@ -1,16 +1,17 @@
 package dev.fluttercommunity.plus.device_info
 
 import android.app.ActivityManager
+import android.content.ContentResolver
 import android.content.pm.FeatureInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.DisplayMetrics
-import android.view.Display
-import android.view.WindowManager
+import android.provider.Settings
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import kotlin.collections.HashMap
+import android.os.StatFs
+import android.os.Environment
 
 /**
  * The implementation of [MethodChannel.MethodCallHandler] for the plugin. Responsible for
@@ -19,6 +20,7 @@ import kotlin.collections.HashMap
 internal class MethodCallHandlerImpl(
     private val packageManager: PackageManager,
     private val activityManager: ActivityManager,
+    private val contentResolver: ContentResolver,
 ) : MethodCallHandler {
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -38,6 +40,10 @@ internal class MethodCallHandlerImpl(
             build["model"] = Build.MODEL
             build["product"] = Build.PRODUCT
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                build["name"] = Settings.Global.getString(contentResolver, Settings.Global.DEVICE_NAME) ?: ""
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 build["supported32BitAbis"] = listOf(*Build.SUPPORTED_32_BIT_ABIS)
                 build["supported64BitAbis"] = listOf(*Build.SUPPORTED_64_BIT_ABIS)
@@ -53,6 +59,10 @@ internal class MethodCallHandlerImpl(
             build["isPhysicalDevice"] = !isEmulator
             build["systemFeatures"] = getSystemFeatures()
 
+            val statFs = StatFs(Environment.getDataDirectory().getPath())
+            build["freeDiskSize"] = statFs.getFreeBytes()
+            build["totalDiskSize"] = statFs.getTotalBytes()
+
             val version: MutableMap<String, Any> = HashMap()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 version["baseOS"] = Build.VERSION.BASE_OS
@@ -64,17 +74,12 @@ internal class MethodCallHandlerImpl(
             version["release"] = Build.VERSION.RELEASE
             version["sdkInt"] = Build.VERSION.SDK_INT
             build["version"] = version
-            build["isLowRamDevice"] = activityManager.isLowRamDevice
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                build["serialNumber"] = try {
-                    Build.getSerial()
-                } catch (ex: SecurityException) {
-                    Build.UNKNOWN
-                }
-            } else {
-                build["serialNumber"] = Build.SERIAL
-            }
 
+            val memoryInfo: ActivityManager.MemoryInfo = ActivityManager.MemoryInfo()
+            activityManager.getMemoryInfo(memoryInfo)
+            build["isLowRamDevice"] = memoryInfo.lowMemory
+            build["physicalRamSize"] = memoryInfo.totalMem / 1048576L // Mb
+            build["availableRamSize"] = memoryInfo.availMem / 1048576L // Mb
             result.success(build)
         } else {
             result.notImplemented()

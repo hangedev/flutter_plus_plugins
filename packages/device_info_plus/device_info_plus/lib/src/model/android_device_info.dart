@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:device_info_plus_platform_interface/model/base_device_info.dart';
+import 'package:meta/meta.dart';
 
 /// Information derived from `android.os.Build`.
 ///
@@ -23,20 +24,24 @@ class AndroidDeviceInfo extends BaseDeviceInfo {
     required this.manufacturer,
     required this.model,
     required this.product,
+    required this.name,
     required List<String> supported32BitAbis,
     required List<String> supported64BitAbis,
     required List<String> supportedAbis,
     required this.tags,
     required this.type,
     required this.isPhysicalDevice,
+    required this.freeDiskSize,
+    required this.totalDiskSize,
     required List<String> systemFeatures,
-    required this.serialNumber,
     required this.isLowRamDevice,
-  })  : supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
-        supported64BitAbis = List<String>.unmodifiable(supported64BitAbis),
-        supportedAbis = List<String>.unmodifiable(supportedAbis),
-        systemFeatures = List<String>.unmodifiable(systemFeatures),
-        super(data);
+    required this.physicalRamSize,
+    required this.availableRamSize,
+  }) : supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
+       supported64BitAbis = List<String>.unmodifiable(supported64BitAbis),
+       supportedAbis = List<String>.unmodifiable(supportedAbis),
+       systemFeatures = List<String>.unmodifiable(systemFeatures),
+       super(data);
 
   /// Android operating system version values derived from `android.os.Build.VERSION`.
   final AndroidBuildVersion version;
@@ -89,6 +94,10 @@ class AndroidDeviceInfo extends BaseDeviceInfo {
   /// https://developer.android.com/reference/android/os/Build#PRODUCT
   final String product;
 
+  /// The name of the device.
+  /// https://developer.android.com/reference/android/provider/Settings.Global#DEVICE_NAME
+  final String name;
+
   /// An ordered list of 32 bit ABIs supported by this device.
   /// Available only on Android L (API 21) and newer
   /// https://developer.android.com/reference/android/os/Build#SUPPORTED_32_BIT_ABIS
@@ -109,11 +118,21 @@ class AndroidDeviceInfo extends BaseDeviceInfo {
   final String tags;
 
   /// The type of build, like "user" or "eng".
-  /// https://developer.android.com/reference/android/os/Build#TIME
+  /// https://developer.android.com/reference/android/os/Build#TYPE
   final String type;
 
   /// `false` if the application is running in an emulator, `true` otherwise.
   final bool isPhysicalDevice;
+
+  /// Available disk size in bytes
+  ///
+  /// https://developer.android.com/reference/android/os/StatFs#getFreeBytes()
+  final int freeDiskSize;
+
+  /// Total disk size in bytes
+  ///
+  /// https://developer.android.com/reference/android/os/StatFs#getTotalBytes()
+  final int totalDiskSize;
 
   /// Describes what features are available on the current device.
   ///
@@ -131,21 +150,26 @@ class AndroidDeviceInfo extends BaseDeviceInfo {
   /// https://developer.android.com/reference/android/content/pm/PackageManager
   final List<String> systemFeatures;
 
-  /// Hardware serial number of the device, if available
-  ///
-  /// There are special restrictions on this identifier, more info here:
-  /// https://developer.android.com/reference/android/os/Build#getSerial()
-  final String serialNumber;
-
   /// `true` if the application is running on a low-RAM device, `false` otherwise.
   final bool isLowRamDevice;
+
+  /// Total physical RAM size of the device in megabytes
+  ///
+  /// https://developer.android.com/reference/android/app/ActivityManager.MemoryInfo#totalMem
+  final int physicalRamSize;
+
+  /// Current unallocated RAM size of the device in megabytes
+  ///
+  /// https://developer.android.com/reference/android/app/ActivityManager.MemoryInfo#availMem
+  final int availableRamSize;
 
   /// Deserializes from the message received from [_kChannel].
   static AndroidDeviceInfo fromMap(Map<String, dynamic> map) {
     return AndroidDeviceInfo._(
       data: map,
       version: AndroidBuildVersion._fromMap(
-          map['version']?.cast<String, dynamic>() ?? {}),
+        map['version']?.cast<String, dynamic>() ?? {},
+      ),
       board: map['board'],
       bootloader: map['bootloader'],
       brand: map['brand'],
@@ -158,19 +182,121 @@ class AndroidDeviceInfo extends BaseDeviceInfo {
       manufacturer: map['manufacturer'],
       model: map['model'],
       product: map['product'],
+      name: map['name'] ?? '',
       supported32BitAbis: _fromList(map['supported32BitAbis'] ?? <String>[]),
       supported64BitAbis: _fromList(map['supported64BitAbis'] ?? <String>[]),
       supportedAbis: _fromList(map['supportedAbis'] ?? []),
       tags: map['tags'],
       type: map['type'],
       isPhysicalDevice: map['isPhysicalDevice'],
+      freeDiskSize: map['freeDiskSize'],
+      totalDiskSize: map['totalDiskSize'],
       systemFeatures: _fromList(map['systemFeatures'] ?? []),
-      serialNumber: map['serialNumber'],
       isLowRamDevice: map['isLowRamDevice'],
+      physicalRamSize: map['physicalRamSize'],
+      availableRamSize: map['availableRamSize'],
     );
   }
 
-  /// Deserializes message as List<String>
+  /// Initializes the application metadata with mock values for testing.
+  @visibleForTesting
+  static AndroidDeviceInfo setMockInitialValues({
+    required AndroidBuildVersion version,
+    required String board,
+    required String bootloader,
+    required String brand,
+    required String device,
+    required String display,
+    required String fingerprint,
+    required String hardware,
+    required String host,
+    required String id,
+    required String manufacturer,
+    required String model,
+    required String product,
+    required String name,
+    required List<String> supported32BitAbis,
+    required List<String> supported64BitAbis,
+    required List<String> supportedAbis,
+    required String tags,
+    required String type,
+    required bool isPhysicalDevice,
+    required int freeDiskSize,
+    required int totalDiskSize,
+    required List<String> systemFeatures,
+    required bool isLowRamDevice,
+    required int physicalRamSize,
+    required int availableRamSize,
+  }) {
+    final Map<String, dynamic> data = {
+      'version': {
+        'baseOS': version.baseOS,
+        'sdkInt': version.sdkInt,
+        'release': version.release,
+        'codename': version.codename,
+        'incremental': version.incremental,
+        'previewSdkInt': version.previewSdkInt,
+        'securityPatch': version.securityPatch,
+      },
+      'board': board,
+      'bootloader': bootloader,
+      'brand': brand,
+      'device': device,
+      'display': display,
+      'fingerprint': fingerprint,
+      'hardware': hardware,
+      'host': host,
+      'id': id,
+      'manufacturer': manufacturer,
+      'model': model,
+      'product': product,
+      'name': name,
+      'supported32BitAbis': supported32BitAbis,
+      'supported64BitAbis': supported64BitAbis,
+      'supportedAbis': supportedAbis,
+      'tags': tags,
+      'type': type,
+      'isPhysicalDevice': isPhysicalDevice,
+      'freeDiskSize': freeDiskSize,
+      'totalDiskSize': totalDiskSize,
+      'systemFeatures': systemFeatures,
+      'isLowRamDevice': isLowRamDevice,
+      'physicalRamSize': physicalRamSize,
+      'availableRamSize': availableRamSize,
+    };
+
+    return AndroidDeviceInfo._(
+      data: data,
+      version: version,
+      board: board,
+      bootloader: bootloader,
+      brand: brand,
+      device: device,
+      display: display,
+      fingerprint: fingerprint,
+      hardware: hardware,
+      host: host,
+      id: id,
+      manufacturer: manufacturer,
+      model: model,
+      product: product,
+      name: name,
+      supported32BitAbis: _fromList(supported32BitAbis),
+      supported64BitAbis: _fromList(supported64BitAbis),
+      supportedAbis: _fromList(supportedAbis),
+      tags: tags,
+      type: type,
+      isPhysicalDevice: isPhysicalDevice,
+      freeDiskSize: freeDiskSize,
+      totalDiskSize: totalDiskSize,
+      systemFeatures: _fromList(systemFeatures),
+      isLowRamDevice: isLowRamDevice,
+      physicalRamSize: physicalRamSize,
+      availableRamSize: availableRamSize,
+    );
+  }
+
+  /// Deserializes message as `List<String>`
   static List<String> _fromList(List<dynamic> message) {
     final list = message.takeWhile((item) => item != null).toList();
     return List<String>.from(list);
@@ -242,6 +368,28 @@ class AndroidBuildVersion {
       release: map['release'],
       sdkInt: map['sdkInt'],
       securityPatch: map['securityPatch'],
+    );
+  }
+
+  /// Initializes the application metadata with mock values for testing.
+  @visibleForTesting
+  static AndroidBuildVersion setMockInitialValues({
+    String? baseOS,
+    required String codename,
+    required String incremental,
+    required int previewSdkInt,
+    required String release,
+    required int sdkInt,
+    String? securityPatch,
+  }) {
+    return AndroidBuildVersion._(
+      baseOS: baseOS,
+      codename: codename,
+      incremental: incremental,
+      previewSdkInt: previewSdkInt,
+      release: release,
+      sdkInt: sdkInt,
+      securityPatch: securityPatch,
     );
   }
 }
