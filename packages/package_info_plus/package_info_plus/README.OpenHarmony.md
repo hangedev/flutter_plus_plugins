@@ -21,11 +21,11 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 
 dependencies:
   package_info_plus:
-    git: 
+    git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
       ref: br_package_info_plus-v8.1.0_ohos
-      
+
 ...
 ```
 
@@ -47,14 +47,15 @@ For use cases [example](example/lib/main.dart)
 
 This document is verified based on the following versions:
 
-1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 
 ## 3. API
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### PackageInfo API 
+### PackageInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | fromPlatform      | Retrieves and caches platform-specific package information | future | / | Future<PackageInfo> | yes |
@@ -63,16 +64,18 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### PackageInfo Filters 
-| Name                | Description                         | Type     | Input | Output  | ohos Support |
-|---------------------|-------------------------------------|----------|-------|---------|--------------|
-| appName             | Gets application name  | String | / | / | yes |
-| packageName         | Gets package name  | String | / | / | yes |
-| version             | Gets package version  | String | / | / | yes |
-| buildNumber         | Gets build number  | String | / | / | yes |
-| buildSignature      | Gets build signature  | String | / | / | yes |
-| installerStore      | Gets installer store information | String? | / | / | no |
-| data                | Gets map representation of package info | Map<String, dynamic> | / | / | yes |
+### PackageInfo Filters
+| Name           | Description                             | Type                 | Input | Output | ohos Support |
+|----------------|-----------------------------------------|----------------------|-------|--------|--------------|
+| appName        | Gets application name                   | String               | /     | /      | yes          |
+| packageName    | Gets package name                       | String               | /     | /      | yes          |
+| version        | Gets package version                    | String               | /     | /      | yes          |
+| buildNumber    | Gets build number                       | String               | /     | /      | yes          |
+| buildSignature | Gets build signature                    | String               | /     | /      | yes          |
+| installTime    | Gets install time                       | String               | /     | /      | yes          |
+| updateTime     | Gets update time                        | String               | /     | /      | yes          |
+| installerStore | Gets installer store information        | String?              | /     | /      | no           |
+| data           | Gets map representation of package info | Map<String, dynamic> | /     | /      | yes          |
 
 ## 5. Known Issues
 

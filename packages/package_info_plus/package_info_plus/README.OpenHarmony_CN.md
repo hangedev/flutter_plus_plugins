@@ -21,7 +21,7 @@
 
 dependencies:
   package_info_plus:
-    git: 
+    git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
       ref: br_package_info_plus-v8.1.0_ohos
@@ -47,14 +47,15 @@ flutter pub get
 
 在以下版本中已测试通过
 
-1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.1.0.828; ROM: 5.1.0.130 SP8;
+2. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 
 ## 3. API
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### PackageInfo API 
+### PackageInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | fromPlatform      | 获取并缓存平台特定的包信息 | future | / | Future<PackageInfo> | yes |
@@ -63,16 +64,18 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### PackageInfo Filters 
-| Name                | Description                         | Type     | Input | Output  | ohos Support |
-|---------------------|-------------------------------------|----------|-------|---------|--------------|
-| appName             | 获取应用名称  | String | / | / | yes |
-| packageName         | 获取包名称  | String | / | / | yes |
-| version             | 获取包版本号  | String | / | / | yes |
-| buildNumber         | 获取构建编号  | String | / | / | yes |
-| buildSignature      | 获取构建签名  | String | / | / | yes |
-| installerStore      | 获取安装商店信息 | String? | / | / | no |
-| data                | 获取包信息的Map表示形式 | Map<String, dynamic> | / | / | yes |
+### PackageInfo Filters
+| Name           | Description   | Type                 | Input | Output | ohos Support |
+|----------------|---------------|----------------------|-------|--------|--------------|
+| appName        | 获取应用名称        | String               | /     | /      | yes          |
+| packageName    | 获取包名称         | String               | /     | /      | yes          |
+| version        | 获取包版本号        | String               | /     | /      | yes          |
+| buildNumber    | 获取构建编号        | String               | /     | /      | yes          |
+| buildSignature | 获取构建签名        | String               | /     | /      | yes          |
+| installerStore | 获取安装商店信息      | String?              | /     | /      | no           |
+| installTime    | 获取安装时间        | String               | /     | /      | yes          |
+| updateTime     | 获取更新时间        | String               | /     | /      | yes          |
+| data           | 获取包信息的Map表示形式 | Map<String, dynamic> | /     | /      | yes          |
 
 ## 5. 遗留问题
 

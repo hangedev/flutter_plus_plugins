@@ -80,6 +80,8 @@ export class PackageInfoPlugin implements FlutterPlugin,MethodCallHandler{
                  Log.d(TAG,'onMethodCall packageInfo plugin buildSignature '+buildSignature)
                }
               infoMap.set("installerStore","");
+              infoMap.set("installTime",bundleManage.installTime.toString());
+              infoMap.set("updateTime",bundleManage.updateTime.toString());
 
                result.success(infoMap);
             } else {
