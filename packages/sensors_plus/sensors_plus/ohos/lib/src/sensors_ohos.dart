@@ -35,7 +35,8 @@ class Sensors extends SensorsPlatform {
     Duration samplingPeriod = SensorInterval.normalInterval,
   }) {
     return _platform.userAccelerometerEventStream(
-        samplingPeriod: samplingPeriod);
+      samplingPeriod: samplingPeriod,
+    );
   }
 
   /// A broadcast stream of events from the device magnetometer.
@@ -46,4 +47,11 @@ class Sensors extends SensorsPlatform {
     return _platform.magnetometerEventStream(samplingPeriod: samplingPeriod);
   }
 
+  /// A broadcast stream of events from the device barometer.
+  @override
+  Stream<BarometerEvent> barometerEventStream({
+    Duration samplingPeriod = SensorInterval.normalInterval,
+  }) {
+    return _platform.barometerEventStream(samplingPeriod: samplingPeriod);
+  }
 }
