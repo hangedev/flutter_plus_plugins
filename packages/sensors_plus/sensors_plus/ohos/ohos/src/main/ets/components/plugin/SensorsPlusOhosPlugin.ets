@@ -15,215 +15,238 @@
 
 import {
   BinaryMessenger,
+  EventChannel,
   FlutterPlugin,
   FlutterPluginBinding,
   MethodCall,
   MethodCallHandler,
   MethodChannel,
   MethodResult,
-  EventChannel,
 } from '@ohos/flutter_ohos';
 import { EventSink, StreamHandler } from '@ohos/flutter_ohos/src/main/ets/plugin/common/EventChannel';
+import { systemDateTime } from '@kit.BasicServicesKit';
 import { sensor } from '@kit.SensorServiceKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 
-// StreamHandlerImpl 实现了 StreamHandler 接口
-class StreamHandlerImpl implements StreamHandler {
-  private event?: EventSink;
-  private sensorId?: sensor.SensorId;
+const defaultSamplingPeriodMicros = 200000;
+const epochMicros = systemDateTime.getTime() * 1000;
 
-  constructor(sensorId: sensor.SensorId) {
+function normalizeNumber(value: number): number {
+  return Number.isInteger(value) ? value + 0.00000000001 : value;
+}
+
+function normalizeTimestamp(sensorTimestampNanos: number): number {
+  return normalizeNumber(epochMicros + sensorTimestampNanos / 1000);
+}
+
+function transformThreeAxisData(
+  x: number,
+  y: number,
+  z: number,
+  timestamp: number,
+): Array<number> {
+  return [
+    normalizeNumber(x),
+    normalizeNumber(y),
+    normalizeNumber(z),
+    normalizeTimestamp(timestamp),
+  ];
+}
+
+class SensorStreamHandlerImpl implements StreamHandler {
+  private events: EventSink | null = null;
+  private samplingPeriodMicros: number = defaultSamplingPeriodMicros;
+  private sensorId: number;
+  private transformer: (response: sensor.Response) => Array<number>;
+
+  constructor(
+    sensorId: number,
+    transformer: (response: sensor.Response) => Array<number>,
+  ) {
     this.sensorId = sensorId;
-    this.initSensorData();
+    this.transformer = transformer;
   }
 
-  private initSensorData(): void {
-    switch (this.sensorId) {
-      case sensor.SensorId.LINEAR_ACCELEROMETER:
-        this.listenLinearAccelerometer();
-        break;
-      case sensor.SensorId.GYROSCOPE:
-        this.listenGyroscope();
-        break;
-      case sensor.SensorId.ACCELEROMETER:
-        this.listenAccelerometer();
-        break;
-      case sensor.SensorId.MAGNETIC_FIELD:
-        this.listenMagnetic();
-        break;
-    }
-  }
-
-  // user加速度计传感器
-  private listenLinearAccelerometer(): void {
-    try {
-      sensor.on(sensor.SensorId.LINEAR_ACCELEROMETER, (data: sensor.LinearAccelerometerResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [3];
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          this.event.success(arr);
-        }
-      }, { interval: 100000000 });
-    } catch (error) {
-      let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
-    }
-  }
-
-  // 陀螺仪
-  private listenGyroscope(): void {
-    try {
-      sensor.on(sensor.SensorId.GYROSCOPE, (data: sensor.GyroscopeResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [3];
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          this.event.success(arr);
-        }
-      }, { interval: 100000000 });
-    } catch (error) {
-      let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
-    }
-  }
-
-  // 加速度计
-  private listenAccelerometer(): void {
-    try {
-      sensor.on(sensor.SensorId.ACCELEROMETER, (data: sensor.AccelerometerResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [3];
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          this.event.success(arr);
-        }
-      }, { interval: 100000000 });
-    } catch (error) {
-      let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
-    }
-  }
-
-  // 磁力计
-  private listenMagnetic(): void {
-    try {
-      sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [3];
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          this.event.success(arr);
-        }
-      }, { interval: 100000000 });
-    } catch (error) {
-      let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+  setSamplingPeriod(value: number): void {
+    this.samplingPeriodMicros = value;
+    if (this.events !== null) {
+      this.resubscribe();
     }
   }
 
   onListen(args: ESObject, events: EventSink): void {
-    this.event = events;
+    this.events = events;
+    this.subscribe();
   }
 
   onCancel(args: ESObject): void {
+    this.unsubscribe();
+    this.events = null;
+  }
+
+  private get samplingPeriodNanos(): number {
+    return this.samplingPeriodMicros * 1000;
+  }
+
+  private callback = (response: sensor.Response): void => {
+    if (this.events === null) {
+      return;
+    }
+    this.events.success(this.transformer(response));
+  };
+
+  private subscribe(): void {
+    try {
+      sensor.on(this.sensorId, this.callback, { interval: this.samplingPeriodNanos });
+    } catch (error) {
+      const e = error as BusinessError;
+      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+    }
+  }
+
+  private unsubscribe(): void {
+    try {
+      sensor.off(this.sensorId, this.callback);
+    } catch (error) {
+      const e = error as BusinessError;
+      console.error(`Failed to invoke off. Code: ${e.code}, message: ${e.message}`);
+    }
+  }
+
+  private resubscribe(): void {
+    this.unsubscribe();
+    this.subscribe();
   }
 }
 
 /** SensorsPlusOhosPlugin **/
 export default class SensorsPlusOhosPlugin implements FlutterPlugin, MethodCallHandler {
   private channel: MethodChannel | null = null;
-  private ACCELEROMETER_CHANNEL_NAME: string = "dev.fluttercommunity.plus/sensors/accelerometer";
-  private GYROSCOPE_CHANNEL_NAME: string = "dev.fluttercommunity.plus/sensors/gyroscope";
-  private MAGNETOMETER_CHANNEL_NAME: string = "dev.fluttercommunity.plus/sensors/magnetometer";
-  private USER_ACCELEROMETER_CHANNEL_NAME: string = "dev.fluttercommunity.plus/sensors/user_accel";
+  private ACCELEROMETER_CHANNEL_NAME: string = 'dev.fluttercommunity.plus/sensors/accelerometer';
+  private GYROSCOPE_CHANNEL_NAME: string = 'dev.fluttercommunity.plus/sensors/gyroscope';
+  private MAGNETOMETER_CHANNEL_NAME: string = 'dev.fluttercommunity.plus/sensors/magnetometer';
+  private USER_ACCELEROMETER_CHANNEL_NAME: string = 'dev.fluttercommunity.plus/sensors/user_accel';
+  private BAROMETER_CHANNEL_NAME: string = 'dev.fluttercommunity.plus/sensors/barometer';
+  private accelerometerChannel: EventChannel | null = null;
+  private gyroscopeChannel: EventChannel | null = null;
+  private magnetometerChannel: EventChannel | null = null;
+  private userAccelerometerChannel: EventChannel | null = null;
+  private barometerChannel: EventChannel | null = null;
+  private accelerometerStreamHandler: SensorStreamHandlerImpl | null = null;
+  private gyroscopeStreamHandler: SensorStreamHandlerImpl | null = null;
+  private magnetometerStreamHandler: SensorStreamHandlerImpl | null = null;
+  private userAccelerometerStreamHandler: SensorStreamHandlerImpl | null = null;
+  private barometerStreamHandler: SensorStreamHandlerImpl | null = null;
 
   constructor() {
   }
 
   getUniqueClassName(): string {
-    return "SensorsPlusOhosPlugin";
+    return 'SensorsPlusOhosPlugin';
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
-    this.channel = new MethodChannel(binding.getBinaryMessenger(), "dev.fluttercommunity.plus/sensors/method");
+    this.channel = new MethodChannel(binding.getBinaryMessenger(), 'dev.fluttercommunity.plus/sensors/method');
     this.channel.setMethodCallHandler(this);
-    this.setupEventChannels(binding.getApplicationContext(), binding.getBinaryMessenger());
+    this.setupEventChannels(binding.getBinaryMessenger());
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
     if (this.channel != null) {
       this.channel.setMethodCallHandler(null);
     }
+    this.accelerometerChannel?.setStreamHandler(null);
+    this.gyroscopeChannel?.setStreamHandler(null);
+    this.magnetometerChannel?.setStreamHandler(null);
+    this.userAccelerometerChannel?.setStreamHandler(null);
+    this.barometerChannel?.setStreamHandler(null);
   }
 
   onMethodCall(call: MethodCall, result: MethodResult): void {
-    if (call.method == "getPlatformVersion") {
-      result.success("OpenHarmony ^ ^ ")
-    } else {
-      result.notImplemented();
+    let streamHandler: SensorStreamHandlerImpl | null = null;
+
+    switch (call.method) {
+      case 'getPlatformVersion':
+        result.success('OpenHarmony ^ ^ ');
+        return;
+      case 'setAccelerationSamplingPeriod':
+        streamHandler = this.accelerometerStreamHandler;
+        break;
+      case 'setUserAccelerometerSamplingPeriod':
+        streamHandler = this.userAccelerometerStreamHandler;
+        break;
+      case 'setGyroscopeSamplingPeriod':
+        streamHandler = this.gyroscopeStreamHandler;
+        break;
+      case 'setMagnetometerSamplingPeriod':
+        streamHandler = this.magnetometerStreamHandler;
+        break;
+      case 'setBarometerSamplingPeriod':
+        streamHandler = this.barometerStreamHandler;
+        break;
+      default:
+        result.notImplemented();
+        return;
     }
+
+    if (streamHandler === null) {
+      result.notImplemented();
+      return;
+    }
+
+    streamHandler.setSamplingPeriod(call.args as number);
+    result.success(null);
   }
 
-  private setupEventChannels(context: Context, messenger: BinaryMessenger) {
-    // user加速度计
-    let userAccelerometerChannel = new EventChannel(messenger, this.USER_ACCELEROMETER_CHANNEL_NAME);
-    let userAccelerationStreamHandler = new StreamHandlerImpl(sensor.SensorId.LINEAR_ACCELEROMETER);
-    userAccelerometerChannel.setStreamHandler(userAccelerationStreamHandler);
+  private setupEventChannels(messenger: BinaryMessenger): void {
+    this.userAccelerometerChannel = new EventChannel(messenger, this.USER_ACCELEROMETER_CHANNEL_NAME);
+    this.userAccelerometerStreamHandler = new SensorStreamHandlerImpl(
+      sensor.SensorId.LINEAR_ACCELEROMETER,
+      (response: sensor.Response) => {
+        const data = response as sensor.LinearAccelerometerResponse;
+        return transformThreeAxisData(data.x, data.y, data.z, data.timestamp);
+      },
+    );
+    this.userAccelerometerChannel.setStreamHandler(this.userAccelerometerStreamHandler);
 
-    // 陀螺仪
-    let gyroscopeChannel = new EventChannel(messenger, this.GYROSCOPE_CHANNEL_NAME);
-    let gyroScopeStreamHandler = new StreamHandlerImpl(sensor.SensorId.GYROSCOPE);
-    gyroscopeChannel.setStreamHandler(gyroScopeStreamHandler);
+    this.gyroscopeChannel = new EventChannel(messenger, this.GYROSCOPE_CHANNEL_NAME);
+    this.gyroscopeStreamHandler = new SensorStreamHandlerImpl(
+      sensor.SensorId.GYROSCOPE,
+      (response: sensor.Response) => {
+        const data = response as sensor.GyroscopeResponse;
+        return transformThreeAxisData(data.x, data.y, data.z, data.timestamp);
+      },
+    );
+    this.gyroscopeChannel.setStreamHandler(this.gyroscopeStreamHandler);
 
-    // 加速度计
-    let accelerometerChannel = new EventChannel(messenger, this.ACCELEROMETER_CHANNEL_NAME);
-    let accelerationStreamHandler = new StreamHandlerImpl(sensor.SensorId.ACCELEROMETER);
-    accelerometerChannel.setStreamHandler(accelerationStreamHandler);
+    this.accelerometerChannel = new EventChannel(messenger, this.ACCELEROMETER_CHANNEL_NAME);
+    this.accelerometerStreamHandler = new SensorStreamHandlerImpl(
+      sensor.SensorId.ACCELEROMETER,
+      (response: sensor.Response) => {
+        const data = response as sensor.AccelerometerResponse;
+        return transformThreeAxisData(data.x, data.y, data.z, data.timestamp);
+      },
+    );
+    this.accelerometerChannel.setStreamHandler(this.accelerometerStreamHandler);
 
-    // 磁力计
-    let magnetometerChannel = new EventChannel(messenger, this.MAGNETOMETER_CHANNEL_NAME);
-    let magnetometerStreamHandler = new StreamHandlerImpl(sensor.SensorId.MAGNETIC_FIELD);
-    magnetometerChannel.setStreamHandler(magnetometerStreamHandler);
+    this.magnetometerChannel = new EventChannel(messenger, this.MAGNETOMETER_CHANNEL_NAME);
+    this.magnetometerStreamHandler = new SensorStreamHandlerImpl(
+      sensor.SensorId.MAGNETIC_FIELD,
+      (response: sensor.Response) => {
+        const data = response as sensor.MagneticFieldResponse;
+        return transformThreeAxisData(data.x, data.y, data.z, data.timestamp);
+      },
+    );
+    this.magnetometerChannel.setStreamHandler(this.magnetometerStreamHandler);
+
+    this.barometerChannel = new EventChannel(messenger, this.BAROMETER_CHANNEL_NAME);
+    this.barometerStreamHandler = new SensorStreamHandlerImpl(
+      sensor.SensorId.BAROMETER,
+      (response: sensor.Response) => {
+        const data = response as sensor.BarometerResponse;
+        return [normalizeNumber(data.pressure), normalizeTimestamp(data.timestamp)];
+      },
+    );
+    this.barometerChannel.setStreamHandler(this.barometerStreamHandler);
   }
 }

@@ -35,6 +35,10 @@ class MethodChannelSensors extends SensorsPlatform {
   Stream<MagnetometerEvent>? _magnetometerEvents;
   Stream<BarometerEvent>? _barometerEvents;
 
+  List<num> _asNumList(dynamic event) {
+    return (event as List<dynamic>).cast<num>();
+  }
+
   /// Returns a broadcast stream of events from the device accelerometer at the
   /// given sampling frequency.
   @override
@@ -55,12 +59,12 @@ class MethodChannelSensors extends SensorsPlatform {
     _accelerometerEvents ??= _accelerometerEventChannel
         .receiveBroadcastStream()
         .map((dynamic event) {
-      final list = event.cast<double>();
+      final list = _asNumList(event);
       return AccelerometerEvent(
-        list[0]!,
-        list[1]!,
-        list[2]!,
-        DateTime.fromMicrosecondsSinceEpoch(list[3]!.toInt()),
+        list[0].toDouble(),
+        list[1].toDouble(),
+        list[2].toDouble(),
+        DateTime.fromMicrosecondsSinceEpoch(list[3].toInt()),
       );
     });
     return _accelerometerEvents!;
@@ -85,12 +89,12 @@ class MethodChannelSensors extends SensorsPlatform {
     _methodChannel.invokeMethod('setGyroscopeSamplingPeriod', microseconds);
     _gyroscopeEvents ??=
         _gyroscopeEventChannel.receiveBroadcastStream().map((dynamic event) {
-      final list = event.cast<double>();
+      final list = _asNumList(event);
       return GyroscopeEvent(
-        list[0]!,
-        list[1]!,
-        list[2]!,
-        DateTime.fromMicrosecondsSinceEpoch(list[3]!.toInt()),
+        list[0].toDouble(),
+        list[1].toDouble(),
+        list[2].toDouble(),
+        DateTime.fromMicrosecondsSinceEpoch(list[3].toInt()),
       );
     });
     return _gyroscopeEvents!;
@@ -117,12 +121,12 @@ class MethodChannelSensors extends SensorsPlatform {
     _userAccelerometerEvents ??= _userAccelerometerEventChannel
         .receiveBroadcastStream()
         .map((dynamic event) {
-      final list = event.cast<double>();
+      final list = _asNumList(event);
       return UserAccelerometerEvent(
-        list[0]!,
-        list[1]!,
-        list[2]!,
-        DateTime.fromMicrosecondsSinceEpoch(list[3]!.toInt()),
+        list[0].toDouble(),
+        list[1].toDouble(),
+        list[2].toDouble(),
+        DateTime.fromMicrosecondsSinceEpoch(list[3].toInt()),
       );
     });
     return _userAccelerometerEvents!;
@@ -147,12 +151,12 @@ class MethodChannelSensors extends SensorsPlatform {
     _methodChannel.invokeMethod('setMagnetometerSamplingPeriod', microseconds);
     _magnetometerEvents ??=
         _magnetometerEventChannel.receiveBroadcastStream().map((dynamic event) {
-      final list = event.cast<double>();
+      final list = _asNumList(event);
       return MagnetometerEvent(
-        list[0]!,
-        list[1]!,
-        list[2]!,
-        DateTime.fromMicrosecondsSinceEpoch(list[3]!.toInt()),
+        list[0].toDouble(),
+        list[1].toDouble(),
+        list[2].toDouble(),
+        DateTime.fromMicrosecondsSinceEpoch(list[3].toInt()),
       );
     });
     return _magnetometerEvents!;
@@ -177,10 +181,10 @@ class MethodChannelSensors extends SensorsPlatform {
     _methodChannel.invokeMethod('setBarometerSamplingPeriod', microseconds);
     _barometerEvents ??=
         _barometerEventChannel.receiveBroadcastStream().map((dynamic event) {
-      final list = event.cast<double>();
+      final list = _asNumList(event);
       return BarometerEvent(
-        list[0]!,
-        DateTime.fromMicrosecondsSinceEpoch(list[1]!.toInt()),
+        list[0].toDouble(),
+        DateTime.fromMicrosecondsSinceEpoch(list[1].toInt()),
       );
     });
     return _barometerEvents!;
