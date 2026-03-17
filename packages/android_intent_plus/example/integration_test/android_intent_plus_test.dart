@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:android_intent_example/main.dart';
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus_example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,7 +25,7 @@ void main() {
           (Widget widget) =>
               widget is Text && widget.data!.startsWith('Tap here'),
         ),
-        findsNWidgets(4),
+        findsNWidgets(5),
       );
     } else {
       expect(
@@ -64,6 +64,18 @@ void main() {
     await intent.launch();
   }, skip: !Platform.isAndroid);
 
+  testWidgets('Parse and Launch should not throw', (WidgetTester tester) async {
+    const intent = 'intent:#Intent;'
+        'action=android.intent.action.SET_ALARM;'
+        'B.android.intent.extra.alarm.SKIP_UI=true;'
+        'S.android.intent.extra.alarm.MESSAGE=Create%20a%20Flutter%20app;'
+        'i.android.intent.extra.alarm.MINUTES=30;'
+        'i.android.intent.extra.alarm.HOUR=21;'
+        'end';
+
+    AndroidIntent.parseAndLaunch(intent);
+  }, skip: !Platform.isAndroid);
+
   testWidgets('LaunchChooser should not throw', (WidgetTester tester) async {
     const intent = AndroidIntent(
       action: 'android.intent.action.SEND',
@@ -71,6 +83,13 @@ void main() {
       data: 'text example',
     );
     await intent.launchChooser('title');
+  }, skip: !Platform.isAndroid);
+
+  testWidgets('sendService should not throw', (WidgetTester tester) async {
+    const intent = AndroidIntent(
+      action: 'com.example.service',
+    );
+    await intent.sendService();
   }, skip: !Platform.isAndroid);
 
   testWidgets('SendBroadcast should not throw', (WidgetTester tester) async {
@@ -94,5 +113,24 @@ void main() {
       (WidgetTester tester) async {
     const intent = AndroidIntent(action: 'LAUNCH', package: 'foobar');
     await expectLater(await intent.canResolveActivity(), isFalse);
+  }, skip: !Platform.isAndroid);
+
+  testWidgets(
+      'getResolvedActivity return activity details when example Activity is found',
+      (WidgetTester tester) async {
+    final intent = AndroidIntent(
+      action: 'action_view',
+      data: Uri.encodeFull('http://'),
+    );
+    await expectLater(await intent.getResolvedActivity(), isNotNull);
+  }, skip: !Platform.isAndroid);
+
+  testWidgets('getResolvedActivity returns null when no Activity is found',
+      (WidgetTester tester) async {
+    final intent = AndroidIntent(
+      action: 'action_view',
+      data: Uri.encodeFull('mycustomscheme://'),
+    );
+    await expectLater(await intent.getResolvedActivity(), isNull);
   }, skip: !Platform.isAndroid);
 }

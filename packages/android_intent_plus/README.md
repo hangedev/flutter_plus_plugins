@@ -1,14 +1,29 @@
 # android_intent_plus
 
-[![Flutter Community: android_intent_plus](https://fluttercommunity.dev/_github/header/android_intent_plus)](https://github.com/fluttercommunity/community)
-
 [![pub package](https://img.shields.io/pub/v/android_intent_plus.svg)](https://pub.dev/packages/android_intent_plus)
 [![pub points](https://img.shields.io/pub/points/android_intent_plus?color=2E8B57&label=pub%20points)](https://pub.dev/packages/android_intent_plus/score)
 [![android_intent_plus](https://github.com/fluttercommunity/plus_plugins/actions/workflows/android_intent_plus.yaml/badge.svg)](https://github.com/fluttercommunity/plus_plugins/actions/workflows/android_intent_plus.yaml)
 
-<center><a href="https://flutter.dev/docs/development/packages-and-plugins/favorites" target="_blank" rel="noreferrer noopener"><img src="../../website/static/img/flutter-favorite-badge.png" width="100" alt="build"></a></center>
+[<img src="../../assets/flutter-favorite-badge.png" width="100" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
 
 This plugin allows Flutter apps to launch arbitrary intents when the platform is Android.
+
+## Platform Support
+
+| Android |
+| :-----: |
+|   ✅    |
+
+## Requirements
+
+- Flutter >=3.12.0
+- Dart >=3.1.0 <4.0.0
+- Java 17
+- Kotlin 2.2.0
+- Android Gradle Plugin >=8.12.1
+- Gradle wrapper >=8.13
+
+## Usage
 
 > **Warning**
 >
@@ -68,11 +83,26 @@ of integers or strings.
 > ACTION_VIEW intents for Android, however this intent plugin also allows
 > clients to set extra parameters for the intent.
 
-## Platform Support
+### Querying activities
+`canResolveActivity()` and `getResolvedActivity()` can be used to query whether an activity can handle an intent,
+or get the details of the activity that can handle the intent.
 
-| Android |
-| :-----: |
-|   ✅    |
+```dart
+import 'package:android_intent_plus/android_intent.dart';
+
+final intent = AndroidIntent(
+      action: 'action_view',
+      data: Uri.encodeFull('http://'),
+    );
+
+// can this intent be handled by an activity
+final canHandleIntent = await intent.canResolveActivity();
+
+// get the details of the activity that will handle this intent
+final details = await intent.getResolvedActivity();
+
+print(details.packageName); // prints com.google.chrome
+```
 
 ## Android 11 package visibility
 
@@ -96,4 +126,3 @@ https://developer.android.com/training/package-visibility/automatic
 ## Learn more
 
 - [API Documentation](https://pub.dev/documentation/android_intent_plus/latest/)
-- [Plugin documentation website](https://plus.fluttercommunity.dev/docs/android_intent_plus/overview)
