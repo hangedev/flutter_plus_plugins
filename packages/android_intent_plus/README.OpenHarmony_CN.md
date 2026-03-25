@@ -46,6 +46,7 @@ flutter pub get
 
 1. Flutter: 3.22.1-ohos-1.0.3; SDK: 5.0.0(12); IDE: DevEco Studio: 6.0.1.251; ROM: 6.0.0.115 SP16;
 2. Flutter: 3.27.5-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 6.0.1.251; ROM: 6.0.0.115 SP16;
+3. Flutter: 3.35.8-ohos-0.0.1; SDK: 6.0.2(22); IDE: DevEco Studio: 6.0.2.640; ROM: 6.0.0.328 SP22;
 
 ## 3. API
 
@@ -53,7 +54,7 @@ flutter pub get
 
 ### android_intent_plus
 
-| Name      | Description | Type     |  Input   | Output      | ohos Support | 
+| Name      | Description | Type     |  Input   | Output      | ohos Support |
 | --------  | ----------- | -------- | -------- | ----------- | ------------ |
 | `Future<void> launch()`       | 触发一次通用 Intent 启动    | function | 无 | void | yes |
 | `Future<void> parseAndLaunch(String uri)` | 解析 Intent URI 字符串并启动  | function | `String uri:uri 为完整的 Intent URI`  | void  | yes |
