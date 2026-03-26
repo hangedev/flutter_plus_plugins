@@ -1,3 +1,85 @@
+## 7.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **FEAT**(network_info_plus): Change Android compile SDK, update Android build config ([#3669](https://github.com/fluttercommunity/plus_plugins/issues/3669)). ([bcb42027](https://github.com/fluttercommunity/plus_plugins/commit/bcb420277b5907fa9aac3977c20fbac65284a4a8))
+
+## 6.1.4
+
+ - **FIX**(network_info_plus): fix deprecated member use in Windows implementation ([#3519](https://github.com/fluttercommunity/plus_plugins/issues/3519)). ([f723fad9](https://github.com/fluttercommunity/plus_plugins/commit/f723fad94e2a834cd0dbac861c6dc086b8dd71f2))
+
+## 6.1.3
+
+ - **FIX**(network_info_plus): Improve Wi-Fi IP address retrieval on iOS to avoid null ([#3408](https://github.com/fluttercommunity/plus_plugins/issues/3408)). ([7c8894b9](https://github.com/fluttercommunity/plus_plugins/commit/7c8894b99878ccbcc33845f9d19e0921470d5935))
+
+## 6.1.2
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+
+## 6.1.1
+
+ - **FIX**(network_info_plus): Update privacy manifest path on MacOS ([#3350](https://github.com/fluttercommunity/plus_plugins/issues/3350)). ([18c81efd](https://github.com/fluttercommunity/plus_plugins/commit/18c81efd0b9f510023c481965b5868184d435961))
+
+## 6.1.0
+
+ - **FEAT**(network_info_plus): Add Swift Package Manager support ([#3172](https://github.com/fluttercommunity/plus_plugins/issues/3172)). ([bcf7a5bb](https://github.com/fluttercommunity/plus_plugins/commit/bcf7a5bbd06d667cc6a4390c7cb79c349bdce6c7))
+
+## 6.0.2
+
+ - **FIX**(all): Clean up macOS Privacy Manifests ([#3268](https://github.com/fluttercommunity/plus_plugins/issues/3268)). ([d7b98ebd](https://github.com/fluttercommunity/plus_plugins/commit/d7b98ebd7d39b0143931f5cc6e627187576223dc))
+ - **FIX**(all): Add macOS Privacy Manifests ([#3251](https://github.com/fluttercommunity/plus_plugins/issues/3251)). ([bf5dad2a](https://github.com/fluttercommunity/plus_plugins/commit/bf5dad2ad249605055bcbd5f663e42569df12d64))
+
+## 6.0.1
+
+ - **FIX**(network_info_plus): Avoid usage of unsupported package:win32 versions ([#3179](https://github.com/fluttercommunity/plus_plugins/issues/3179)). ([79f61add](https://github.com/fluttercommunity/plus_plugins/commit/79f61add195693f33330103dd5f31f6433dfc1f2))
+
+## 6.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**(network_info_plus): Do not ignore errors on Android ([#3080](https://github.com/fluttercommunity/plus_plugins/issues/3080)). ([5b0cdf4f](https://github.com/fluttercommunity/plus_plugins/commit/5b0cdf4f71a8cc21b245c7defe355ec7b5796cc2))
+ - **REFACTOR**(all): Remove website files, configs, mentions ([#3018](https://github.com/fluttercommunity/plus_plugins/issues/3018)). ([ecc57146](https://github.com/fluttercommunity/plus_plugins/commit/ecc57146aa8c6b1c9c332169d3cc2205bc4a700f))
+ - **FIX**(all): changed homepage url in pubspec.yaml ([#3099](https://github.com/fluttercommunity/plus_plugins/issues/3099)). ([66613656](https://github.com/fluttercommunity/plus_plugins/commit/66613656a85c176ba2ad337e4d4943d1f4171129))
+
+## 5.0.3
+
+ - **REFACTOR**(network_info_plus): Migrate Android example to use the new plugins declaration ([#2768](https://github.com/fluttercommunity/plus_plugins/issues/2768)). ([d7206929](https://github.com/fluttercommunity/plus_plugins/commit/d72069292995355fbe0fe62ec6d74f34005008f6))
+ - **DOCS**(network_info_plus): Add explanation on Wi-Fi name in quotes to README ([#2815](https://github.com/fluttercommunity/plus_plugins/issues/2815)). ([e94c9b4b](https://github.com/fluttercommunity/plus_plugins/commit/e94c9b4be566f99dba34718fc2b4868165d31026))
+
+## 5.0.2
+
+> Plugin now requires the following:
+> - compileSDK 34 for Android part
+> - Java 17 for Android part
+> - Gradle 8.4 for Android part
+
+- **BREAKING** **REFACTOR**(network_info_plus): bump MACOSX_DEPLOYMENT_TARGET from 10.11 to 10.14 ([#2590](https://github.com/fluttercommunity/plus_plugins/issues/2590)). ([4033e162](https://github.com/fluttercommunity/plus_plugins/commit/4033e1623de7836893a672098936c218ee9f7aca))
+- **BREAKING** **FEAT**(network_info_plus): Remove deprecated permission handling methods, update example and docs ([#2686](https://github.com/fluttercommunity/plus_plugins/issues/2686)). ([a71a27c5](https://github.com/fluttercommunity/plus_plugins/commit/a71a27c5fbdbbfc56a30359a1aff0a3d3da8dc73))
+- **BREAKING** **BUILD**(network_info_plus): Target Java 17 on Android ([#2726](https://github.com/fluttercommunity/plus_plugins/issues/2726)). ([5eaa3a7d](https://github.com/fluttercommunity/plus_plugins/commit/5eaa3a7d3ed47ced0a452f7604066d030490d379))
+- **BREAKING** **BUILD**(network_info_plus): Update to target and compile SDK 34 ([#2706](https://github.com/fluttercommunity/plus_plugins/pull/2706)). ([efb3bac](https://github.com/fluttercommunity/plus_plugins/commit/efb3bace46a1e71f4d4fef1d0de67c4195183bf3))
+- **FIX**(network_info_plus): Added getWifiIPv6, getWifiSubmask, getWifiBroadcast and getWifiGatewayIP functions for Windows and fixed getWifiName and getWifiBSSID. ([#2666](https://github.com/fluttercommunity/plus_plugins/issues/2666)). ([915a4431](https://github.com/fluttercommunity/plus_plugins/commit/915a44312b796b10ad65995e0297d7cd23b37cd0))
+- **FIX**(network_info_plus): Add iOS Privacy Info ([#2583](https://github.com/fluttercommunity/plus_plugins/issues/2583)). ([3b0cd6c3](https://github.com/fluttercommunity/plus_plugins/commit/3b0cd6c38e0b736a903c69cf6e3df8e40a37815f))
+- **FEAT**(network_info_plus): Update min iOS target to 12 ([#2659](https://github.com/fluttercommunity/plus_plugins/issues/2659)). ([c01d6012](https://github.com/fluttercommunity/plus_plugins/commit/c01d60120556449c4df5ce74d0f0941f4f8bc061))
+- **DOCS**(network_info_plus): Add note about ios simulators ([#2524](https://github.com/fluttercommunity/plus_plugins/issues/2524)). ([20a7515e](https://github.com/fluttercommunity/plus_plugins/commit/20a7515ead6ffbae02be0b1a5cba91c93bf5c84f))
+
+## 5.0.1
+
+> Note: DO NOT USE THIS RELEASE. It is invalid due to a publishing issue
+
+## 5.0.0
+
+> Note: This release was retracted due to ([#2251](https://github.com/fluttercommunity/plus_plugins/issues/2251)).
+
+## 4.1.0+1
+
+ - **DOCS**(network_info_plus): Add note about ios simulators ([#2524](https://github.com/fluttercommunity/plus_plugins/issues/2524)). ([20a7515e](https://github.com/fluttercommunity/plus_plugins/commit/20a7515ead6ffbae02be0b1a5cba91c93bf5c84f))
+
 ## 4.1.0
 
 > Info: This release is a replacement for release 5.0.0, which was retracted due to issue ([#2251](https://github.com/fluttercommunity/plus_plugins/issues/2251)). As breaking change was reverted the major release was also reverted in favor of this one.
