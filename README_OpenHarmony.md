@@ -1,20 +1,156 @@
 # plus_plugins
 
-原始仓来源：https://github.com/fluttercommunity/plus_plugins
+Original repository source: [plus_plugins](https://github.com/fluttercommunity/plus_plugins)
 
-## 仓库简介
-plus_plugins是Flutter一系列插件的集合，旨在为Flutter开发者提供一系列增强功能和扩展插件。  
-该仓库为plus_plugins库适配OpenHarmony的仓库。
+## Repository Introduction
 
-## 引入背景简述
-OpenHarmony北向生态发展过程中，已经适配Flutter的厂商在接入OpenHarmony过程中存在使用plus_plugins的诉求。鉴于此OpenHarmony为支持北向生态伙伴快速接入适配、快速实现产品化而提供的plus_plugins，本方案采用插件化的适配器模式实现plus_plugins适配OpenHarmony平台。
+plus_plugins is a collection of plugins for Flutter, designed to provide Flutter developers with a range of enhancements and extensions.
 
-## 使用场景
-本方案仅供应用厂商中已支持Flutter框架的设备在移植OpenHarmony系统过程中作为备选方案使用。
+This repository is for adapting the plus_plugins library to OpenHarmony.
 
-## 使用文档
 
-适配OpenHarmony平台的使用指导请见：[Flutter使用指导文档](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/07_plugin/ohos%E5%B9%B3%E5%8F%B0%E9%80%82%E9%85%8Dflutter%E4%B8%89%E6%96%B9%E5%BA%93%E6%8C%87%E5%AF%BC.md)
+### `battery_plus`
+
+Flutter plugin for accessing information about the battery state(full, charging, discharging) on Android, iOS and ohos.
+
+[View Source](/packages/battery_plus)
+
+[README](/packages/battery_plus/battery_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅   | ✅  |  ✅   | ✅  |  ✅   |  ✅  | ✅  |
+
+---
+
+### `connectivity_plus`
+
+Flutter plugin for discovering the state of the network (WiFi & mobile/cellular) connectivity on Android, iOS and ohos.
+
+[View Source](/packages/connectivity_plus)
+
+[README](/packages/connectivity_plus/connectivity_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: |:-----: |
+|   ✅    | ✅  |  ✅   | ✅  |  ✅   |   ✅    | ✅  |
+
+
+---
+
+### `device_info_plus`
+
+Flutter plugin providing detailed information about the device (make, model, etc.), Android, iOS, or ohos version the app is running on.
+
+[View Source](/packages/device_info_plus)
+
+[README](/packages/device_info_plus/device_info_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅    | ✅  |  ✅   | ✅  |  ✅   |   ✅    | ✅  |
+---
+
+### `network_info_plus`
+
+Flutter plugin for discovering network info.
+
+[View Source](/packages/network_info_plus)
+
+[README](/packages/network_info_plus/network_info_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅    | ✅   |  ✅   | ❌  |  ✅   |   ✅    | ✅  |
+
+---
+
+### `package_info_plus`
+
+Flutter plugin for querying information about the application package.
+
+[View Source](/packages/package_info_plus)
+
+[README](/packages/package_info_plus/package_info_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅    | ✅  |  ✅   | ✅  |  ✅   |   ✅    | ✅  |
+
+---
+
+### `sensors_plus`
+
+Flutter plugin for accessing accelerometer, gyroscope, and magnetometer sensors.
+
+[View Source](/packages/sensors_plus)
+
+[README](/packages/sensors_plus/sensors_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅    | ✅  |   ❌    | ✅  |   ❌    |    ❌     | ✅  |
+
+---
+
+### `share_plus`
+
+Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android, UIActivityViewController on iOS, and systemShare on ohos.
+
+[View Source](/packages/share_plus)
+
+[README](/packages/share_plus/share_plus/README.OpenHarmony_CN.md)
+
+#### Platform Support
+
+| Android | iOS | MacOS | Web | Linux | Windows | ohos |
+| :-----: | :-: | :---: | :-: | :---: | :-----: | :-----: |
+|   ✅   | ✅  |  ✅   | ✅  |  ✅   |   ✅    | ✅  |
+
+---
+
+### `android_alarm_manager_plus`
+
+Flutter plugin for accessing the Android AlarmManager service, and running Dart code in the background when alarms fire.
+
+[View Source](/packages/android_alarm_manager_plus)
+
+[README](/packages/android_alarm_manager_plus/README.md)
+
+#### Platform Support
+
+| Android | ohos |
+| :-----: | :-----: |
+|   ✅    | ❌ |
+
+---
+
+### `android_intent_plus`
+
+Flutter plugin for launching Android Intents and ohos Want. Not supported on iOS.
+
+[View Source](/packages/android_intent_plus)
+
+[README](/packages/android_intent_plus/README.md)
+
+#### Platform Support
+
+| Android | ohos |
+| :-----: | :-----: |
+|   ✅    | In Progress |
+
 
 ## License
 
