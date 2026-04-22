@@ -13,19 +13,32 @@
 * limitations under the License.
 */
 
-import common from '@ohos.app.ability.common';
-import { hilog } from '@kit.PerformanceAnalysisKit';
+import { common } from '@kit.AbilityKit';
 import { Want, wantConstant } from '@kit.AbilityKit';
 import { commonEventManager } from '@kit.BasicServicesKit';
-import { MethodResult } from '@ohos/flutter_ohos';
+import { MethodResult, Log } from '@ohos/flutter_ohos';
 
 const TAG = 'WantSender';
 
 export class WantSender {
-  public context: common.UIAbilityContext;
+  public context: common.UIAbilityContext | null = null;
 
-  constructor(context: common.UIAbilityContext) {
+  setContext(context: common.UIAbilityContext | null): void {
     this.context = context;
+  }
+
+  private getErrorMessage(error: Object): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
+  }
+
+  private requireContext(): common.UIAbilityContext {
+    if (!this.context) {
+      throw new Error('Context not initialized');
+    }
+    return this.context;
   }
 
   // 构建Want对象
@@ -40,7 +53,7 @@ export class WantSender {
     type: string | null,
   ): Want | null {
     if (!this.context) {
-      hilog.error(0x0000, TAG, 'Context not initialized');
+      Log.e(TAG, 'Context not initialized');
       return null;
     }
 
@@ -58,7 +71,7 @@ export class WantSender {
       want.abilityName = componentName;
     }
     if (category) {
-      want.moduleName = category;
+      want.entities = [category];
     }
     if (parameters && Object.keys(parameters).length !== 0) {
       want.parameters = parameters;
@@ -69,10 +82,10 @@ export class WantSender {
     // 处理flags
     if (flags) {
       // HarmonyOS Want flags映射
-      if (flags & 0x10000000) {
-        want.flags = wantConstant.Flags.FLAG_AUTH_READ_URI_PERMISSION;
-      }
       want.flags = flags;
+      if (flags & 0x10000000) {
+        want.flags |= wantConstant.Flags.FLAG_AUTH_READ_URI_PERMISSION;
+      }
     }
 
     return want;
@@ -80,21 +93,21 @@ export class WantSender {
 
   // 启动Ability
   async send(want: Want): Promise<void> {
-    if (!this.context) {
-      hilog.error(0x0000, TAG, 'Context not initialized');
-      return;
-    }
+    const context = this.requireContext();
     try {
-      await this.context.startAbility(want);
+      await context.startAbility(want);
     } catch (error) {
-      hilog.error(0x0000, TAG, `Failed to start ability: ${error.message}`);
+      const message = this.getErrorMessage(error);
+      Log.e(TAG, `Failed to start ability: ${message}`);
+      throw new Error(message);
     }
   }
 
   // 发送广播
   sendBroadcast(want: Want, result: MethodResult): void {
     if (!this.context) {
-      hilog.error(0x0000, TAG, 'Context not initialized');
+      Log.e(TAG, 'Context not initialized');
+      result.error('error', 'Context not initialized', null);
       return;
     }
 
@@ -132,27 +145,29 @@ export class WantSender {
       // 发布公共事件,使用Want对象中的action作为事件名称
       commonEventManager.publish(event, options, (err) => {
         if (err) {
-          hilog.error(0x0000, TAG, "PublishCallBack err=" + JSON.stringify(err))
+          Log.e(TAG, "PublishCallBack err=" + JSON.stringify(err))
+          result.error('error', `Failed to publish common event: ${err.message}`, null);
         } else {
           result.success(null);
         }
       })
     } catch (error) {
-      hilog.error(0x0000, TAG, `Failed to publish common event: ${error.message}`);
+      const message = this.getErrorMessage(error);
+      Log.e(TAG, `Failed to publish common event: ${message}`);
+      result.error('error', message, null);
     }
   }
 
   // 启动选择器
   async launchChooser(want: Want, title: string): Promise<void> {
-    if (!this.context) {
-      hilog.error(0x0000, TAG, 'Context not initialized');
-      return;
-    }
+    const context = this.requireContext();
 
     try {
-      await this.context.startAbility(want);
+      await context.startAbility(want);
     } catch (error) {
-      hilog.error(0x0000, TAG, `Failed to launch chooser: ${error.message}`);
+      const message = this.getErrorMessage(error);
+      Log.e(TAG, `Failed to launch chooser: ${message}`);
+      throw new Error(message);
     }
   }
 
@@ -208,7 +223,7 @@ export class WantSender {
 
       return want;
     } catch (error) {
-      hilog.error(0x0000, TAG, 'Failed to parse JSON string: ' + (error as Error).message);
+      Log.e(TAG, 'Failed to parse JSON string: ' + this.getErrorMessage(error));
       // 如果JSON解析失败，返回一个空的Want对象
       return {};
     }

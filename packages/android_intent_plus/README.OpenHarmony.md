@@ -22,6 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/android_intent_plus
+      ref: br_android_intent_plus-v6.0.0_ohos
 
 ...
 ```

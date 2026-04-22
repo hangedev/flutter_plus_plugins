@@ -13,9 +13,8 @@
 * limitations under the License.
 */
 
-import { MethodChannel, MethodCall, MethodResult, BinaryMessenger, MethodCallHandler, Any } from '@ohos/flutter_ohos';
+import { MethodChannel, MethodCall, MethodResult, BinaryMessenger, MethodCallHandler, Log } from '@ohos/flutter_ohos';
 import { WantSender } from './WantSender';
-import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Want } from '@kit.AbilityKit';
 
 const TAG = 'MethodCallHandlerImpl';
@@ -31,7 +30,7 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
 
   startListening(messenger: BinaryMessenger): void {
     if (this.methodChannel != null) {
-      hilog.info(0x0000, TAG, "Setting a method call handler before the last was disposed.");
+      Log.i(TAG, "Setting a method call handler before the last was disposed.");
       this.stopListening();
     }
     this.methodChannel = new MethodChannel(messenger, CHANNEL_NAME);
@@ -40,11 +39,18 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
 
   stopListening(): void {
     if (this.methodChannel == null) {
-      hilog.info(0x0000, TAG, "Tried to stop listening when no methodChannel had been initialized.");
+      Log.i(TAG, "Tried to stop listening when no methodChannel had been initialized.");
       return;
     }
     this.methodChannel.setMethodCallHandler(null);
     this.methodChannel = null;
+  }
+
+  private getErrorMessage(error: Object): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
   }
 
   async onMethodCall(call: MethodCall, result: MethodResult): Promise<void> {
@@ -92,8 +98,9 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
           result.notImplemented();
       }
     } catch (error) {
-      hilog.error(0x0000, TAG, `Error handling method call: ${error.message}`);
-      result.error('error', error.message, null);
+      const message = this.getErrorMessage(error);
+      Log.e(TAG, `Error handling method call: ${message}`);
+      result.error('error', message, null);
     }
   }
 
@@ -108,7 +115,7 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
 
     if (rawArgsMap && typeof rawArgsMap.forEach === 'function') {
       rawArgsMap.forEach((value: ESObject, key: string) => {
-        hilog.info(0x0000, TAG, `Map Key: ${key}, Value: ${value}, Type: ${typeof value}`);
+        Log.i(TAG, `Map Key: ${key}, Value: ${value}, Type: ${typeof value}`);
         args[key] = this.recursivelyConvertMap(value);
       });
     }
@@ -134,11 +141,10 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
       type,
     );
 
-    if (want) {
-      return want;
-    } else {
-      return {} as Want;
+    if (!want) {
+      throw new Error('Failed to build Want object: context not initialized');
     }
+    return want;
   }
 
   private recursivelyConvertMap(obj: ESObject): Object {
@@ -196,15 +202,11 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
   }
 
   private async launch(want: Want): Promise<void> {
-    try {
-      // 兼容部分场景 data 可能被编码成 geo%3A...
-      if (want.uri && want.uri.startsWith('geo%3A')) {
-        want.uri = decodeURIComponent(want.uri);
-      }
-
-      await this.sender.send(want);
-    } catch (error) {
-      hilog.error(0x0000, TAG, `Error handling launch: ${error.message}`);
+    // 兼容部分场景 data 可能被编码成 geo%3A...
+    if (want.uri && want.uri.startsWith('geo%3A')) {
+      want.uri = decodeURIComponent(want.uri);
     }
+
+    await this.sender.send(want);
   }
 }

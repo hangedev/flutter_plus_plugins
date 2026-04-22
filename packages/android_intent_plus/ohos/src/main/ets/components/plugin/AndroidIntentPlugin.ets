@@ -14,6 +14,9 @@
 */
 
 import {
+  AbilityAware,
+  AbilityPluginBinding,
+  BinaryMessenger,
   FlutterPlugin,
   FlutterPluginBinding,
 } from '@ohos/flutter_ohos';
@@ -21,34 +24,53 @@ import { MethodCallHandlerImpl } from './MethodCallHandlerImpl';
 import { WantSender } from './WantSender';
 import { common } from '@kit.AbilityKit';
 
-let globalCtx: common.UIAbilityContext | null = null;
-
 /** AndroidIntentPlugin **/
-export default class AndroidIntentPlugin implements FlutterPlugin {
+export default class AndroidIntentPlugin implements FlutterPlugin, AbilityAware {
   private sender: WantSender | null = null;
   private impl: MethodCallHandlerImpl | null = null;
+  private context: common.UIAbilityContext | null = null;
+  private binaryMessenger: BinaryMessenger | null = null;
+
+  private tryStartListening(): void {
+    if (!this.context || !this.binaryMessenger) {
+      return;
+    }
+    if (!this.sender) {
+      this.sender = new WantSender();
+    }
+    this.sender.setContext(this.context);
+    if (!this.impl) {
+      this.impl = new MethodCallHandlerImpl(this.sender);
+    }
+    this.impl.startListening(this.binaryMessenger);
+  }
 
   getUniqueClassName(): string {
     return 'AndroidIntentPlugin'
   }
 
-  // 使用 UIAbility 的context
-  setContext(context: common.UIAbilityContext): void {
-    globalCtx = context;
+  onAttachedToEngine(binding: FlutterPluginBinding): void {
+    this.binaryMessenger = binding.getBinaryMessenger();
+    this.tryStartListening();
   }
 
-  onAttachedToEngine(binding: FlutterPluginBinding): void {
-    if (globalCtx) {
-      this.sender = new WantSender(globalCtx);
-      this.impl = new MethodCallHandlerImpl(this.sender);
-      this.impl.startListening(binding.getBinaryMessenger());
-    }
+  onAttachedToAbility(binding: AbilityPluginBinding): void {
+    this.context = binding.getAbility().context as common.UIAbilityContext;
+    this.tryStartListening();
+  }
+
+  onDetachedFromAbility(): void {
+    this.impl?.stopListening();
+    this.impl = null;
+    this.sender?.setContext(null);
+    this.context = null;
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
     this.impl?.stopListening();
     this.sender = null;
     this.impl = null;
-    globalCtx = null;
+    this.binaryMessenger = null;
+    this.context = null;
   }
 }
