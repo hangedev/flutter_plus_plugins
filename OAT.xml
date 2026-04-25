@@ -90,6 +90,7 @@
                 <filteritem type="filename" name="*.so|*.har" desc="engine二进制文件,不影响兼容性"/>
                 <filteritem type="filename" name="*.tgz" desc="hvigor本地插件,不影响兼容性"/>
                 <filteritem type="filename" name="**.json5" desc="配置文件，flutter插件项目编译时会重写覆盖"/>
+                <filteritem type="filepath" name="projectroot/buildEnv.sh" desc="CI build config file"/>
                 <filteritem type="filepath" name="*/ohos/har/" desc="hvigor本地插件,不影响兼容性"/>
                 <filteritem type="filepath" name="*/ohos/entry/src/main/resources/rawfile/flutter_assets/" desc="资源文件，不影响兼容性"/>
                 <filteritem type="filepath" name="*/ohos/dta/icudtl.dat" desc="ohos字体库文件，不影响兼容性"/>
@@ -103,10 +104,12 @@
             <filefilter name="defaultPolicyFilter" desc="Filters for compatibility，license header policies">
                 <filteritem type='filepath' name="packages/pigeon/example/app/ohos/entry/src/main/ets/plugins/Messages.ets" desc='BSDStyleLicense,不影响兼容性'/>
                 <filteritem type="filename" name="**.json5" desc="配置文件，flutter插件项目编译时会重写覆盖"/>
+                <filteritem type="filepath" name="projectroot/buildEnv.sh" desc="CI build config file"/>
                 <filteritem type="filepath" name="packages/sensors_plus/sensors_plus/ohos/.*" desc="sensors_plus开源库代码（或原库代码文件），原本就无协议头，不做侵入式修改"/>
 				<filteritem type="filepath" name="packages/network_info_plus/network_info_plus/network_info_plus_ohos/.*" desc="sensors_plus开源库代码（或原库代码文件），原本就无协议头，不做侵入式修改"/>
             </filefilter>
             <filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies">
+                <filteritem type="filepath" name="projectroot/buildEnv.sh" desc="CI build config file"/>
                 <filteritem type="filepath" name="packages/sensors_plus/sensors_plus/ohos/.*" desc="sensors_plus开源库代码（或原库代码文件），原本就无版权头，不做侵入式修改"/>
 				<filteritem type="filepath" name="packages/network_info_plus/network_info_plus/network_info_plus_ohos/.*" desc="sensors_plus开源库代码（或原库代码文件），原本就无版权头，不做侵入式修改"/>
             </filefilter>
