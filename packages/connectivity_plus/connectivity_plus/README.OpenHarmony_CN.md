@@ -21,8 +21,8 @@ dependencies:
   connectivity_plus:
     git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
-      path: packages/connectivity_plus/connectivity_plus
-      ref: br_connectivity_plus-v7.0.0_ohos
+      # ref: br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1
+      ref: TAG  # 请根据下方TAG版本对应表选择TAG
 
 ...
 ```
@@ -32,6 +32,14 @@ dependencies:
 ```bash
 flutter pub get
 ```
+
+### TAG 版本对应表
+
+| Flutter 框架版本 | TAG                          | 分支     |
+|--------------|------------------------------|--------|
+| 3.22         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.27         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.35         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
 
 <!-- tabs:end -->
 
@@ -46,7 +54,8 @@ flutter pub get
 在以下版本中已测试通过
 
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3
+2. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+3. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 
 
 ### 2.2 权限要求
