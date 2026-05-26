@@ -21,6 +21,7 @@ dependencies:
   network_info_plus_ohos:
     git:
       url: https://gitcode.com/openharmony-sig/fluttertpc_network_info_plus.git
+      path: packages/network_info_plus/network_info_plus/network_info_plus_ohos
       # ref: br_network_info_plus-7.0.0-ohos.1.0.0-beta.1
       ref: TAG   # Please select the TAG to the TAG Version Mapping
 ...
