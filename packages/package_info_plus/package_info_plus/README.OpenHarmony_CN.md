@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
-      ref: br_package_info_plus-v8.1.0_ohos
+      ref: br_package_info_plus-v9.0.0_ohos
 
 ...
 ```
