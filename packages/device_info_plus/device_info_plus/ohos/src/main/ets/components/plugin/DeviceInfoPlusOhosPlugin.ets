@@ -66,6 +66,7 @@ export default class DeviceInfoPlusPlugin implements FlutterPlugin, MethodCallHa
       infoMap.set('buildHost', deviceInfo.buildHost);
       infoMap.set('buildTime', deviceInfo.buildTime);
       infoMap.set('buildRootHash', deviceInfo.buildRootHash);
+      infoMap.set('ODID', deviceInfo.ODID);//ohos.permission.APP_TRACKING_CONSENT用户授权才能获取有效值
       // infoMap.set('udid', deviceInfo.udid);
       // infoMap.set('udid', '');
       infoMap.set('distributionOSName', deviceInfo.distributionOSName);
