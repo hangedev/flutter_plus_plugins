@@ -20,7 +20,7 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 dependencies:
   battery_plus:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/battery_plus/battery_plus
 
 ...
