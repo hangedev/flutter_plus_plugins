@@ -20,7 +20,7 @@
 dependencies:
   network_info_plus_ohos:
     git:
-      url: https://gitcode.com/openharmony-sig/fluttertpc_network_info_plus.git
+      url: https://gitcode.com/CPF-Flutter/fluttertpc_network_info_plus.git
       path: packages/network_info_plus/network_info_plus/network_info_plus_ohos
 ...
 ```
