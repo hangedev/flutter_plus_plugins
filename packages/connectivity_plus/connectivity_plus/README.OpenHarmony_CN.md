@@ -19,8 +19,8 @@
 
 dependencies:
   connectivity_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
       ref: br_connectivity_plus-v6.1.0_ohos
 
@@ -65,7 +65,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### Connectivity API 
+### Connectivity API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | Connectivity()      | 构造 [Connectivity] 的单例实例 | function | / | Connectivity | yes |
@@ -78,7 +78,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### ConnectivityResult Filters 
+### ConnectivityResult Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | bluetooth           | 通过蓝牙连接的设备      | enum     | /     | /       | yes          |
