@@ -21,10 +21,10 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 
 dependencies:
   share_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/share_plus/share_plus
-      
+
 ...
 ```
 
@@ -54,7 +54,7 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### Share API 
+### Share API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | shareUri            | Summons the platform's share sheet to share URI | function | (Uri uri) | Future<void> | yes |
@@ -70,7 +70,7 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### ShareResult Filters 
+### ShareResult Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | raw                 | Raw platform return value (empty=dismissed, special value=unavailable) | String | / | / | yes |
@@ -78,7 +78,7 @@ This document is verified based on the following versions:
 
 ---
 
-### ShareResultStatus Filters 
+### ShareResultStatus Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | success             | User selected an action             | enum | / | / | yes |
