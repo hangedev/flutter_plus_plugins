@@ -19,8 +19,8 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 
 dependencies:
   device_info_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       ref: br_device_info_plus-v11.1.0_ohos
 ...
@@ -50,7 +50,7 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### DeviceInfoPlugin API 
+### DeviceInfoPlugin API
 | Name                | Description                                                                 | Type     | Input | Output                          | ohos Support |
 |---------------------|-----------------------------------------------------------------------------|----------|-------|---------------------------------|--------------|
 | ohosDeviceInfo      | Retrieves device information from `@ohos.deviceInfo` | function | /     | Future<OhosDeviceInfo>          | yes          |
@@ -64,7 +64,7 @@ This document is verified based on the following versions:
 
 ---
 
-### BaseDeviceInfo API 
+### BaseDeviceInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | toMap             | Returns the raw device information data map (deprecated) | function | / | Map<String, dynamic> | yes |
@@ -75,8 +75,8 @@ This document is verified based on the following versions:
 ## 4. Properties
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
- 
-### OhosDeviceInfo Filters 
+
+### OhosDeviceInfo Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | deviceType          | Gets the device type (e.g. phone/tablet/wearable) | String   | /     | /       | yes          |
@@ -107,7 +107,7 @@ This document is verified based on the following versions:
 
 ---
 
-### BaseDeviceInfo Filters 
+### BaseDeviceInfo Filters
 | Name                | Description                         | Type               | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|--------------------|-------|---------|--------------|
 | data                | Gets the raw device information data map | Map<String, dynamic> | /     | /       | yes          |
