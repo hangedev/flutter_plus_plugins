@@ -20,7 +20,7 @@
 dependencies:
   connectivity_plus:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
       # ref: br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1
       ref: TAG  # 请根据下方TAG版本对应表选择TAG
