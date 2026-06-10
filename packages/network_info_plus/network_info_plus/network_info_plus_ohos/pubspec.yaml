@@ -1,7 +1,7 @@
 name: network_info_plus_ohos
 description: Flutter plugin for discovering information (e.g. WiFi details) of the network.
 version: 1.0.0
-homepage: https://gitee.com/openharmony-sig/fluttertpc_network_info_plus
+homepage: https://gitcode.com/CPF-Flutter/flutter_plus_plugins/tree/master/packages/network_info_plus
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
