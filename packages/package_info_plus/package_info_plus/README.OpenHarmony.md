@@ -21,11 +21,11 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 
 dependencies:
   package_info_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
       ref: br_package_info_plus-v8.1.0_ohos
-      
+
 ...
 ```
 
@@ -54,7 +54,7 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### PackageInfo API 
+### PackageInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | fromPlatform      | Retrieves and caches platform-specific package information | future | / | Future<PackageInfo> | yes |
@@ -63,7 +63,7 @@ This document is verified based on the following versions:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### PackageInfo Filters 
+### PackageInfo Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | appName             | Gets application name  | String | / | / | yes |

@@ -21,8 +21,8 @@
 
 dependencies:
   package_info_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
       ref: br_package_info_plus-v8.1.0_ohos
 
@@ -54,7 +54,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### PackageInfo API 
+### PackageInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | fromPlatform      | 获取并缓存平台特定的包信息 | future | / | Future<PackageInfo> | yes |
@@ -63,7 +63,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### PackageInfo Filters 
+### PackageInfo Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | appName             | 获取应用名称  | String | / | / | yes |
