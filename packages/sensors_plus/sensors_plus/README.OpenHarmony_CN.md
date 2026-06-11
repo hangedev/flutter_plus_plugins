@@ -22,7 +22,7 @@
 dependencies:
   sensors_plus_ohos:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/sensors_plus/sensors_plus/ohos
       ref: br_sensors_plus-v7.0.0_ohos
 
