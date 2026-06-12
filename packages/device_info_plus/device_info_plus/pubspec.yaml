@@ -3,8 +3,8 @@ description: Flutter plugin providing detailed information about the device
   (make, model, etc.), and Android or iOS version the app is running on.
 version: 9.1.0
 homepage: https://plus.fluttercommunity.dev/
-repository: https://gitcode.com/openharmony-sig/flutter_plus_plugins/tree/master/packages/device_info_plus/device_info_plus
-issue_tracker: https://gitcode.com/openharmony-sig/flutter_plus_plugins/issues
+repository: https://gitcode.com/CPF-Flutter/flutter_plus_plugins/tree/master/packages/device_info_plus/device_info_plus
+issue_tracker: https://gitcode.com/CPF-Flutter/flutter_plus_plugins/issues
 
 flutter:
   plugin:
