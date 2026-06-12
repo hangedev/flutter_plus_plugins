@@ -19,8 +19,8 @@
 
 dependencies:
   device_info_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       ref: br_device_info_plus-v11.1.0_ohos
 ...
@@ -50,7 +50,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### DeviceInfoPlugin API 
+### DeviceInfoPlugin API
 | Name                | Description                                                                 | Type     | Input | Output                          | ohos Support |
 |---------------------|-----------------------------------------------------------------------------|----------|-------|---------------------------------|--------------|
 | ohosDeviceInfo      | 从 `@ohos.deviceInfo` 获取设备信息 | function | /     | Future<OhosDeviceInfo>          | yes          |
@@ -64,7 +64,7 @@ flutter pub get
 
 ---
 
-### BaseDeviceInfo API 
+### BaseDeviceInfo API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | toMap             | Returns the raw device information data map (deprecated) | function | / | Map<String, dynamic> | yes |
@@ -76,7 +76,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### OhosDeviceInfo Filters 
+### OhosDeviceInfo Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | deviceType          | 获取设备类型（如手机/平板/穿戴设备） | String   | /     | /       | yes          |
@@ -107,7 +107,7 @@ flutter pub get
 
 ---
 
-### BaseDeviceInfo Filters 
+### BaseDeviceInfo Filters
 | Name                | Description                         | Type               | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|--------------------|-------|---------|--------------|
 | data                | 获取原始设备信息数据字典 | Map<String, dynamic> | /     | /       | yes          |
