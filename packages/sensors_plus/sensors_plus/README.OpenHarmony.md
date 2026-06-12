@@ -21,10 +21,10 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 
 dependencies:
   sensors_plus_ohos:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/sensors_plus/sensors_plus/ohos
-      
+
 ...
 ```
 
@@ -67,7 +67,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### Sensors API 
+### Sensors API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | accelerometerEvents | A broadcast stream of events from the device accelerometer | function | / | Stream<AccelerometerEvent> | yes |
@@ -81,7 +81,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 > [!TIP] If the value of **ohos Support** is **yes**, it means that the ohos platform supports this property; **no** means the opposite; **partially** means some capabilities of this property are supported. The usage method is the same on different platforms and the effect is the same as that of iOS or Android.
 
-### AccelerometerEvent Filters 
+### AccelerometerEvent Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | x                   | Acceleration force along X-axis (m/s², includes gravity) | double | / | / | yes |
@@ -90,7 +90,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 ---
 
-### GyroscopeEvent Filters 
+### GyroscopeEvent Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | x                   | Rotation rate around X-axis (rad/s, describes "pitch") | double | / | / | yes |
@@ -99,7 +99,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 ---
 
-### UserAccelerometerEvent Filters 
+### UserAccelerometerEvent Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | x                   | Acceleration force along X-axis (m/s², excludes gravity) | double | / | / | yes |
@@ -108,7 +108,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 
 ---
 
-### MagnetometerEvent Filters 
+### MagnetometerEvent Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | x                   | Ambient magnetic field along X-axis (μT) | double | / | / | yes |
