@@ -20,7 +20,7 @@ Go to the project directory and add the following dependencies in pubspec.yaml
 dependencies:
   android_intent_plus:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/android_intent_plus
       ref: br_android_intent_plus-v6.0.0_ohos
 
