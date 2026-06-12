@@ -20,7 +20,7 @@
 dependencies:
   device_info_plus:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       ref: br_device_info_plus-v12.3.0_ohos
 ...
