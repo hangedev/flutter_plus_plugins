@@ -11,9 +11,9 @@ dependencies:
   meta: ^1.8.0
   mime: ^1.0.4
   plugin_platform_interface: ^2.1.4
-  path_provider: 
+  path_provider:
     git:
-      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/CPF-Flutter/flutter_packages.git
       ref: master
       path: packages/path_provider/path_provider
 
