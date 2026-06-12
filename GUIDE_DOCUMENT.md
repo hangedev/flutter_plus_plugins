@@ -8,7 +8,7 @@
 
 首先，我们需要将三方库中example的安卓样例运行起来，以package_info_plus为例，可以看到，此插件是用来获取应用包的相关信息的。
 
-![image-20240124104027229](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E5%AE%89%E5%8D%93%E6%95%88%E6%9E%9C.png)
+![image-20240124104027229](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E5%AE%89%E5%8D%93%E6%95%88%E6%9E%9C.png)
 
 ​
 
@@ -18,13 +18,13 @@
 
 在三方插件（package_info_plus为例）中添加ohos模块，可直接复制此模块，ohos模块结构如下，与android和ios在同一级下。
 
-![添加ohos模块](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E6%B7%BB%E5%8A%A0ohos%E6%A8%A1%E5%9D%97.png)
+![添加ohos模块](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E6%B7%BB%E5%8A%A0ohos%E6%A8%A1%E5%9D%97.png)
 
 #### 2、三方插件目录结构参考
 
 插件目录结构可以参考安卓，写在ohos下面的`src > main > ets`下。
 
-![代码结构](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94.png)
+![代码结构](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94.png)
 
 #### 3、代码适配
 
@@ -104,13 +104,13 @@ export default PackageInfoPlugin;
 
 打包步骤：1、鼠标定位到packageInfoPlus目录；2、点击DevEco Studio中的Build；3、点击Make Module 'packageInfoPlus'选项；4、等待打包完成。
 
-![打har包 ](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E6%89%93har%E5%8C%85%20.png)
+![打har包 ](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E6%89%93har%E5%8C%85%20.png)
 
 预期结果：
 
 在`packageInfoPlus > build > outputs > default`中有packageInfoPlus.har生成，即为打har包成功。
 
-![打har包成功 ](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E6%89%93har%E5%8C%85%E6%88%90%E5%8A%9F.png)
+![打har包成功 ](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E6%89%93har%E5%8C%85%E6%88%90%E5%8A%9F.png)
 
 
 
@@ -134,7 +134,7 @@ flutter:
         pluginClass: PackageInfoPlugin
 ```
 
-![修改pubspec1.yaml](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E4%BF%AE%E6%94%B9pubspec1.yaml.png)
+![修改pubspec1.yaml](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E4%BF%AE%E6%94%B9pubspec1.yaml.png)
 
 **修改路径2：**`file:/package_info_plus/package_info_plus/example/pubspec.yaml`
 
@@ -148,13 +148,13 @@ dependencies:
     path: ../
 ```
 
-![修改pubspec2.yaml](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E4%BF%AE%E6%94%B9pubspec2.yaml.png)
+![修改pubspec2.yaml](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E4%BF%AE%E6%94%B9pubspec2.yaml.png)
 
 #### 2、在example中添加ohos模块
 
 在example目录下，通过命令`flutter create --platforms ohos .` ，添加ohos模块，生成代码如下图所示：
 
-![example中的ohos](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/example%E4%B8%AD%E7%9A%84ohos.png)
+![example中的ohos](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/example%E4%B8%AD%E7%9A%84ohos.png)
 
 
 
@@ -170,9 +170,9 @@ dependencies:
 
 单击 `File > Project Structure > Project > Signing Configs` 界面勾选 `Automatically generate signature`，等待自动签名完成即可，单击 `OK`；
 
-你也可以使用 [签名工具](https://gitee.com/openharmony/developtools_hapsigner) 签名，可参考https://gitee.com/openharmony-sig/flutter_flutter中的环境配置中第四步，配置签名。
+你也可以使用 [签名工具](https://gitcode.com/openharmony/developtools_hapsigner) 签名，可参考https://gitcode.com/CPF-Flutter/flutter_flutter中的环境配置中第四步，配置签名。
 
-![image-20240122151304602](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E7%AD%BE%E5%90%8D.png)
+![image-20240122151304602](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E7%AD%BE%E5%90%8D.png)
 
 #### 2、运行
 
@@ -184,4 +184,4 @@ flutter run --local-engine=<flutter_engine out path>
 
 **运行成功效果如下：**
 
-![效果](https://gitee.com/OpenHarmony-SIG/flutter_plus_plugins/raw/master/img_storage/%E6%95%88%E6%9E%9C.png)
+![效果](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/img_storage/%E6%95%88%E6%9E%9C.png)
