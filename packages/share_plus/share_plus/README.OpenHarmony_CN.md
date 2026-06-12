@@ -21,8 +21,8 @@
 
 dependencies:
   share_plus:
-    git: 
-      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/share_plus/share_plus
       ref: br_share_plus-v10.1.1_ohos
 
@@ -54,7 +54,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### Share API 
+### Share API
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | shareUri            | 调用平台分享面板以分享URI | function | (Uri uri, {Rect? sharePositionOrigin}) | Future<ShareResult> | yes |
@@ -67,7 +67,7 @@ flutter pub get
 
 > [!TIP] "ohos Support"列为 yes 表示 ohos 平台支持该属性；no 则表示不支持；partially 表示部分支持。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
 
-### ShareResult Filters 
+### ShareResult Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | raw                 | 原始平台返回值（空字符串=用户取消分享，特殊值=功能不可用） | String | / | / | yes |
@@ -75,7 +75,7 @@ flutter pub get
 
 ---
 
-### ShareResultStatus Filters 
+### ShareResultStatus Filters
 | Name                | Description                         | Type     | Input | Output  | ohos Support |
 |---------------------|-------------------------------------|----------|-------|---------|--------------|
 | success             | 用户选择了某个分享动作 | enum | / | / | yes |
