@@ -22,6 +22,8 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/fluttertpc_network_info_plus.git
       path: packages/network_info_plus/network_info_plus/network_info_plus_ohos
+      # ref: network_info_plus-4.1.0-ohos-1.0.0-beta.1
+      ref: TAG  # 请根据下方TAG版本对应表选择TAG
 ...
 ```
 
@@ -30,6 +32,13 @@ dependencies:
 ```bash
 flutter pub get
 ```
+
+### TAG 版本对应表
+
+| Flutter 框架版本   | TAG                                          | 分支     |
+|----------------|----------------------------------------------|--------|
+| 3.7            | network_info_plus-4.1.0-ohos-1.0.0-beta.1    | master |
+| 3.22           | network_info_plus-4.1.0-ohos-1.0.0-beta.1    | master |
 
 <!-- tabs:end -->
 

@@ -29,9 +29,9 @@ Flutter plugin for accessing information about the battery state(full, charging,
 
 Flutter plugin for discovering the state of the network (WiFi & mobile/cellular) connectivity on Android, iOS and ohos.
 
-[View Source](/packages/connectivity_plus)
+[View Source](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_connectivity_plus-v7.0.0_ohos/packages/connectivity_plus/)
 
-[README](/packages/connectivity_plus/connectivity_plus/README.OpenHarmony_CN.md)
+[README](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_connectivity_plus-v7.0.0_ohos/packages/connectivity_plus/connectivity_plus/README.OpenHarmony_CN.md)
 
 #### Platform Support
 
@@ -61,9 +61,9 @@ Flutter plugin providing detailed information about the device (make, model, etc
 
 Flutter plugin for discovering network info.
 
-[View Source](/packages/network_info_plus)
+[View Source](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_network_info_plus_v7.0.0_ohos/packages/network_info_plus/)
 
-[README](/packages/network_info_plus/network_info_plus/README.OpenHarmony_CN.md)
+[README](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_network_info_plus_v7.0.0_ohos/packages/network_info_plus/network_info_plus/README.OpenHarmony.md)
 
 #### Platform Support
 
