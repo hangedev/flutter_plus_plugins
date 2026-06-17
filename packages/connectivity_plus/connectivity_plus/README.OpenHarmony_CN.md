@@ -36,11 +36,12 @@ flutter pub get
 
 ### TAG 版本对应表
 
-| Flutter 框架版本 | TAG                          | 分支     |
-|--------------|------------------------------|--------|
-| 3.22         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.27         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.35         | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| Flutter 框架版本     | TAG                                          | 分支                               |
+|------------------|----------------------------------------------|----------------------------------|
+| 3.7              | connectivity_plus-5.0.1-ohos-1.0.0-beta.1    | master                           |
+| 3.22             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.27             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.35             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
 
 <!-- tabs:end -->
 
