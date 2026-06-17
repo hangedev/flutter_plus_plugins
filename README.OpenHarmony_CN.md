@@ -25,7 +25,7 @@ Flutter 插件，用于访问 Android、iOS 和 ohos 上电池状态（已充满
 
 Flutter 插件，用于发现 Android、iOS 和 ohos 上的网络状态（WiFi 和移动/蜂窝）连接。
 
-[查看代码](/packages/connectivity_plus)       [查看使用文档](/packages/connectivity_plus/connectivity_plus/README.OpenHarmony_CN.md)
+[查看代码](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_connectivity_plus-v7.0.0_ohos/packages/connectivity_plus/)       [查看使用文档](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_connectivity_plus-v7.0.0_ohos/packages/connectivity_plus/connectivity_plus/README.OpenHarmony_CN.md)
 
 #### Platform Support
 
@@ -53,7 +53,7 @@ Flutter 插件，提供有关设备的详细信息（制造商、型号等）以
 
 Flutter 插件，用于发现网络信息。
 
-[查看代码](/packages/network_info_plus)       [查看使用文档](/packages/network_info_plus/network_info_plus/README.OpenHarmony_CN.md)
+[查看代码](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_network_info_plus_v7.0.0_ohos/packages/network_info_plus/)       [查看使用文档](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/br_network_info_plus_v7.0.0_ohos/packages/network_info_plus/network_info_plus/README.OpenHarmony.md)
 
 #### Platform Support
 

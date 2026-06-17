@@ -24,7 +24,8 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
-
+      # ref: connectivity_plus-5.0.1-ohos-1.0.0-beta.1
+      ref: TAG   # Please select the TAG to the TAG Version Mapping
 ...
 ```
 
@@ -33,6 +34,13 @@ Execute Command
 ```bash
 flutter pub get
 ```
+
+### TAG Version Mapping
+
+| Flutter Framework Version  | TAG                                       | Branch    |
+|----------------------------|-------------------------------------------|-----------|
+| 3.7                        | connectivity_plus-5.0.1-ohos-1.0.0-beta.1 | master    |
+| 3.22                       | connectivity_plus-5.0.1-ohos-1.0.0-beta.1 | master    |
 
 <!-- tabs:end -->
 
