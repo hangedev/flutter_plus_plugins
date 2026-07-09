@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
       path: packages/android_intent_plus
-      ref: br_android_intent_plus-v6.0.0_ohos
+      ref: 6.0.0-ohos-1.0.0-beta.1
 
 ...
 ```
@@ -55,15 +55,15 @@ flutter pub get
 
 ### android_intent_plus
 
-| Name      | Description | Type     |  Input   | Output      | ohos Support |
+| Name | Description | Type | Input | Output | ohos Support |
 | --------  | ----------- | -------- | -------- | ----------- | ------------ |
-| `Future<void> launch()`       | 触发一次通用 Intent 启动    | function | 无 | void | yes |
-| `Future<void> parseAndLaunch(String uri)` | 解析 Intent URI 字符串并启动  | function | `String uri:uri 为完整的 Intent URI`  | void  | yes |
-| `Future<void> launchChooser(String title)`  | 启动系统选择器弹窗    | function | `String title：title 为选择器标题` | void  | yes |
-| `Future<void> sendBroadcast()`  | 以广播方式发送 Intent  | function |  无  | void  | yes |
-| `Future<void> sendService() `  | 以 Service 方式启动 Intent | function |  无  | void  | no |
-| `Future<ResolvedActivity?> canResolveActivity()`  | 判断是否能够处理该activity，返回布尔值  | function |  无  | void  | no |
-| `Future<ResolvedActivity?> getResolvedActivity()`  | 获取该activity，返回Uint8List  | function |  无  | void  | no |
+| `Future<void> launch()` | 触发一次通用 Intent 启动 | function | 无 | void | yes |
+| `Future<void> parseAndLaunch(String uri)` | 解析 Intent URI 字符串并启动 | function | `String uri:uri 为完整的 Intent URI` | void | yes |
+| `Future<void> launchChooser(String title)` | 启动系统选择器弹窗 | function | `String title：title 为选择器标题` | void | yes |
+| `Future<void> sendBroadcast()` | 以广播方式发送 Intent | function | 无 | void | yes |
+| `Future<void> sendService() ` | 以 Service 方式启动 Intent | function | 无 | void | no |
+| `Future<ResolvedActivity?> canResolveActivity()` | 判断是否能够处理该activity，返回布尔值 | function | 无 | void | no |
+| `Future<ResolvedActivity?> getResolvedActivity()` | 获取该activity，返回Uint8List | function | 无 | void | no |
 
 
 ## 4. 遗留问题
