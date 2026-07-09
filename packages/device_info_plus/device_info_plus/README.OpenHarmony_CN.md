@@ -22,6 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
+      # ref: 根据下方表格选择不同框架适配的TAG版本
       ref: br_device_info_plus-v12.3.0_ohos
 ...
 ```
@@ -31,6 +32,12 @@ dependencies:
 ```bash
 flutter pub get
 ```
+
+> TAG 命名规则：`原库版本-ohos-版本号-betax`，不同 TAG 之间的变更详见 CHANGELOG.OpenHarmony.md。
+
+| Flutter 框架版本 | TAG 名称 | 分支名 |
+|---|---|---|
+| 3.35 | device_info_plus-12.3.0-ohos-1.0.0-beta.1 | br_device_info_plus-v12.3.0_ohos |
 
 <!-- tabs:end -->
 
