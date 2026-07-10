@@ -22,6 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
+      # ref: Select the TAG version that matches your Flutter framework version from the table below
       ref: br_device_info_plus-v12.3.0_ohos
 ...
 ```
@@ -31,6 +32,12 @@ Execute Command
 ```bash
 flutter pub get
 ```
+
+> TAG naming rule: `original-library-version-ohos-version-betax`. For changes between TAGs, see CHANGELOG.OpenHarmony.md.
+
+| Flutter Framework Version | TAG Name | Branch |
+|---|---|---|
+| 3.35 | device_info_plus-12.3.0-ohos-1.0.0-beta.1 | br_device_info_plus-v12.3.0_ohos |
 
 <!-- tabs:end -->
 
