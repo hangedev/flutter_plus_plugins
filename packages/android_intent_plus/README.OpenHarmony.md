@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/android_intent_plus
-      ref: br_android_intent_plus-v6.0.0_ohos
+      ref: 6.0.0-ohos-1.0.0-beta.1
 
 ...
 ```
@@ -49,15 +49,15 @@ This document is verified based on the following versions:
 
 ### android_intent_plus
 
-| Name      | Description | Type     |  Input   | Output      | ohos Support |
+| Name | Description | Type | Input | Output | ohos Support |
 | --------  | ----------- | -------- | -------- | ----------- | ------------ |
-| `Future<void> launch()`       | Trigger a generic Intent launch    | function | 无 | void | yes |
-| `Future<void> parseAndLaunch(String uri)` | Parse the Intent URI string and launch  | function | `String uri:uri 为完整的 Intent URI`  | void  | yes |
-| `Future<void> launchChooser(String title)`  | Launch the system selector pop-up    | function | `String title：title 为选择器标题` | void  | yes |
-| `Future<void> sendBroadcast()`  | Send Intent via broadcast  | function |  无  | void  | yes |
-| `Future<void> sendService() `  | Start Intent in Service mode | function |  无  | void  | no |
-| `Future<ResolvedActivity?> canResolveActivity()`  | Determine whether the activity can be processed and return a boolean value | function |  无  | void  | no |
-| `Future<ResolvedActivity?> getResolvedActivity()`  | Get the activity and return a Uint8List  | function |  无  | void  | no |
+| `Future<void> launch()` | Trigger a generic Intent launch | function | 无 | void | yes |
+| `Future<void> parseAndLaunch(String uri)` | Parse the Intent URI string and launch | function | `String uri:uri 为完整的 Intent URI` | void | yes |
+| `Future<void> launchChooser(String title)` | Launch the system selector pop-up | function | `String title：title 为选择器标题` | void | yes |
+| `Future<void> sendBroadcast()` | Send Intent via broadcast | function | 无 | void | yes |
+| `Future<void> sendService() ` | Start Intent in Service mode | function | 无 | void | no |
+| `Future<ResolvedActivity?> canResolveActivity()` | Determine whether the activity can be processed and return a boolean value | function | 无 | void | no |
+| `Future<ResolvedActivity?> getResolvedActivity()` | Get the activity and return a Uint8List | function | 无 | void | no |
 
 ## 4. Known Issues
 
