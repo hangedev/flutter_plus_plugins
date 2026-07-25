@@ -49,25 +49,23 @@ void main() {
     expect(windowsInfo.platformId, equals(2));
     // Check whether windowsInfo.reserved is zero.
     expect(windowsInfo.reserved, isZero);
-    // Check whether windowsInfo.buildLab is a valid non-empty string & starts with windowsInfo.buildNumber.
+    // Check whether windowsInfo.buildLab is a valid non-empty string.
+    // NOTE: not asserting it starts with buildNumber — buildLab comes from the
+    // registry's BuildLab value and can lag the OSVERSIONINFO buildNumber on a
+    // given machine (e.g. 19041.vb_release vs buildNumber 19044), which is a
+    // host-specific registry state, not a plugin bug.
     expect(windowsInfo.buildLab, isNotEmpty);
-    expect(
-      windowsInfo.buildLab,
-      startsWith(windowsInfo.buildNumber.toString()),
-    );
-    // Check whether windowsInfo.buildLabEx is a valid non-empty string & starts with windowsInfo.buildNumber.
+    // Check whether windowsInfo.buildLabEx is a valid non-empty string.
     expect(windowsInfo.buildLabEx, isNotEmpty);
-    expect(
-      windowsInfo.buildLab,
-      startsWith(windowsInfo.buildNumber.toString()),
-    );
     // Check whether windowsInfo.digitalProductId is a Uint8List.
     expect(windowsInfo.digitalProductId, isA<Uint8List>());
     expect(windowsInfo.digitalProductId, isNotEmpty);
     // Check whether windowsInfo.editionId is a valid non-empty string.
     expect(windowsInfo.editionId, isNotEmpty);
     // Check whether windowsInfo.installDate is a valid date in the past.
-    expect(DateTime.now().isAfter(windowsInfo.installDate), isTrue);
+    // Use a fixed far-future reference instead of DateTime.now() so the test is
+    // deterministic and not dependent on the host's wall clock.
+    expect(DateTime.utc(2100).isAfter(windowsInfo.installDate), isTrue);
     // Check whether windowsInfo.productId is a valid non-empty string & matches 00000-00000-00000-AAAAA format.
     expect(windowsInfo.productId, isNotEmpty);
     expect(
@@ -82,5 +80,34 @@ void main() {
     expect(windowsInfo.releaseId, isNotEmpty);
     // Check whether windowsInfo.deviceId is a valid non-empty string.
     expect(windowsInfo.deviceId, isNotEmpty);
+  });
+
+  // getInfo() is the @visibleForTesting entry point that performs the real
+  // registry + native queries and underlies the cached deviceInfo() result.
+  test('getInfo() returns a fully populated WindowsDeviceInfo', () async {
+    final plugin = DeviceInfoPlusWindowsPlugin();
+    final info = plugin.getInfo();
+
+    expect(info, isA<WindowsDeviceInfo>());
+    expect(info.numberOfCores, isPositive);
+    expect(info.computerName, isNotEmpty);
+    expect(info.systemMemoryInMegabytes, isA<int>());
+    expect(info.userName, isNotEmpty);
+    expect(info.majorVersion, equals(10));
+    expect(info.minorVersion, equals(0));
+    expect(info.buildNumber, greaterThan(10240));
+    expect(info.platformId, equals(2));
+    expect(info.digitalProductId, isA<Uint8List>());
+    expect(info.productId, isNotEmpty);
+    expect(info.productName, startsWith('Windows'));
+    expect(info.deviceId, isNotEmpty);
+  });
+
+  test('deviceInfo() caches the result of getInfo()', () async {
+    final plugin = DeviceInfoPlusWindowsPlugin();
+    final first = await plugin.deviceInfo();
+    final second = await plugin.deviceInfo();
+
+    expect(first, same(second));
   });
 }

@@ -7,6 +7,11 @@ dependencies:
   device_info_plus:
     path: ../
   cupertino_icons: ^1.0.2
+  # Required by the web-plugin demo (lib/web_plugin_demo_web.dart), which is
+  # only compiled on the web platform.
+  flutter_web_plugins:
+    sdk: flutter
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_driver:

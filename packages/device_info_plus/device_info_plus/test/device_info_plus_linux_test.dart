@@ -1,7 +1,7 @@
 @TestOn('linux')
 library;
 
-import 'package:device_info_plus/src/device_info_plus_linux.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_info_plus_platform_interface/device_info_plus_platform_interface.dart';
 import 'package:file/memory.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +10,29 @@ void main() {
   test('registered instance', () {
     DeviceInfoPlusLinuxPlugin.registerWith();
     expect(DeviceInfoPlatform.instance, isA<DeviceInfoPlusLinuxPlugin>());
+  });
+
+  test('deviceInfo() returns a BaseDeviceInfo and caches the result',
+      () async {
+    // deviceInfo() is the public @override entry point that the platform
+    // interface calls; it computes the info once and caches it via `_cache ??=`.
+    // Exercise it directly (linuxInfo() merely casts its result) and assert
+    // both the return type and the single-computation cache.
+    final fs = MemoryFileSystem.test();
+    final file = fs.file('/etc/os-release')..createSync(recursive: true);
+    file.writeAsStringSync('NAME="A Linux"\nID=foo\n');
+
+    final deviceInfo = DeviceInfoPlusLinuxPlugin(fileSystem: fs);
+
+    final first = await deviceInfo.deviceInfo();
+
+    expect(first, isA<BaseDeviceInfo>());
+    // The cached value is a LinuxDeviceInfo under the hood.
+    expect(first, isA<LinuxDeviceInfo>());
+
+    // Second call must return the identical cached instance (no re-read).
+    final second = await deviceInfo.deviceInfo();
+    expect(identical(second, first), isTrue);
   });
   test('os-release', () async {
     final fs = MemoryFileSystem.test();

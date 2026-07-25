@@ -44,5 +44,86 @@ void main() {
         expect(macosDeviceInfo.data, macosDeviceInfoMap);
       });
     });
+
+    group('setMockInitialValues', () {
+      test('constructs an instance from explicit mock values', () {
+        final info = MacOsDeviceInfo.setMockInitialValues(
+          computerName: 'MacBook',
+          hostName: 'host',
+          arch: 'arm64',
+          model: 'Mac14,2',
+          modelName: 'MacBook Pro',
+          kernelVersion: '22.0',
+          osRelease: '22.0',
+          majorVersion: 13,
+          minorVersion: 0,
+          patchVersion: 0,
+          activeCPUs: 8,
+          memorySize: 17179869184,
+          cpuFrequency: 0,
+          systemGUID: 'GUID-1234',
+        );
+
+        expect(info.computerName, 'MacBook');
+        expect(info.model, 'Mac14,2');
+        expect(info.majorVersion, 13);
+        expect(info.activeCPUs, 8);
+        expect(info.systemGUID, 'GUID-1234');
+        // The mock must also produce a valid backing data map.
+        expect(info.data['computerName'], 'MacBook');
+        expect(info.data['systemGUID'], 'GUID-1234');
+      });
+
+      test('produces a data map that round-trips through fromMap', () {
+        final info = MacOsDeviceInfo.setMockInitialValues(
+          computerName: 'Mac',
+          hostName: 'host',
+          arch: 'x86_64',
+          model: 'MacPro1,1',
+          modelName: 'Mac Pro',
+          kernelVersion: '20.0',
+          osRelease: '20.0',
+          majorVersion: 11,
+          minorVersion: 6,
+          patchVersion: 2,
+          activeCPUs: 4,
+          memorySize: 8589934592,
+          cpuFrequency: 2600,
+          systemGUID: 'GUID',
+        );
+
+        final restored = MacOsDeviceInfo.fromMap(info.data);
+
+        expect(restored.computerName, info.computerName);
+        expect(restored.model, info.model);
+        expect(restored.majorVersion, info.majorVersion);
+        expect(restored.minorVersion, info.minorVersion);
+        expect(restored.activeCPUs, info.activeCPUs);
+        expect(restored.systemGUID, info.systemGUID);
+      });
+    });
+
+    group('fromMap boundary scenarios', () {
+      test('handles a null systemGUID', () {
+        final info = MacOsDeviceInfo.fromMap(const <String, dynamic>{
+          'computerName': 'Mac',
+          'hostName': 'host',
+          'arch': 'arm64',
+          'model': 'Mac14,2',
+          'modelName': 'MacBook',
+          'kernelVersion': '22.0',
+          'osRelease': '22.0',
+          'majorVersion': 13,
+          'minorVersion': 0,
+          'patchVersion': 0,
+          'activeCPUs': 8,
+          'memorySize': 0,
+          'cpuFrequency': 0,
+          'systemGUID': null,
+        });
+
+        expect(info.systemGUID, isNull);
+      });
+    });
   });
 }

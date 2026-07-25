@@ -12,6 +12,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'device_info_plus_demo.dart';
+
 void main() {
   runZonedGuarded(
     () {
@@ -73,12 +75,20 @@ class _MyAppState extends State<MyApp> {
               'Error:': '$defaultTargetPlatform isn\'t supported'
             };
         }
-        ;
       }
     } on PlatformException {
       deviceData = <String, dynamic>{
         'Error:': 'Failed to get platform version.',
       };
+    }
+
+  // Run the Ohos + Web API demo (fromMap/toJson/fields/UDID getter/web plugin)
+  // purely to exercise the API. Invoked from initState() via initPlatformState();
+  // its output is intentionally NOT merged into the displayed data.
+  try {
+    await runDeviceInfoPlusDemo();
+    } catch (e) {
+      developer.log('runDeviceInfoPlusDemo failed', error: e);
     }
 
     if (!mounted) return;
