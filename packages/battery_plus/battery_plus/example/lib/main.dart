@@ -6,6 +6,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 
+import 'battery_demo_coverage.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -45,6 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _battery.batteryState.then(_updateBatteryState);
     _batteryStateSubscription =
         _battery.onBatteryStateChanged.listen(_updateBatteryState);
+    // Exercise the full battery_plus API surface (every BatteryState enum
+    // value and the BatteryPlusLinuxPlugin entry points) for demo coverage.
+    // Renders no UI; failures are swallowed inside the helper.
+    runBatteryDemoCoverage();
   }
 
   void _updateBatteryState(BatteryState state) {
