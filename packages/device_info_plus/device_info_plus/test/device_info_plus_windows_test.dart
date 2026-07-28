@@ -5,9 +5,15 @@ import 'dart:typed_data';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_info_plus_platform_interface/device_info_plus_platform_interface.dart';
+import 'package:device_info_plus_platform_interface/method_channel/method_channel_device_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  tearDown(() {
+    // Reset the global platform so registerWith() does not leak between tests.
+    DeviceInfoPlatform.instance = MethodChannelDeviceInfo();
+  });
+
   test('registered instance', () {
     DeviceInfoPlusWindowsPlugin.registerWith();
     expect(DeviceInfoPlatform.instance, isA<DeviceInfoPlusWindowsPlugin>());
@@ -31,6 +37,9 @@ void main() {
     expect(userName, isNotEmpty);
   });
   test('windows information', () async {
+    // Capture a timestamp before the call so the installDate assertion does
+    // not depend on a bare DateTime.now() at assertion time.
+    final before = DateTime.now();
     final deviceInfo = DeviceInfoPlusWindowsPlugin();
     final windowsInfo = (await deviceInfo.deviceInfo()) as WindowsDeviceInfo;
     // Check whether windowsInfo.numberOfProcessors is a positive integer.
@@ -49,25 +58,22 @@ void main() {
     expect(windowsInfo.platformId, equals(2));
     // Check whether windowsInfo.reserved is zero.
     expect(windowsInfo.reserved, isZero);
-    // Check whether windowsInfo.buildLab is a valid non-empty string & starts with windowsInfo.buildNumber.
+    // Check whether windowsInfo.buildLab is a valid non-empty string containing
+    // a build number. (BuildLab may reflect the base build - e.g. 19041 - while
+    // buildNumber reflects the patched build - e.g. 19044 - so an exact prefix
+    // match against buildNumber is not reliable across Windows updates.)
     expect(windowsInfo.buildLab, isNotEmpty);
-    expect(
-      windowsInfo.buildLab,
-      startsWith(windowsInfo.buildNumber.toString()),
-    );
-    // Check whether windowsInfo.buildLabEx is a valid non-empty string & starts with windowsInfo.buildNumber.
+    expect(windowsInfo.buildLab, matches(RegExp(r'\d{5}')));
+    // Check whether windowsInfo.buildLabEx is a valid non-empty string.
     expect(windowsInfo.buildLabEx, isNotEmpty);
-    expect(
-      windowsInfo.buildLab,
-      startsWith(windowsInfo.buildNumber.toString()),
-    );
+    expect(windowsInfo.buildLabEx, matches(RegExp(r'\d{5}')));
     // Check whether windowsInfo.digitalProductId is a Uint8List.
     expect(windowsInfo.digitalProductId, isA<Uint8List>());
     expect(windowsInfo.digitalProductId, isNotEmpty);
     // Check whether windowsInfo.editionId is a valid non-empty string.
     expect(windowsInfo.editionId, isNotEmpty);
     // Check whether windowsInfo.installDate is a valid date in the past.
-    expect(DateTime.now().isAfter(windowsInfo.installDate), isTrue);
+    expect(windowsInfo.installDate.isBefore(before), isTrue);
     // Check whether windowsInfo.productId is a valid non-empty string & matches 00000-00000-00000-AAAAA format.
     expect(windowsInfo.productId, isNotEmpty);
     expect(

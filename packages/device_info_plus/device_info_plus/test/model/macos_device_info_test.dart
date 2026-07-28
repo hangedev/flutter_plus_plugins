@@ -35,12 +35,26 @@ void main() {
         expect(macosDeviceInfo.majorVersion, 10);
         expect(macosDeviceInfo.minorVersion, 9);
         expect(macosDeviceInfo.patchVersion, 3);
+        expect(macosDeviceInfo.computerName, 'computerName');
+        expect(macosDeviceInfo.kernelVersion, 'kernelVersion');
         expect(macosDeviceInfo.systemGUID, isNull);
       });
 
       test('toMap should return map with correct key and map', () {
         final macosDeviceInfo = MacOsDeviceInfo.fromMap(macosDeviceInfoMap);
         expect(macosDeviceInfo.data, macosDeviceInfoMap);
+      });
+
+      test('systemGUID may be non-null', () {
+        final macosDeviceInfo = MacOsDeviceInfo.fromMap(
+            <String, dynamic>{...macosDeviceInfoMap, 'systemGUID': 'GUID'});
+        expect(macosDeviceInfo.systemGUID, 'GUID');
+      });
+
+      test('fromMap rejects a map missing required fields', () {
+        // computerName is a non-nullable String; an empty map fails.
+        expect(() => MacOsDeviceInfo.fromMap(<String, dynamic>{}),
+            throwsA(isA<TypeError>()));
       });
     });
   });

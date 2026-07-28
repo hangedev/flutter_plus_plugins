@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-BUILD_PKG_DIR=packages/battery_plus/battery_plus/example
-FLUTTER_SDK_VERSION=br_3.7.12-ohos-dev
+BUILD_PKG_DIR=packages/device_info_plus/device_info_plus/example
+FLUTTER_SDK_VERSION=3.22.0-ohos
