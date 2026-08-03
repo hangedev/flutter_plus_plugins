@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
-      # ref: br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1
+      # ref: connectivity_plus-7.0.0-ohos-1.0.0
       ref: TAG  # 请根据下方TAG版本对应表选择TAG
 
 ...
@@ -39,9 +39,9 @@ flutter pub get
 | Flutter 框架版本     | TAG                                          | 分支                               |
 |------------------|----------------------------------------------|----------------------------------|
 | 3.7              | connectivity_plus-5.0.1-ohos-1.0.0-beta.1    | master                           |
-| 3.22             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.27             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.35             | br_connectivity_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.22             | connectivity_plus-7.0.0-ohos-1.0.0 | network_info_plus_v7.0.0_ohos |
+| 3.27             | connectivity_plus-7.0.0-ohos-1.0.0 | network_info_plus_v7.0.0_ohos |
+| 3.35             | connectivity_plus-7.0.0-ohos-1.0.0 | network_info_plus_v7.0.0_ohos |
 
 <!-- tabs:end -->
 
