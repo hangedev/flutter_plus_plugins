@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/network_info_plus/network_info_plus/network_info_plus_ohos
-      # ref: br_network_info_plus-7.0.0-ohos.1.0.0-beta.1
+      # ref: network_info_plus-7.0.0-ohos-1.0.0
       ref: TAG   # Please select the TAG to the TAG Version Mapping
 ...
 ```
@@ -39,8 +39,8 @@ flutter pub get
 |---------------------------|----------------------------------------------|----------------------------------|
 | 3.7                       | network_info_plus-4.1.0-ohos-1.0.0-beta.1    | master                           |
 | 3.22                      | network_info_plus-4.1.0-ohos-1.0.0-beta.1    | master                           |
-| 3.27                      | br_network_info_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.35                      | br_network_info_plus-7.0.0-ohos.1.0.0-beta.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.27                      | network_info_plus-7.0.0-ohos-1.0.0           | br_network_info_plus_v7.0.0_ohos |
+| 3.35                      | network_info_plus-7.0.0-ohos-1.0.0           | br_network_info_plus_v7.0.0_ohos |
 
 <!-- tabs:end -->
 
