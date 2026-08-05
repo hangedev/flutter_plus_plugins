@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/sensors_plus/sensors_plus/ohos
-      ref: br_sensors_plus-v7.0.0_ohos
+      ref: TAG
 
 ...
 ```
@@ -34,7 +34,14 @@ Execute Command
 ```bash
 flutter pub get
 ```
+TAG Version Mapping
 
+| Flutter Version | TAG | Branch |
+| --- | --- | --- |
+|3.7	|sensors_plus-3.1.0-ohos.1.0.0-beta.1|master
+|3.22	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
+|3.27	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
+|3.35	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
 <!-- tabs:end -->
 
 ### 1.2 Usage
