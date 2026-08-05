@@ -18,14 +18,13 @@
 
 ```yaml
 ...
-
 dependencies:
   package_info_plus:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
-      ref: br_package_info_plus-v9.0.0_ohos
-
+      # ref: package_info_plus-9.0.0-ohos-1.0.0
+      ref: TAG   # 请根据下方TAG版本对应表选择TAG
 ...
 ```
 
@@ -34,7 +33,14 @@ dependencies:
 ```bash
 flutter pub get
 ```
+TAG 版本对应表
 
+| Flutter 框架版本 | TAG | 分支 |
+| --- | --- | --- |
+|3.7	|package_info_plus-4.2.0-ohos-1.0.0-beta.1	|master
+|3.22	|package_info_plus-4.2.0-ohos.1.0.0-beta.1	|master
+|3.27	|package_info_plus-9.0.0-ohos-1.0.0	|br_package_info_plus-v9.0.0_ohos
+|3.35	|package_info_plus-9.0.0-ohos-1.0.0	|br_package_info_plus-v9.0.0_ohos
 <!-- tabs:end -->
 
 ### 1.2 使用案例
