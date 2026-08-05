@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/share_plus/share_plus
-      ref: br_share_plus-v12.0.1_ohos
+      ref: TAG
 
 ...
 ```
@@ -34,7 +34,12 @@ Execute Command
 ```bash
 flutter pub get
 ```
-
+| Flutter framework version | TAG name | Branch |
+|---|---|---|
+|3.7	|sensors_plus-7.2.0-ohos.1.0.0-beta.1	|master
+|3.22	|sensors_plus-12.0.1-ohos-1.0.0|	br_share_plus-v12.0.1_ohos
+|3.27	|sensors_plus-12.0.1-ohos-1.0.0|	br_share_plus-v12.0.1_ohos
+|3.35	|sensors_plus-12.0.1-ohos-1.0.0|	br_share_plus-v12.0.1_ohos
 <!-- tabs:end -->
 
 ### 1.2 Usage
