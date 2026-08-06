@@ -24,8 +24,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
-      ref: br_package_info_plus-v9.0.0_ohos
-
+      ref: TAG 
 ...
 ```
 
@@ -34,7 +33,14 @@ Execute Command
 ```bash
 flutter pub get
 ```
+TAG Version Mapping
 
+| Flutter Version | TAG | Branch |
+| --- | --- | --- |
+|3.7	|package_info_plus-4.2.0-ohos-1.0.0-beta.1	|master
+|3.22	|package_info_plus-4.2.0-ohos.1.0.0-beta.1	|master
+|3.27	|package_info_plus-9.0.0-ohos-1.0.0	|br_package_info_plus-v9.0.0_ohos
+|3.35	|package_info_plus-9.0.0-ohos-1.0.0	|br_package_info_plus-v9.0.0_ohos
 <!-- tabs:end -->
 
 ### 1.2 Usage
