@@ -20,12 +20,21 @@
 ...
 
 dependencies:
+  # master分支如下方式导入
   sensors_plus_ohos:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/sensors_plus/sensors_plus/ohos
-      ref: br_sensors_plus-v7.0.0_ohos
+      # ref: sensors_plus-3.1.0-ohos.1.0.0-beta.1
+      ref: TAG   # 请根据下方TAG版本对应表选择TAG
 
+  # br_sensors_plus-v7.0.0_ohos分支如下方式导入
+  sensors_plus_ohos:
+    git:
+      url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
+      path: packages/sensors_plus/sensors_plus
+      # ref: sensors_plus-7.0.0-ohos-1.0.0
+      ref: TAG   # 请根据下方TAG版本对应表选择TAG
 ...
 ```
 
@@ -34,7 +43,15 @@ dependencies:
 ```bash
 flutter pub get
 ```
+#### TAG 版本对应表
 
+可通过分支超链跳转到对应目录下，查看代码和文档
+| Flutter 框架版本 | TAG | 分支 |
+| --- | --- | --- |
+|3.7	|sensors_plus-3.1.0-ohos.1.0.0-beta.1|master
+|3.22	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
+|3.27	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
+|3.35	|sensors_plus-7.0.0-ohos-1.0.0|br_sensors_plus-v7.0.0_ohos
 <!-- tabs:end -->
 
 ### 1.2 使用案例
