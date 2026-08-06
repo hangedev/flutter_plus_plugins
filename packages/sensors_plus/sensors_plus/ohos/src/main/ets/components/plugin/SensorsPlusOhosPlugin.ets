@@ -24,248 +24,347 @@ import MethodChannel, {
 import MethodCall from '@ohos/flutter_ohos/src/main/ets/plugin/common/MethodCall';
 import EventChannel, { StreamHandler, EventSink } from '@ohos/flutter_ohos/src/main/ets/plugin/common/EventChannel';
 import { BinaryMessenger } from '@ohos/flutter_ohos';
+import AbilityAware from '@ohos/flutter_ohos/src/main/ets/embedding/engine/plugins/ability/AbilityAware';
+import {
+  AbilityPluginBinding
+} from '@ohos/flutter_ohos/src/main/ets/embedding/engine/plugins/ability/AbilityPluginBinding';
 import sensor from '@ohos.sensor';
 import { BusinessError } from '@kit.BasicServicesKit';
 import systemDateTime from '@ohos.systemDateTime';
 
 class StreamHandlerImpl implements StreamHandler {
   private event: EventSink | null = null;
-  private sensorId?: sensor.SensorId;
+  private sensorId: sensor.SensorId;
   private currentInterval: number = 200000000;
+  private isListening: boolean = false;
 
   constructor(sensorId: sensor.SensorId) {
     this.sensorId = sensorId;
-    this.initSensorData(this.currentInterval);
   }
 
-  private initSensorData(interval: number): void {
+  private getSensorName(): string {
     switch (this.sensorId) {
-      case sensor.SensorId.LINEAR_ACCELEROMETER:
-        this.listenLinearAccelerometer(interval);
-        break;
       case sensor.SensorId.ACCELEROMETER:
-        this.listenAccelerometer(interval);
-        break;
+        return 'Accelerometer';
+      case sensor.SensorId.LINEAR_ACCELEROMETER:
+        return 'User Accelerometer';
       case sensor.SensorId.GYROSCOPE:
-        this.listenGyroscope(interval);
-        break;
+        return 'Gyroscope';
       case sensor.SensorId.MAGNETIC_FIELD:
-        this.listenMagnetic(interval);
-        break;
+        return 'Magnetometer';
       case sensor.SensorId.BAROMETER:
-        this.listenBarometer(interval);
-        break;
+        return 'Barometer';
+      default:
+        return 'Unknown';
     }
   }
 
-  // user加速度计传感器
-  private listenLinearAccelerometer(interval: number): void {
-    try {
-      if(this.currentInterval !== interval){
-        sensor.off(sensor.SensorId.LINEAR_ACCELEROMETER);
-        this.currentInterval = interval;
+  private startSensor(interval: number): void {
+    if (this.isListening && this.currentInterval === interval) {
+      // 间隔未变且已在监听，无需重复注册
+      return;
+    }
+    // 先取消旧监听，避免重复回调
+    if (this.isListening) {
+      const stopped: boolean = this.stopSensor();
+      if (!stopped) {
+        // 旧监听未成功取消，若继续注册会导致重复订阅。
+        // 失败已通过 event.error 通知 Flutter，此处跳过本次注册。
+        console.warn(`Stop ${this.getSensorName()} failed, skip re-subscribe`);
+        return;
       }
-      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) - (systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000);
-      sensor.on(sensor.SensorId.LINEAR_ACCELEROMETER, (data: sensor.LinearAccelerometerResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [4];
-          let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          arr[3] = timestampMicro;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
+    }
+    try {
+      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) -
+        (systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000);
+      switch (this.sensorId) {
+        case sensor.SensorId.LINEAR_ACCELEROMETER:
+          sensor.on(sensor.SensorId.LINEAR_ACCELEROMETER, (data: sensor.LinearAccelerometerResponse) => {
+            this.sendLinearAccelerometerEvent(data, timestampMicroAtBoot);
+          }, { interval: interval });
+          break;
+        case sensor.SensorId.ACCELEROMETER:
+          sensor.on(sensor.SensorId.ACCELEROMETER, (data: sensor.AccelerometerResponse) => {
+            this.sendAccelerometerEvent(data, timestampMicroAtBoot);
+          }, { interval: interval });
+          break;
+        case sensor.SensorId.GYROSCOPE:
+          sensor.on(sensor.SensorId.GYROSCOPE, (data: sensor.GyroscopeResponse) => {
+            this.sendGyroscopeEvent(data, timestampMicroAtBoot);
+          }, { interval: interval });
+          break;
+        case sensor.SensorId.MAGNETIC_FIELD:
+          sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
+            this.sendMagneticEvent(data, timestampMicroAtBoot);
+          }, { interval: interval });
+          break;
+        case sensor.SensorId.BAROMETER:
+          sensor.on(sensor.SensorId.BAROMETER, (data: sensor.BarometerResponse) => {
+            this.sendBarometerEvent(data, timestampMicroAtBoot);
+          }, { interval: interval });
+          break;
+        default:
+          if (this.event) {
+            this.event.error('UNKNOWN_SENSOR', `Sensor type not supported: ${this.sensorId}`, null);
           }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          if (Number.isInteger(timestampMicro)) {
-            arr[3] = timestampMicro + 0.00000000001;
-          }
-          this.event.success(arr);
-        }
-      }, { interval: interval });
+          return;
+      }
+      // sensor.on() 成功后才更新状态
+      this.currentInterval = interval;
+      this.isListening = true;
     } catch (error) {
       let e: BusinessError = error as BusinessError;
       console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+      if (this.event) {
+        this.event.error('UNAVAILABLE', `Failed to subscribe to ${this.getSensorName()}: ${e.code} - ${e.message}`, null);
+      }
+    }
+  }
+
+  /**
+   * 停止传感器监听。
+   *
+   * @returns 是否成功停止：true 表示已取消监听；false 表示 sensor.off() 失败，
+   *          实际监听可能仍在，isListening 保持 true 以保持状态一致，
+   *          并已通过 event.error('UNAVAILABLE') 将错误传播到 Flutter 层。
+   */
+  private stopSensor(): boolean {
+    if (!this.isListening) {
+      return true;
+    }
+    try {
+      switch (this.sensorId) {
+        case sensor.SensorId.ACCELEROMETER:
+          sensor.off(sensor.SensorId.ACCELEROMETER);
+          break;
+        case sensor.SensorId.LINEAR_ACCELEROMETER:
+          sensor.off(sensor.SensorId.LINEAR_ACCELEROMETER);
+          break;
+        case sensor.SensorId.GYROSCOPE:
+          sensor.off(sensor.SensorId.GYROSCOPE);
+          break;
+        case sensor.SensorId.MAGNETIC_FIELD:
+          sensor.off(sensor.SensorId.MAGNETIC_FIELD);
+          break;
+        case sensor.SensorId.BAROMETER:
+          sensor.off(sensor.SensorId.BAROMETER);
+          break;
+        default:
+          break;
+      }
+      // 成功取消监听后才更新状态
+      this.isListening = false;
+      return true;
+    } catch (error) {
+      let e: BusinessError = error as BusinessError;
+      console.error(`Failed to invoke off. Code: ${e.code}, message: ${e.message}`);
+      if (this.event) {
+        this.event.error('UNAVAILABLE', `Failed to unsubscribe ${this.getSensorName()}: ${e.code} - ${e.message}`, null);
+      }
+      // 失败：保留 isListening 状态，表示监听可能仍在，避免状态与实际不一致
+      return false;
+    }
+  }
+
+  /**
+   * Ability 生命周期：停止传感器监听但保留 event sink。
+   *
+   * 当 UIAbility 销毁/退后台时调用，释放传感器资源避免继续消耗 CPU/电量；
+   * 保留 event sink 引用，Flutter 重新订阅流时可通过 onListen 恢复监听。
+   */
+  stopForAbilityDetach(): void {
+    this.stopSensor();
+  }
+
+  // user加速度计传感器
+  private sendLinearAccelerometerEvent(data: sensor.LinearAccelerometerResponse, timestampMicroAtBoot: number): void {
+    try {
+      if (this.event) {
+        let arr: Array<number> = [4];
+        let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
+        arr[0] = data.x;
+        arr[1] = data.y;
+        arr[2] = data.z;
+        arr[3] = timestampMicro;
+        if (Number.isInteger(data.x)) {
+          arr[0] = data.x + 0.00000000001;
+        }
+        if (Number.isInteger(data.y)) {
+          arr[1] = data.y + 0.00000000001;
+        }
+        if (Number.isInteger(data.z)) {
+          arr[2] = data.z + 0.00000000001;
+        }
+        if (Number.isInteger(timestampMicro)) {
+          arr[3] = timestampMicro + 0.00000000001;
+        }
+        this.event.success(arr);
+      }
+    } catch (error) {
+      let e: BusinessError = error as BusinessError;
+      console.error(`sendLinearAccelerometerEvent error: ${e.code}, ${e.message}`);
     }
   }
 
   // 加速度计传感器
-  private listenAccelerometer(interval: number): void {
+  private sendAccelerometerEvent(data: sensor.AccelerometerResponse, timestampMicroAtBoot: number): void {
     try {
-      if(this.currentInterval !== interval){
-        sensor.off(sensor.SensorId.ACCELEROMETER);
-        this.currentInterval = interval;
-      }
-      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) - systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000;
-      sensor.on(sensor.SensorId.ACCELEROMETER, (data: sensor.AccelerometerResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [4];
-          let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          arr[3] = timestampMicro;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          if (Number.isInteger(timestampMicro)) {
-            arr[3] = timestampMicro + 0.00000000001;
-          }
-          this.event.success(arr);
+      if (this.event) {
+        let arr: Array<number> = [4];
+        let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
+        arr[0] = data.x;
+        arr[1] = data.y;
+        arr[2] = data.z;
+        arr[3] = timestampMicro;
+        if (Number.isInteger(data.x)) {
+          arr[0] = data.x + 0.00000000001;
         }
-      }, { interval: interval });
+        if (Number.isInteger(data.y)) {
+          arr[1] = data.y + 0.00000000001;
+        }
+        if (Number.isInteger(data.z)) {
+          arr[2] = data.z + 0.00000000001;
+        }
+        if (Number.isInteger(timestampMicro)) {
+          arr[3] = timestampMicro + 0.00000000001;
+        }
+        this.event.success(arr);
+      }
     } catch (error) {
       let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+      console.error(`sendAccelerometerEvent error: ${e.code}, ${e.message}`);
     }
   }
 
   // 陀螺仪传感器
-  private listenGyroscope(interval: number): void {
+  private sendGyroscopeEvent(data: sensor.GyroscopeResponse, timestampMicroAtBoot: number): void {
     try {
-      if(this.currentInterval !== interval){
-        sensor.off(sensor.SensorId.GYROSCOPE);
-        this.currentInterval = interval;
-      }
-      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) - systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000;
-      sensor.on(sensor.SensorId.GYROSCOPE, (data: sensor.GyroscopeResponse) => {
+      if (this.event) {
+        let arr: Array<number> = [4];
         let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
-        if (this.event) {
-          let arr: Array<number> = [4];
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          arr[3] = timestampMicro;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          if (Number.isInteger(timestampMicro)) {
-            arr[3] = timestampMicro + 0.00000000001;
-          }
-          this.event.success(arr);
+        arr[0] = data.x;
+        arr[1] = data.y;
+        arr[2] = data.z;
+        arr[3] = timestampMicro;
+        if (Number.isInteger(data.x)) {
+          arr[0] = data.x + 0.00000000001;
         }
-      }, { interval: interval });
+        if (Number.isInteger(data.y)) {
+          arr[1] = data.y + 0.00000000001;
+        }
+        if (Number.isInteger(data.z)) {
+          arr[2] = data.z + 0.00000000001;
+        }
+        if (Number.isInteger(timestampMicro)) {
+          arr[3] = timestampMicro + 0.00000000001;
+        }
+        this.event.success(arr);
+      }
     } catch (error) {
       let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+      console.error(`sendGyroscopeEvent error: ${e.code}, ${e.message}`);
     }
   }
 
   // 磁力计传感器
-  private listenMagnetic(interval: number): void {
+  private sendMagneticEvent(data: sensor.MagneticFieldResponse, timestampMicroAtBoot: number): void {
     try {
-      if(this.currentInterval !== interval){
-        sensor.off(sensor.SensorId.MAGNETIC_FIELD);
-        this.currentInterval = interval;
-      }
-      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) - systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000;
-      sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [4];
-          let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
-          arr[0] = data.x;
-          arr[1] = data.y;
-          arr[2] = data.z;
-          arr[3] = timestampMicro;
-          if (Number.isInteger(data.x)) {
-            arr[0] = data.x + 0.00000000001;
-          }
-          if (Number.isInteger(data.y)) {
-            arr[1] = data.y + 0.00000000001;
-          }
-          if (Number.isInteger(data.z)) {
-            arr[2] = data.z + 0.00000000001;
-          }
-          if (Number.isInteger(timestampMicro)) {
-            arr[3] = timestampMicro + 0.00000000001;
-          }
-          this.event.success(arr);
+      if (this.event) {
+        let arr: Array<number> = [4];
+        let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
+        arr[0] = data.x;
+        arr[1] = data.y;
+        arr[2] = data.z;
+        arr[3] = timestampMicro;
+        if (Number.isInteger(data.x)) {
+          arr[0] = data.x + 0.00000000001;
         }
-      }, { interval: interval });
+        if (Number.isInteger(data.y)) {
+          arr[1] = data.y + 0.00000000001;
+        }
+        if (Number.isInteger(data.z)) {
+          arr[2] = data.z + 0.00000000001;
+        }
+        if (Number.isInteger(timestampMicro)) {
+          arr[3] = timestampMicro + 0.00000000001;
+        }
+        this.event.success(arr);
+      }
     } catch (error) {
       let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+      console.error(`sendMagneticEvent error: ${e.code}, ${e.message}`);
     }
   }
 
   // 气压传感器
-  private listenBarometer(interval: number): void {
+  private sendBarometerEvent(data: sensor.BarometerResponse, timestampMicroAtBoot: number): void {
     try {
-      if(this.currentInterval !== interval){
-        sensor.off(sensor.SensorId.BAROMETER);
-        this.currentInterval = interval;
-      }
-      let timestampMicroAtBoot = (systemDateTime.getTime(true) / 1000) - systemDateTime.getUptime(systemDateTime.TimeType.ACTIVE, true) / 1000;
-      sensor.on(sensor.SensorId.BAROMETER, (data: sensor.BarometerResponse) => {
-        if (this.event) {
-          let arr: Array<number> = [2];
-          let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
-          arr[0] = data.pressure;
-          arr[1] = timestampMicro;
-          if (Number.isInteger(data.pressure)) {
-            arr[0] = data.pressure + 0.00000000001;
-          }
-          if (Number.isInteger(timestampMicro)) {
-            arr[1] = timestampMicro + 0.00000000001;
-          }
-          this.event.success(arr);
+      if (this.event) {
+        let arr: Array<number> = [2];
+        let timestampMicro = (timestampMicroAtBoot + (data.timestamp * 1000)) / 1000000;
+        arr[0] = data.pressure;
+        arr[1] = timestampMicro;
+        if (Number.isInteger(data.pressure)) {
+          arr[0] = data.pressure + 0.00000000001;
         }
-      }, { interval: interval });
+        if (Number.isInteger(timestampMicro)) {
+          arr[1] = timestampMicro + 0.00000000001;
+        }
+        this.event.success(arr);
+      }
     } catch (error) {
       let e: BusinessError = error as BusinessError;
-      console.error(`Failed to invoke on. Code: ${e.code}, message: ${e.message}`);
+      console.error(`sendBarometerEvent error: ${e.code}, ${e.message}`);
     }
   }
 
   setUpdateInterval(interval: number) {
+    if (typeof interval !== 'number' || interval <= 0) {
+      console.error(`Invalid interval value: ${interval}, must be a positive number`);
+      return;
+    }
     switch (interval) {
       case 20000:
-        this.initSensorData(20000000);
+        this.startSensor(20000000);
         break;
-      case 66667 :
-        this.initSensorData(66667000);
+      case 66667:
+        this.startSensor(66667000);
         break;
       case 200000:
-        this.initSensorData(200000000);
+        this.startSensor(200000000);
         break;
       case 500000:
-        this.initSensorData(500000000);
+        this.startSensor(500000000);
         break;
       case 1000000:
-        this.initSensorData(1000000000);
+        this.startSensor(1000000000);
+        break;
+      default:
+        this.startSensor(interval * 1000);
         break;
     }
   }
 
   onListen(args: ESObject, events: EventSink): void {
     this.event = events;
+    // Flutter 开始监听时才启动传感器。
+    // 可用性检查由 startSensor 内的 try-catch 完成：sensor.on() 订阅失败
+    // （传感器不存在或权限不足）会通过 event.error('UNAVAILABLE') 通知 Flutter。
+    this.startSensor(this.currentInterval);
   }
 
   onCancel(args: ESObject): void {
+    // Flutter 停止监听，取消传感器订阅
+    this.stopSensor();
+    this.event = null;
   }
 }
 
 /** SensorsPlusOhosPlugin **/
-export default class SensorsPlusOhosPlugin implements FlutterPlugin, MethodCallHandler {
+export default class SensorsPlusOhosPlugin implements FlutterPlugin, MethodCallHandler, AbilityAware {
   private channel: MethodChannel | null = null;
+  // 当前绑定的 Ability（AbilityAware 生命周期），用于按 Ability 生命周期管理传感器资源
+  private abilityBinding: AbilityPluginBinding | null = null;
 
   private ACCELEROMETER_CHANNEL_NAME = 'dev.fluttercommunity.plus/sensors/accelerometer';
   private USER_ACCELEROMETER_CHANNEL_NAME = 'dev.fluttercommunity.plus/sensors/user_accel';
@@ -289,40 +388,106 @@ export default class SensorsPlusOhosPlugin implements FlutterPlugin, MethodCallH
   }
 
   getUniqueClassName(): string {
-    return "SensorsPlusOhosPlugin"
+    return 'SensorsPlusOhosPlugin';
+  }
+
+  /**
+   * AbilityAware：插件已关联到 UIAbility。
+   *
+   * 保存 binding 以便后续按 Ability 生命周期管理传感器资源。
+   *
+   * @param binding Ability 绑定信息，提供 UIAbility 引用。
+   */
+  onAttachedToAbility(binding: AbilityPluginBinding): void {
+    this.abilityBinding = binding;
+  }
+
+  /**
+   * AbilityAware：插件已与 UIAbility 解绑。
+   *
+   * Ability 销毁/退后台时调用：停止所有传感器监听，释放传感器资源，
+   * 避免 Ability 销毁后传感器持续消耗 CPU/电量；
+   * 并清空 abilityBinding 引用，避免泄漏 UIAbility。
+   */
+  onDetachedFromAbility(): void {
+    // 停止所有活跃的传感器监听，保留 event sink，Flutter 重新订阅时可恢复
+    this.accelerationStreamHandler?.stopForAbilityDetach();
+    this.userAccelerationStreamHandler?.stopForAbilityDetach();
+    this.gyroScopeStreamHandler?.stopForAbilityDetach();
+    this.magnetometerStreamHandler?.stopForAbilityDetach();
+    this.barometerStreamHandler?.stopForAbilityDetach();
+    // 清空 Ability 引用，避免泄漏 UIAbility
+    this.abilityBinding = null;
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
-    this.channel = new MethodChannel(binding.getBinaryMessenger(), "dev.fluttercommunity.plus/sensors/method");
+    this.channel = new MethodChannel(binding.getBinaryMessenger(), 'dev.fluttercommunity.plus/sensors/method');
     this.channel.setMethodCallHandler(this)
     this.setupEventChannels(binding.getApplicationContext(), binding.getBinaryMessenger());
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
+    // 释放传感器监听
+    this.accelerationStreamHandler?.onCancel(null);
+    this.userAccelerationStreamHandler?.onCancel(null);
+    this.gyroScopeStreamHandler?.onCancel(null);
+    this.magnetometerStreamHandler?.onCancel(null);
+    this.barometerStreamHandler?.onCancel(null);
+    // 清理 EventChannel
+    this.accelerometerChannel?.setStreamHandler(null);
+    this.userAccelerometerChannel?.setStreamHandler(null);
+    this.gyroscopeChannel?.setStreamHandler(null);
+    this.magnetometerChannel?.setStreamHandler(null);
+    this.barometerChannel?.setStreamHandler(null);
+    // 释放引用
+    this.accelerationStreamHandler = null;
+    this.userAccelerationStreamHandler = null;
+    this.gyroScopeStreamHandler = null;
+    this.magnetometerStreamHandler = null;
+    this.barometerStreamHandler = null;
+    this.accelerometerChannel = null;
+    this.userAccelerometerChannel = null;
+    this.gyroscopeChannel = null;
+    this.magnetometerChannel = null;
+    this.barometerChannel = null;
     if (this.channel != null) {
       this.channel.setMethodCallHandler(null)
+      this.channel = null;
     }
   }
 
   onMethodCall(call: MethodCall, result: MethodResult): void {
-    switch (call.method) {
-      case 'setAccelerationSamplingPeriod':
-        this.accelerationStreamHandler?.setUpdateInterval(call.args as number);
-        break;
-      case 'setGyroscopeSamplingPeriod':
-        this.gyroScopeStreamHandler?.setUpdateInterval(call.args as number);
-        break;
-      case 'setUserAccelerometerSamplingPeriod':
-        this.userAccelerationStreamHandler?.setUpdateInterval(call.args as number);
-        break;
-      case 'setMagnetometerSamplingPeriod':
-        this.magnetometerStreamHandler?.setUpdateInterval(call.args as number);
-        break;
-      case 'setBarometerSamplingPeriod':
-        this.barometerStreamHandler?.setUpdateInterval(call.args as number);
-        break;
-      default:
-        result.notImplemented();
+    try {
+      let interval: number = call.args as number;
+      if (typeof interval !== 'number' || interval <= 0) {
+        result.error('INVALID_ARGUMENT', `Expected positive number for interval, got: ${interval}`, null);
+        return;
+      }
+      switch (call.method) {
+        case 'setAccelerationSamplingPeriod':
+          this.accelerationStreamHandler?.setUpdateInterval(interval);
+          break;
+        case 'setGyroscopeSamplingPeriod':
+          this.gyroScopeStreamHandler?.setUpdateInterval(interval);
+          break;
+        case 'setUserAccelerometerSamplingPeriod':
+          this.userAccelerationStreamHandler?.setUpdateInterval(interval);
+          break;
+        case 'setMagnetometerSamplingPeriod':
+          this.magnetometerStreamHandler?.setUpdateInterval(interval);
+          break;
+        case 'setBarometerSamplingPeriod':
+          this.barometerStreamHandler?.setUpdateInterval(interval);
+          break;
+        default:
+          result.notImplemented();
+          return;
+      }
+      result.success(null);
+    } catch (error) {
+      let e: BusinessError = error as BusinessError;
+      console.error(`onMethodCall error. Code: ${e.code}, message: ${e.message}`);
+      result.error('METHOD_CALL_ERROR', `Unexpected error: ${e.code} - ${e.message}`, null);
     }
   }
 

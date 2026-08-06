@@ -8,9 +8,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sensors_plus_ohos/sensors_plus.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import 'snake.dart';
+import 'sensors_coverage_demo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int? _magnetometerLastInterval;
   int? _barometerLastInterval;
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+
+  // 覆盖全部公开接口的后台演示实例，便于 dispose 时清理
+  final _coverageDemo = SensorsCoverageDemo();
 
   Duration sensorInterval = SensorInterval.normalInterval;
 
@@ -256,6 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
+    _coverageDemo.dispose();
     for (final subscription in _streamSubscriptions) {
       subscription.cancel();
     }
@@ -264,6 +269,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    // 在后台驱动覆盖全部公开接口的演示，不在界面上展示。
+    // 异步执行，不阻塞 UI。
+    _coverageDemo.run().catchError((Object e) {
+      debugPrint('SensorsCoverageDemo error: $e');
+    });
     _streamSubscriptions.add(
       userAccelerometerEventStream(samplingPeriod: sensorInterval).listen(
         (UserAccelerometerEvent event) {

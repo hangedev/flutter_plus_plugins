@@ -1,6 +1,6 @@
 {
   "modelVersion": "5.0.0",
-  "name": "sensors_plus_ohos_example",
+  "name": "sensors_plus_example",
   "version": "1.0.0",
   "description": "Please describe the basic information.",
   "main": "",
@@ -14,7 +14,7 @@
   },
   "overrides": {
     "@ohos/flutter_ohos": "file:./har/flutter.har",
-    "sensors_plus_ohos": "file:./har/sensors_plus_ohos.har",
-    "@ohos/flutter_module": "file:./entry"
+    "@ohos/flutter_module": "file:./entry",
+    "sensors_plus": "file:./har/sensors_plus.har"
   }
 }

@@ -1,5 +1,5 @@
-name: sensors_plus_ohos_example
-description: Demonstrates how to use the sensors_plus_ohos plugin.
+name: sensors_plus_example
+description: Demonstrates how to use the sensors plugin.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sensors_plus_ohos:
+  sensors_plus:
     # When depending on this package from a real application you should use:
     #   sensors_plus_ohos: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
@@ -30,6 +30,8 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
