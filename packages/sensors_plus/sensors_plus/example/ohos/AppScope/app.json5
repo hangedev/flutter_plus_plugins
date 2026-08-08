@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.example.sensors_plus_ohos_example",
+    "bundleName": "com.example.sensors_plus_example",
     "vendor": "example",
     "versionCode": 1000000,
     "versionName": "1.0.0",

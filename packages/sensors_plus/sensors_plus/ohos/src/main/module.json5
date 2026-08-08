@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "sensors_plus_ohos",
+    "name": "sensors_plus",
     "type": "har",
     "deviceTypes": [
       "default",
