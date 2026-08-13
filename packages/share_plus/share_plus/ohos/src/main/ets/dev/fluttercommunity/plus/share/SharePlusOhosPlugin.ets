@@ -45,7 +45,9 @@ export default class SharePlusOhosPlugin implements FlutterPlugin, AbilityAware 
 
   onDetachedFromAbility() {
     Log.i(TAG, "onDetachedFromAbility");
-    this.share?.setAbility(null);
+    // Drop the dismiss listener and the ability reference; onAttachedToAbility
+    // will re-attach the ability if the ability comes back.
+    this.share?.dispose();
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
@@ -60,5 +62,11 @@ export default class SharePlusOhosPlugin implements FlutterPlugin, AbilityAware 
     Log.i(TAG, "onDetachedFromEngine");
     this.methodChannel?.setMethodCallHandler(null);
     this.methodChannel = null;
+    // Release the handler and the Share instance so their references to the
+    // ApplicationContext / UIAbility are not retained after detach. dispose()
+    // also unregisters any live dismiss listener.
+    this.methodChannelHandlerImpl = null;
+    this.share?.dispose();
+    this.share = null;
   }
 }
