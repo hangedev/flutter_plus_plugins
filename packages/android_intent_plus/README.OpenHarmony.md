@@ -22,10 +22,19 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/android_intent_plus
-      ref: 6.0.0-ohos-1.0.0-beta.1
+      # ref: Select the TAG version that matches your Flutter framework version from the table below
+      ref: 6.0.0-ohos-1.0.0
 
 ...
 ```
+
+### TAG Version Mapping
+
+| Flutter Framework Version | TAG                     | Branch |
+|--------------|-------------------------|------|
+| 3.22         | 6.0.0-ohos-1.0.0 | br_android_intent_plus-v6.0.0_ohos |
+| 3.27         | 6.0.0-ohos-1.0.0 | br_android_intent_plus-v6.0.0_ohos |
+| 3.35         | 6.0.0-ohos-1.0.0 | br_android_intent_plus-v6.0.0_ohos |
 
 Execute Command
 
