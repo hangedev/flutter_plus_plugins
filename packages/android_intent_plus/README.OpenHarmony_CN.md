@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/android_intent_plus
       # ref: 根据下方表格选择不同框架适配的TAG版本
-      ref: 6.0.0-ohos-1.0.0
+      ref: android_intent_plus-6.0.0-ohos-1.0.0
 
 ...
 ```
@@ -31,9 +31,9 @@ dependencies:
 ### TAG 版本对应表
 | Flutter 框架版本 | TAG                | 分支     |
 |--------------|--------------------|--------|
-| 3.22        | 6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
-| 3.27        | 6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
-| 3.35        | 6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
+| 3.22        | android_intent_plus-6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
+| 3.27        | android_intent_plus-6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
+| 3.35        | android_intent_plus-6.0.0-ohos-1.0.0   | br_android_intent_plus-v6.0.0_ohos |
 
 执行命令
 
