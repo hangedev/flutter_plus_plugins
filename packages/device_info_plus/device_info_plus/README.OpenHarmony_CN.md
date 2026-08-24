@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       # ref: 根据下方表格选择不同框架适配的TAG版本
-      ref: device_info_plus-9.1.0-ohos-1.0.0-beta.2
+      ref: device_info_plus-9.1.0-ohos-1.0.0
 ...
 ```
 
@@ -38,9 +38,9 @@ flutter pub get
 
 | Flutter 框架版本 | TAG 名称 | 分支名 |
 |---|---|---|
-| 3.7  | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
-| 3.22 | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
-| 3.27 | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
+| 3.7  | device_info_plus-9.1.0-ohos-1.0.0 | master |
+| 3.22 | device_info_plus-9.1.0-ohos-1.0.0 | master |
+| 3.27 | device_info_plus-9.1.0-ohos-1.0.0 | master |
 
 ### 1.3 使用案例
 

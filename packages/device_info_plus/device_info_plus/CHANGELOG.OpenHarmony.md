@@ -1,5 +1,10 @@
 # Changelog
 
+## device_info_plus-9.1.0-ohos-1.0.0
+
+* release version device_info_plus-9.1.0-ohos-1.0.0
+
+
 ## device_info_plus-9.1.0-ohos-1.0.0-beta.2
 
 * Consistency

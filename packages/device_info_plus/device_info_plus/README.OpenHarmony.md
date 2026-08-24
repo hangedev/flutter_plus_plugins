@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       # ref: Select the TAG version that matches your Flutter framework version from the table below
-      ref: device_info_plus-9.1.0-ohos-1.0.0-beta.2
+      ref: device_info_plus-9.1.0-ohos-1.0.0
 ...
 ```
 
@@ -39,9 +39,9 @@ flutter pub get
 
 | Flutter Framework Version | TAG Name | Branch |
 |---|---|---|
-| 3.7  | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
-| 3.22 | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
-| 3.27 | device_info_plus-9.1.0-ohos-1.0.0-beta.2 | master |
+| 3.7  | device_info_plus-9.1.0-ohos-1.0.0 | master |
+| 3.22 | device_info_plus-9.1.0-ohos-1.0.0 | master |
+| 3.27 | device_info_plus-9.1.0-ohos-1.0.0 | master |
 
 ### 1.3 Usage
 
