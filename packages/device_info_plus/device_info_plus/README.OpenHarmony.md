@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       # ref: Select the TAG version that matches your Flutter framework version from the table below
-      ref: br_device_info_plus-v12.3.0_ohos
+      ref: device_info_plus-12.3.0-ohos-1.0.0
 ...
 ```
 
@@ -37,13 +37,49 @@ flutter pub get
 
 | Flutter Framework Version | TAG Name | Branch |
 |---|---|---|
-| 3.35 | device_info_plus-12.3.0-ohos-1.0.0-beta.1 | br_device_info_plus-v12.3.0_ohos |
+| 3.35 | device_info_plus-12.3.0-ohos-1.0.0 | br_device_info_plus-v12.3.0_ohos |
 
 <!-- tabs:end -->
 
 ### 1.2 Usage
 
-For use cases [example](example/lib/main.dart)
+A complete runnable example lives in [example](example/lib/main.dart). The
+minimal inline flow — from import to retrieval — is shown below.
+
+```dart
+import 'package:device_info_plus/device_info_plus.dart';
+
+// 1. Create a plugin instance. It is safe to reuse / cache it across the app.
+final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+// 2. Get OHOS device info — no permission required.
+//    NOTE: `OhosDeviceInfo` is not part of the public export surface, so access
+//    it through type inference (`final`) rather than naming the type explicitly.
+final ohosInfo = await deviceInfoPlugin.ohosDeviceInfo;
+
+print('brand           : ${ohosInfo.brand}');
+print('productModel    : ${ohosInfo.productModel}');
+print('osFullName      : ${ohosInfo.osFullName}');
+print('sdkApiVersion   : ${ohosInfo.sdkApiVersion}');
+print('isPhysicalDevice: ${ohosInfo.isPhysicalDevice}');
+
+// OHOS-specific: ODID is carried inside the raw data map (there is no typed
+// `odID` field) and only holds a valid value after the user grants the
+// `ohos.permission.APP_TRACKING_CONSENT` permission.
+print('ODID            : ${ohosInfo.data['ODID']}');
+
+// 3. Get the device serial number & UDID.
+//    This requires the SYSTEM-level permission `ohos.permission.sec.ACCESS_UDID`,
+//    which is open only to system apps. It throws when the permission is missing,
+//    so always wrap the call in try/catch.
+try {
+  final udidInfo = await deviceInfoPlugin.ohosAccessUDIDInfo;
+  print('serial: ${udidInfo.serial}');
+  print('udid  : ${udidInfo.udid}');
+} catch (e) {
+  print('Failed to get UDID info: $e');
+}
+```
 
 ## 2. Constraints
 
@@ -61,6 +97,7 @@ This document is verified based on the following versions:
 | Name                | Description                                                                 | Type     | Input | Output                          | ohos Support |
 |---------------------|-----------------------------------------------------------------------------|----------|-------|---------------------------------|--------------|
 | ohosDeviceInfo      | Retrieves device information from `@ohos.deviceInfo` | function | /     | Future<OhosDeviceInfo>          | yes          |
+| ohosAccessUDIDInfo  | Retrieves device serial & UDID. **Requires the system-level permission `ohos.permission.sec.ACCESS_UDID` (system apps only); throws when the permission is missing** | function | /     | Future<OhosAccessUDIDInfo>      | yes          |
 | androidInfo         | Retrieves Android device information from `android.os.Build`                    | function | /     | Future<AndroidDeviceInfo>         | no          |
 | iosInfo             | Retrieves iOS device information from `UIDevice`                              | function | /     | Future<IosDeviceInfo>             | no          |
 | linuxInfo           | Retrieves Linux device information from `/etc/os-release`                     | function | /     | Future<LinuxDeviceInfo>           | no          |
@@ -94,7 +131,6 @@ This document is verified based on the following versions:
 | productModel        | Gets the product model              | String   | /     | /       | yes          |
 | softwareModel       | Gets the software model             | String   | /     | /       | yes          |
 | hardwareModel       | Gets the hardware model             | String   | /     | /       | yes          |
-| hardwareProfile     | Gets hardware capabilities profile  | String   | /     | /       | yes          |
 | bootloaderVersion   | Gets the bootloader version         | String   | /     | /       | yes          |
 | abiList             | Gets supported ABI list             | String   | /     | /       | yes          |
 | securityPatchTag    | Gets security patch version         | String   | /     | /       | yes          |
@@ -108,9 +144,31 @@ This document is verified based on the following versions:
 | buildVersion        | Gets OS build version number        | int      | /     | /       | yes          |
 | sdkApiVersion       | Gets SDK API version                | int      | /     | /       | yes          |
 | firstApiVersion     | Gets earliest supported API version | int      | /     | /       | yes          |
+| versionId           | Gets the version ID                 | String   | /     | /       | yes          |
 | buildType           | Gets build type (e.g. "user/debug") | String   | /     | /       | yes          |
+| buildUser           | Gets the build user                 | String   | /     | /       | yes          |
+| buildHost           | Gets the build host                 | String   | /     | /       | yes          |
 | buildTime           | Gets build timestamp string         | String   | /     | /       | yes          |
-| odID                | Gets ODID (OpenHarmony Device ID)   | String   | /     | /       | yes          |
+| buildRootHash       | Gets the build version hash         | String   | /     | /       | yes          |
+| ODID                | Gets ODID (OpenHarmony Device ID)   | String   | /     | /       | yes          |
+| distributionOSName           | Gets the distribution OS name           | String   | /     | /       | yes          |
+| distributionOSVersion        | Gets the distribution OS version        | String   | /     | /       | yes          |
+| distributionOSApiVersion     | Gets the distribution OS API version    | int      | /     | /       | yes          |
+| distributionOSReleaseType    | Gets the distribution OS release type   | String   | /     | /       | yes          |
+| isPhysicalDevice    | `false` on an emulator, `true` otherwise | bool     | /     | /       | yes          |
+
+> [!NOTE] `hardwareProfile` and `serial`/`udid` were removed from `OhosDeviceInfo`'s public fields: they are commented out in the source and no longer exposed on this model. To obtain the serial/UDID use [`ohosAccessUDIDInfo`](#ohosaccessudidinfo-filters). ODID is not a typed field — read it from `ohosInfo.data['ODID']` (valid only after `ohos.permission.APP_TRACKING_CONSENT` is granted).
+
+---
+
+### OhosAccessUDIDInfo Filters
+
+> [!NOTE] Both fields require the system-level permission `ohos.permission.sec.ACCESS_UDID`, which is open only to system apps. On devices without the permission, `ohosAccessUDIDInfo` throws — always call it inside a `try/catch`.
+
+| Name                | Description                                       | Type     | Input | Output  | ohos Support |
+|---------------------|---------------------------------------------------|----------|-------|---------|--------------|
+| serial              | Gets the device serial number                     | String   | /     | /       | yes          |
+| udid                | Gets the device UDID                              | String   | /     | /       | yes          |
 
 ---
 

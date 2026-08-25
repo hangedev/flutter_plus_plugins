@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       # ref: 根据下方表格选择不同框架适配的TAG版本
-      ref: br_device_info_plus-v12.3.0_ohos
+      ref: device_info_plus-12.3.0-ohos-1.0.0
 ...
 ```
 
@@ -37,13 +37,46 @@ flutter pub get
 
 | Flutter 框架版本 | TAG 名称 | 分支名 |
 |---|---|---|
-| 3.35 | device_info_plus-12.3.0-ohos-1.0.0-beta.1 | br_device_info_plus-v12.3.0_ohos |
+| 3.35 | device_info_plus-12.3.0-ohos-1.0.0 | br_device_info_plus-v12.3.0_ohos |
 
 <!-- tabs:end -->
 
 ### 1.2 使用案例
 
-使用案例详见 [example](example/lib/main.dart)
+完整可运行的示例详见 [example](example/lib/main.dart)。从导入到获取数据的最小内联流程如下：
+
+```dart
+import 'package:device_info_plus/device_info_plus.dart';
+
+// 1. 创建插件实例。可在整个应用中安全复用 / 缓存。
+final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+// 2. 获取 OHOS 设备信息 —— 无需任何权限。
+//    注意：`OhosDeviceInfo` 不在公开导出范围内，请通过类型推断（`final`）访问，
+//    不要显式写出类型名。
+final ohosInfo = await deviceInfoPlugin.ohosDeviceInfo;
+
+print('brand           : ${ohosInfo.brand}');
+print('productModel    : ${ohosInfo.productModel}');
+print('osFullName      : ${ohosInfo.osFullName}');
+print('sdkApiVersion   : ${ohosInfo.sdkApiVersion}');
+print('isPhysicalDevice: ${ohosInfo.isPhysicalDevice}');
+
+// 鸿蒙特性：ODID 仅存在于原始数据字典中（没有对应的类型化字段），
+// 且只有在用户授予 `ohos.permission.APP_TRACKING_CONSENT` 权限后才为有效值。
+print('ODID            : ${ohosInfo.data['ODID']}');
+
+// 3. 获取设备序列号与 UDID。
+//    该接口需要系统级权限 `ohos.permission.sec.ACCESS_UDID`，仅对系统应用开放；
+//    缺少权限时会抛出异常，因此务必使用 try/catch 包裹。
+try {
+  final udidInfo = await deviceInfoPlugin.ohosAccessUDIDInfo;
+  print('serial: ${udidInfo.serial}');
+  print('udid  : ${udidInfo.udid}');
+} catch (e) {
+  print('获取 UDID 信息失败: $e');
+}
+```
 
 ## 2. 约束与限制
 
@@ -61,6 +94,7 @@ flutter pub get
 | Name                | Description                                                                 | Type     | Input | Output                          | ohos Support |
 |---------------------|-----------------------------------------------------------------------------|----------|-------|---------------------------------|--------------|
 | ohosDeviceInfo      | 从 `@ohos.deviceInfo` 获取设备信息 | function | /     | Future<OhosDeviceInfo>          | yes          |
+| ohosAccessUDIDInfo  | 获取设备序列号与 UDID。**需要系统级权限 `ohos.permission.sec.ACCESS_UDID`（仅系统应用可用）；权限缺失时会抛出异常** | function | /     | Future<OhosAccessUDIDInfo>      | yes          |
 | androidInfo         | 从 `android.os.Build` 获取 Android 设备信息 | function | /     | Future<AndroidDeviceInfo>         | no          |
 | iosInfo             | 从 `UIDevice` 获取 iOS 设备信息 | function | /     | Future<IosDeviceInfo>             | no          |
 | linuxInfo           | 从 `/etc/os-release` 获取 Linux 设备信息 | function | /     | Future<LinuxDeviceInfo>           | no          |
@@ -94,7 +128,6 @@ flutter pub get
 | productModel        | 获取产品型号 | String   | /     | /       | yes          |
 | softwareModel       | 获取软件模型 | String   | /     | /       | yes          |
 | hardwareModel       | 获取硬件型号 | String   | /     | /       | yes          |
-| hardwareProfile     | 获取硬件能力配置文件 | String   | /     | /       | yes          |
 | bootloaderVersion   | 获取引导程序版本 | String   | /     | /       | yes          |
 | abiList             | 获取支持的 ABI 列表 | String   | /     | /       | yes          |
 | securityPatchTag    | 获取安全补丁标签 | String   | /     | /       | yes          |
@@ -108,9 +141,31 @@ flutter pub get
 | buildVersion        | 获取构建版本号 | int      | /     | /       | yes          |
 | sdkApiVersion       | 获取 SDK API 版本 | int      | /     | /       | yes          |
 | firstApiVersion     | 获取最早支持的 API 版本 | int      | /     | /       | yes          |
+| versionId           | 获取版本 ID | String   | /     | /       | yes          |
 | buildType           | 获取构建类型（如 "user/debug"） | String   | /     | /       | yes          |
+| buildUser           | 获取构建用户 | String   | /     | /       | yes          |
+| buildHost           | 获取构建主机 | String   | /     | /       | yes          |
 | buildTime           | 获取构建时间戳字符串 | String   | /     | /       | yes          |
-| odID                | 获取 ODID（OpenHarmony 设备 ID） | String   | /     | /       | yes          |
+| buildRootHash       | 获取构建版本 Hash | String   | /     | /       | yes          |
+| ODID                | 获取 ODID（OpenHarmony 设备 ID） | String   | /     | /       | yes          |
+| distributionOSName           | 获取发行版系统名称     | String   | /     | /       | yes          |
+| distributionOSVersion        | 获取发行版系统版本号   | String   | /     | /       | yes          |
+| distributionOSApiVersion     | 获取发行版系统 API 版本号 | int      | /     | /       | yes          |
+| distributionOSReleaseType    | 获取发行版系统类型     | String   | /     | /       | yes          |
+| isPhysicalDevice    | 是否物理设备（模拟器为 false） | bool     | /     | /       | yes          |
+
+> [!NOTE] `hardwareProfile` 与 `serial`/`udid` 已从 `OhosDeviceInfo` 的公开字段中移除：源码中已注释掉，本模型不再暴露。如需获取序列号/UDID，请使用 [`ohosAccessUDIDInfo`](#ohosaccessudidinfo-filters)。ODID 不是类型化字段，请通过 `ohosInfo.data['ODID']` 读取（仅在授予 `ohos.permission.APP_TRACKING_CONSENT` 后为有效值）。
+
+---
+
+### OhosAccessUDIDInfo Filters
+
+> [!NOTE] 以下两个字段均需要系统级权限 `ohos.permission.sec.ACCESS_UDID`，仅对系统应用开放。缺少权限时 `ohosAccessUDIDInfo` 会抛出异常，请务必在 `try/catch` 中调用。
+
+| Name                | Description                                       | Type     | Input | Output  | ohos Support |
+|---------------------|---------------------------------------------------|----------|-------|---------|--------------|
+| serial              | 获取设备序列号                     | String   | /     | /       | yes          |
+| udid                | 获取设备 UDID                              | String   | /     | /       | yes          |
 
 ---
 
