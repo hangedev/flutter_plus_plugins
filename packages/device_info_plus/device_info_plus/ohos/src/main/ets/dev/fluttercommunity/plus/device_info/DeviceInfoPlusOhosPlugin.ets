@@ -21,17 +21,35 @@ import {
 import MethodChannel from '@ohos/flutter_ohos/src/main/ets/plugin/common/MethodChannel';
 import { DeviceMethodHandler } from './DeviceMethodHandler'
 
-const TAG = "DeviceInfoPlusOhosPlugin";
+const TAG = 'DeviceInfoPlusOhosPlugin';
 const CHANNEL_NAME = 'dev.fluttercommunity.plus/device_info';
 
-/** DeviceInfoPlusOhosPlugin  */
+/**
+ * OpenHarmony (ohos) implementation of the `device_info_plus` plugin.
+ *
+ * Registers a [MethodChannel] with a [DeviceMethodHandler] when the Flutter
+ * engine attaches, and cleans it up on detach.
+ */
 export default class DeviceInfoPlusOhosPlugin implements FlutterPlugin {
   private channel: MethodChannel | null = null;
 
+  /**
+   * Returns the unique class name used by the Flutter-OHOS plugin registry
+   * to identify this plugin instance.
+   *
+   * @returns The plugin's unique identifier string.
+   */
   getUniqueClassName(): string {
     return TAG;
   }
 
+  /**
+   * Called when the Flutter engine attaches this plugin. Creates the
+   * `device_info` [MethodChannel] and binds a [DeviceMethodHandler] to it.
+   *
+   * @param binding The Flutter plugin binding providing the binary messenger
+   *                and other engine services.
+   */
   onAttachedToEngine(binding: FlutterPluginBinding): void {
     Log.d(TAG, 'onAttachedToEngine local auth')
     this.channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_NAME);
@@ -39,6 +57,12 @@ export default class DeviceInfoPlusOhosPlugin implements FlutterPlugin {
     this.channel.setMethodCallHandler(deviceMethodHandler);
   }
 
+  /**
+   * Called when the Flutter engine detaches this plugin. Releases the
+   * [MethodChannel] handler and clears the channel reference.
+   *
+   * @param binding The Flutter plugin binding (unused beyond lifecycle signalling).
+   */
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
     if (this.channel != null) {
       this.channel.setMethodCallHandler(null);

@@ -12,6 +12,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'device_info_coverage_demo.dart';
+
 void main() {
   runZonedGuarded(() {
     runApp(const MyApp());
@@ -35,6 +37,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    // Exercise the full plugin API across all platforms (no UI, fire-and-forget).
+    runDeviceInfoCoverageDemo();
   }
 
   Future<void> initPlatformState() async {
