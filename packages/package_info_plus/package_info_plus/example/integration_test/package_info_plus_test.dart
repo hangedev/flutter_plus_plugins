@@ -153,7 +153,32 @@ void main() {
           ),
         );
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: the OHOS runner reports none of the stock platform
+        // flags above. Values come from the OHOS implementation, based on
+        // example/ohos/AppScope/app.json5 (label "example", bundleName
+        // "io.flutter.plugins.example", versionName "1.2.3", versionCode 4).
+        expect(info.appName, 'example');
+        expect(info.buildNumber, '4');
+        expect(info.buildSignature, isNotEmpty); // signing certificate fingerprint
+        expect(info.packageName, 'io.flutter.plugins.example');
+        expect(info.version, '1.2.3');
+        expect(info.installerStore, isNull); // no store information reported
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       }
     }
   });
@@ -228,7 +253,28 @@ void main() {
         expect(find.text('not available'), findsOneWidget);
         expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: mirrors the OHOS branch of the fromPlatform test
+        // above (label "example", bundleName "io.flutter.plugins.example").
+        expect(find.text('example'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('io.flutter.plugins.example'), findsOneWidget);
+        expect(find.text('1.2.3'), findsOneWidget);
+        // Every version field is populated on OHOS.
+        expect(find.text('Not set'), findsNothing);
+        // installerStore is null on OHOS.
+        expect(find.text('not available'), findsOneWidget);
+        // On OHOS installTime is the FIRST install of the bundle and can
+        // long predate this run (updateTime is the reinstall that just
+        // happened), so both time tiles are checked for a rendered
+        // ISO-8601 timestamp instead of matching the test start time.
+        expect(find.text('Install time not available'), findsNothing);
+        expect(find.text('Update time not available'), findsNothing);
+        expect(
+          find.textContaining(
+            RegExp(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}'),
+          ),
+          findsNWidgets(2),
+        );
       }
     }
   });
