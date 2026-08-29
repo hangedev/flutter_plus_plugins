@@ -30,7 +30,9 @@ void main() {
         expect(info.buildSignature, isNotEmpty);
         expect(info.packageName, 'io.flutter.plugins.packageinfoexample');
         expect(info.version, '1.2.3');
-        expect(info.installerStore, null);
+        // Since Android 14 (API 34) OS returns com.android.shell when app is
+        // installed via package installer; older versions report null.
+        expect(info.installerStore, anyOf(isNull, 'com.android.shell'));
       } else if (Platform.isIOS) {
         expect(info.appName, 'Package Info Plus Example');
         expect(info.buildNumber, '4');
@@ -59,7 +61,19 @@ void main() {
         expect(info.version, '1.2.3');
         expect(info.installerStore, null);
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: the OHOS runner reports none of the stock platform
+        // flags above. Values come from the OHOS implementation, based on
+        // example/ohos/AppScope/app.json5 (label "example", bundleName
+        // "io.flutter.plugins.example", versionName "1.2.3", versionCode 4).
+        expect(info.appName, 'example');
+        expect(info.buildNumber, '4');
+        expect(info.buildSignature, isNotEmpty); // signing certificate fingerprint
+        expect(info.packageName, 'io.flutter.plugins.example');
+        expect(info.version, '1.2.3');
+        // The OHOS implementation reports no store information: the key
+        // is either absent (null) or an empty string on the Dart side,
+        // depending on the plugin har build.
+        expect(info.installerStore, anyOf(isNull, ''));
       }
     }
   });
@@ -78,10 +92,18 @@ void main() {
         expect(find.text('package_info_example'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
         expect(
-            find.text('io.flutter.plugins.packageinfoexample'), findsOneWidget);
+          find.text('io.flutter.plugins.packageinfoexample'),
+          findsOneWidget,
+        );
         expect(find.text('1.2.3'), findsOneWidget);
         expect(find.text('Not set'), findsNothing);
-        expect(find.text('not available'), findsOneWidget);
+        // Since Android 14 (API 34) OS returns com.android.shell when app is
+        // installed via package installer; older versions report null, which
+        // the tile renders as the fallback text.
+        final storeTile = find.text('com.android.shell').evaluate().isNotEmpty
+            ? find.text('com.android.shell')
+            : find.text('not available');
+        expect(storeTile, findsOneWidget);
       } else if (Platform.isIOS) {
         expect(find.text('Package Info Plus Example'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
@@ -110,7 +132,19 @@ void main() {
         expect(find.text('Not set'), findsOneWidget);
         expect(find.text('not available'), findsOneWidget);
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: mirrors the OHOS branch of the fromPlatform test
+        // above (label "example", bundleName "io.flutter.plugins.example").
+        expect(find.text('example'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('io.flutter.plugins.example'), findsOneWidget);
+        expect(find.text('1.2.3'), findsOneWidget);
+        // Every version field is populated on OHOS. Only the installer
+        // store tile falls back: 'not available' when the key is absent
+        // (null), 'Not set' for the empty-string store.
+        final storeFallback = find.text('not available').evaluate().isNotEmpty
+            ? find.text('not available')
+            : find.text('Not set');
+        expect(storeFallback, findsOneWidget);
       }
     }
   });

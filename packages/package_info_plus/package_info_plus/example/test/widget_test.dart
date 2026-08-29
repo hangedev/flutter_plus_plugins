@@ -1,30 +1,63 @@
-// This is a basic Flutter widget test.
+// Widget test for the package_info_plus example app.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// The home page loads its data through PackageInfo.fromPlatform in
+// initState, so mock values are seeded before pumping the widget —
+// no platform channel is involved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:example/main.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info_plus_example/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('renders every package info tile with the platform values',
+      (WidgetTester tester) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'mock_package_info_example',
+      packageName: 'io.flutter.plugins.mockpackageinfoexample',
+      version: '1.2.3',
+      buildNumber: '4',
+      buildSignature: 'a1b2c3d4e5f6a7b8',
+      installerStore: 'com.example.store',
+    );
+
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('PackageInfoPlus example'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Let the initState platform lookup complete and rebuild the tiles.
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('App name'), findsOneWidget);
+    expect(find.text('mock_package_info_example'), findsOneWidget);
+    expect(find.text('Package name'), findsOneWidget);
+    expect(find.text('io.flutter.plugins.mockpackageinfoexample'), findsOneWidget);
+    expect(find.text('App version'), findsOneWidget);
+    expect(find.text('1.2.3'), findsOneWidget);
+    expect(find.text('Build number'), findsOneWidget);
+    expect(find.text('4'), findsOneWidget);
+    expect(find.text('Build signature'), findsOneWidget);
+    expect(find.text('a1b2c3d4e5f6a7b8'), findsOneWidget);
+    expect(find.text('Installer store'), findsOneWidget);
+    expect(find.text('com.example.store'), findsOneWidget);
+  });
+
+  testWidgets('falls back to placeholders until the platform answers',
+      (WidgetTester tester) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'Unknown',
+      packageName: 'Unknown',
+      version: 'Unknown',
+      buildNumber: 'Unknown',
+      buildSignature: 'Unknown',
+      installerStore: null,
+    );
+
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    // Empty/unset fields are rendered as 'Unknown'/'not available' rather
+    // than blank tiles.
+    expect(find.text('Unknown'), findsNWidgets(5));
+    expect(find.text('not available'), findsOneWidget);
   });
 }

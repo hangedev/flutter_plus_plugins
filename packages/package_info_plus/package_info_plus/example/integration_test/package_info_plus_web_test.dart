@@ -1,5 +1,4 @@
 @TestOn('browser')
-library package_info_plus_web_test;
 
 import 'dart:convert';
 
@@ -32,14 +31,14 @@ void main() {
   late PackageInfoPlusWebPlugin plugin;
   late MockClient client;
 
-  setUp(() {
-    client = MockClient();
-    plugin = PackageInfoPlusWebPlugin(client);
-  });
-
   group(
     'Package Info Web',
     () {
+      setUp(() {
+        client = MockClient();
+        plugin = PackageInfoPlusWebPlugin(client);
+      });
+
       testWidgets(
         'Get correct values when response status is 200',
         (tester) async {
@@ -104,9 +103,10 @@ void main() {
             Uri.parse('https://example.com/a/b/c/version.json?cachebuster=1'),
           );
           expect(
+            // 'c' here is to be considered as a page, not a folder
             plugin.versionJsonUrl(
                 'https://example.com/a/b/c?hello_world=true#/my-page', 1),
-            Uri.parse('https://example.com/a/b/c/version.json?cachebuster=1'),
+            Uri.parse('https://example.com/a/b/version.json?cachebuster=1'),
           );
         },
       );
