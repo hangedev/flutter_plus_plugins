@@ -24,16 +24,16 @@ import HashMap from '@ohos.util.HashMap';
 
 
 import bundleManager from '@ohos.bundle.bundleManager'
-let bundleFlags =  bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION | bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_SIGNATURE_INFO
+const bundleFlags =  bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION | bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_SIGNATURE_INFO
 
-const TAG:string ="PackageInfoPlugin"
+const TAG:string ='PackageInfoPlugin'
 
-const CHANNEL_NAME = "dev.fluttercommunity.plus/package_info";
+const CHANNEL_NAME = 'dev.fluttercommunity.plus/package_info';
 export class PackageInfoPlugin implements FlutterPlugin,MethodCallHandler{
 
 
   getUniqueClassName(): string {
-    return "PackageInfoPlugin";
+    return 'PackageInfoPlugin';
   }
 
 
@@ -59,7 +59,7 @@ export class PackageInfoPlugin implements FlutterPlugin,MethodCallHandler{
   onMethodCall(call: MethodCall, result: MethodResult): void {
     Log.d(TAG,'onMethodCall packageInfo plugin1')
     try {
-             if (call.method == "getAll") {
+             if (call.method =='getAll') {
 
                const bundleManage = bundleManager.getBundleInfoForSelfSync(bundleFlags);
                const appInfo = bundleManage.appInfo;
@@ -67,26 +67,26 @@ export class PackageInfoPlugin implements FlutterPlugin,MethodCallHandler{
                const infoMap = new Map<string,string>();
                const buildSignature = bundleManage.signatureInfo.fingerprint;
                const appName = this.applicationContext?.resourceManager.getStringSync(appInfo.labelId) ?? '';
-               infoMap.set("appName", appName);
+               infoMap.set('appName', appName);
                Log.d(TAG,'onMethodCall packageInfo plugin appName '+ appName);
-               infoMap.set("packageName",bundleManage.name);
+               infoMap.set('packageName',bundleManage.name);
                Log.d(TAG,'onMethodCall packageInfo plugin packageName '+bundleManage.name)
-               infoMap.set("version",bundleManage.versionName);
+               infoMap.set('version',bundleManage.versionName);
                Log.d(TAG,'onMethodCall packageInfo plugin version '+bundleManage.versionName)
-               infoMap.set("buildNumber",bundleManage.versionCode.toString());
+               infoMap.set('buildNumber',bundleManage.versionCode.toString());
                Log.d(TAG,'onMethodCall packageInfo plugin buildNumber '+bundleManage.versionCode.toString())
                if (buildSignature != null){
-                 infoMap.set("buildSignature",buildSignature);
+                 infoMap.set('buildSignature',buildSignature);
                  Log.d(TAG,'onMethodCall packageInfo plugin buildSignature '+buildSignature)
                }
-              infoMap.set("installerStore","");
+              infoMap.set('installerStore','');
 
                result.success(infoMap);
             } else {
                result.notImplemented()
              }
     } catch(err){
-      result.error("Name not found", err.message, null)
+      result.error('Name not found', err.message, null)
     }
   }
 
