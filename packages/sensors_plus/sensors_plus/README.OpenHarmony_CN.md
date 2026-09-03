@@ -25,6 +25,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/sensors_plus/sensors_plus
       ref: sensors_plus-7.0.0-ohos-1.0.1
+
 ...
 ```
 
