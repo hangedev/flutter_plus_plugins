@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "sensors_plus_ohos": "file:../har/sensors_plus_ohos.har",
+    "sensors_plus": "file:../har/sensors_plus.har",
     "@ohos/flutter_ohos": "har/flutter.har"
   }
 }
