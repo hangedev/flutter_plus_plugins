@@ -22,6 +22,7 @@ void main() {
         'systemName': 'systemName',
         'isPhysicalDevice': true,
         'isiOSAppOnMac': true,
+        'isiOSAppOnVision': true,
         'physicalRamSize': 8192,
         'availableRamSize': 4096,
         'systemVersion': 'systemVersion',
@@ -40,6 +41,7 @@ void main() {
       expect(iosDeviceInfo.modelName, 'modelName');
       expect(iosDeviceInfo.isPhysicalDevice, isTrue);
       expect(iosDeviceInfo.isiOSAppOnMac, isTrue);
+      expect(iosDeviceInfo.isiOSAppOnVision, isTrue);
       expect(iosDeviceInfo.physicalRamSize, 8192);
       expect(iosDeviceInfo.availableRamSize, 4096);
       expect(iosDeviceInfo.systemName, 'systemName');
@@ -80,6 +82,7 @@ void main() {
         totalDiskSize: 2000,
         isPhysicalDevice: true,
         isiOSAppOnMac: false,
+        isiOSAppOnVision: false,
         physicalRamSize: 6144,
         availableRamSize: 2048,
         utsname: utsname,
@@ -108,6 +111,7 @@ void main() {
         identifierForVendor: 'IDFV',
         isPhysicalDevice: false,
         isiOSAppOnMac: true,
+        isiOSAppOnVision: true,
         physicalRamSize: 4096,
         availableRamSize: 1024,
         utsname: utsname,
@@ -119,6 +123,7 @@ void main() {
       expect(restored.identifierForVendor, 'IDFV');
       expect(restored.isPhysicalDevice, info.isPhysicalDevice);
       expect(restored.isiOSAppOnMac, info.isiOSAppOnMac);
+      expect(restored.isiOSAppOnVision, info.isiOSAppOnVision);
       expect(restored.utsname.machine, info.utsname.machine);
     });
   });
@@ -153,6 +158,7 @@ void main() {
           'localizedModel': 'iPhone',
           'isPhysicalDevice': true,
           'isiOSAppOnMac': false,
+          'isiOSAppOnVision': false,
           'freeDiskSize': 0,
           'totalDiskSize': 0,
           'physicalRamSize': 0,

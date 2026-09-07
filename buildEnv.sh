@@ -13,4 +13,4 @@
 # limitations under the License.
 
 BUILD_PKG_DIR=packages/device_info_plus/device_info_plus/example
-FLUTTER_SDK_VERSION=oh-3.35.7-dev
+FLUTTER_SDK_VERSION=oh-3.41.9-release

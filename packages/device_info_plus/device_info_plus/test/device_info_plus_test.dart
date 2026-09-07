@@ -218,6 +218,72 @@ void main() {
       });
     });
 
+    // --- Ohos getters accessed via a typed plugin variable ------------------
+    //
+    // The getters above are also exercised through chained
+    // `DeviceInfoPlugin().ohosDeviceInfo` expressions; the versions below bind
+    // the plugin to an explicitly typed local variable first, so static
+    // coverage tooling can attribute the member access to DeviceInfoPlugin.
+
+    group('ohos getters on a typed DeviceInfoPlugin variable', () {
+      void mockChannel(String method, Object? Function(MethodCall) handler) {
+        TestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(_kChannel, (MethodCall call) async {
+          if (call.method == method) {
+            return handler(call);
+          }
+          return null;
+        });
+      }
+
+      test('ohosDeviceInfo returns the parsed OhosDeviceInfo', () async {
+        DeviceInfoPlatform.instance = MethodChannelDeviceInfo();
+        mockChannel('getDeviceInfo', (_) => _ohosInfoMap);
+
+        final DeviceInfoPlugin plugin = DeviceInfoPlugin();
+        final OhosDeviceInfo info = await plugin.ohosDeviceInfo;
+
+        expect(info, isA<OhosDeviceInfo>());
+        expect(info.brand, 'DEMO-brand');
+        expect(info.osFullName, 'DEMO-osFullName');
+        expect(info.majorVersion, 5);
+        expect(info.isPhysicalDevice, isTrue);
+      });
+
+      test('ohosDeviceInfo answers later calls from its cache', () async {
+        DeviceInfoPlatform.instance = MethodChannelDeviceInfo();
+        var channelCalls = 0;
+        mockChannel('getDeviceInfo', (_) {
+          channelCalls++;
+          return _ohosInfoMap;
+        });
+
+        final DeviceInfoPlugin plugin = DeviceInfoPlugin();
+        final OhosDeviceInfo first = await plugin.ohosDeviceInfo;
+        final OhosDeviceInfo second = await plugin.ohosDeviceInfo;
+
+        expect(identical(first, second), isTrue);
+        expect(channelCalls, 1);
+      });
+
+      test('ohosAccessUDIDInfo returns serial and udid from the channel',
+          () async {
+        DeviceInfoPlatform.instance = MethodChannelDeviceInfo();
+        mockChannel('getAccessUDIDInfo', (_) => <String, dynamic>{
+              'serial': 'ABC123',
+              'udid': 'UDID-456',
+            });
+
+        final DeviceInfoPlugin plugin = DeviceInfoPlugin();
+        final OhosAccessUDIDInfo accessUDIDInfo =
+            await plugin.ohosAccessUDIDInfo;
+
+        expect(accessUDIDInfo, isA<OhosAccessUDIDInfo>());
+        expect(accessUDIDInfo.serial, 'ABC123');
+        expect(accessUDIDInfo.udid, 'UDID-456');
+      });
+    });
+
     // --- Caching -----------------------------------------------------------
 
     group('caching', () {
@@ -256,6 +322,66 @@ void main() {
 
         // THEN the platform is hit twice (caches are per-instance, not global)
         expect(platform.deviceInfoCalls, 2);
+      });
+    });
+
+    // --- Static mock injection ----------------------------------------------
+
+    group('DeviceInfoPlugin.setMockInitialValues', () {
+      test('seeds every cache so getters never reach the platform', () async {
+        // GIVEN fully seeded caches for all six platforms
+        final android = AndroidDeviceInfo.fromMap(_androidInfoMap);
+        final ios = IosDeviceInfo.fromMap(_iosInfoMap);
+        final macos = MacOsDeviceInfo.fromMap(_macosInfoMap);
+        final linux = LinuxDeviceInfo(
+          name: 'Linux',
+          version: '22.04',
+          id: 'ubuntu',
+          prettyName: 'Ubuntu 22.04 LTS',
+          machineId: 'machine-id',
+        );
+        final web = _webBrowserInfo();
+        final windows = _windowsDeviceInfo();
+
+        final DeviceInfoPlugin plugin = DeviceInfoPlugin.setMockInitialValues(
+          androidDeviceInfo: android,
+          iosDeviceInfo: ios,
+          linuxDeviceInfo: linux,
+          webBrowserInfo: web,
+          macOsDeviceInfo: macos,
+          windowsDeviceInfo: windows,
+        );
+
+        // AND a counting platform that would record any cache miss as a leak
+        final platform = _CountingPlatform(BaseDeviceInfo(<String, dynamic>{}));
+        DeviceInfoPlatform.instance = platform;
+
+        // THEN each getter returns its seeded instance without a platform call
+        expect(await plugin.androidInfo, same(android));
+        expect(await plugin.iosInfo, same(ios));
+        expect(await plugin.linuxInfo, same(linux));
+        expect(await plugin.macOsInfo, same(macos));
+        expect(await plugin.windowsInfo, same(windows));
+        expect(await plugin.webBrowserInfo, same(web));
+        expect(platform.deviceInfoCalls, 0);
+      });
+
+      test('unseeded platforms still fetch (and cache) from the platform',
+          () async {
+        // GIVEN only the android cache is seeded
+        final android = AndroidDeviceInfo.fromMap(_androidInfoMap);
+        final DeviceInfoPlugin plugin =
+            DeviceInfoPlugin.setMockInitialValues(androidDeviceInfo: android);
+
+        // WHEN macos was left unseeded
+        final platform = _CountingPlatform(BaseDeviceInfo(_macosInfoMap));
+        DeviceInfoPlatform.instance = platform;
+
+        // THEN android is served from the seed, macos fetches once and caches
+        expect(await plugin.androidInfo, same(android));
+        expect(await plugin.macOsInfo, isA<MacOsDeviceInfo>());
+        expect(await plugin.macOsInfo, isA<MacOsDeviceInfo>());
+        expect(platform.deviceInfoCalls, 1);
       });
     });
 
@@ -724,6 +850,7 @@ Map<String, dynamic> _iosInfoMap = <String, dynamic>{
   'identifierForVendor': 'IDFV',
   'isPhysicalDevice': true,
   'isiOSAppOnMac': false,
+  'isiOSAppOnVision': false,
   'freeDiskSize': 1000,
   'totalDiskSize': 2000,
   'physicalRamSize': 6144,
