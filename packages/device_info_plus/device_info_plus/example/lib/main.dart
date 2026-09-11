@@ -49,32 +49,27 @@ class _MyAppState extends State<MyApp> {
       if (kIsWeb) {
         deviceData = _readWebBrowserInfo(await deviceInfoPlugin.webBrowserInfo);
       } else {
-        switch (defaultTargetPlatform) {
-          case TargetPlatform.android:
-            deviceData =
-                _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
-            break;
-          case TargetPlatform.iOS:
-            deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
-            break;
-          case TargetPlatform.linux:
-            deviceData = _readLinuxDeviceInfo(await deviceInfoPlugin.linuxInfo);
-            break;
-          case TargetPlatform.windows:
-            deviceData =
-                _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo);
-            break;
-          case TargetPlatform.macOS:
-            deviceData = _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo);
-            break;
-          case TargetPlatform.ohos:
-            deviceData = (await deviceInfoPlugin.ohosDeviceInfo).data;
-            break;
-          default:
-            deviceData = <String, dynamic>{
-              'Error:': '$defaultTargetPlatform isn\'t supported'
-            };
-        }
+	        deviceData = switch (defaultTargetPlatform) {
+          TargetPlatform.android => _readAndroidBuildData(
+            await deviceInfoPlugin.androidInfo,
+          ),
+          TargetPlatform.iOS => _readIosDeviceInfo(
+            await deviceInfoPlugin.iosInfo,
+          ),
+          TargetPlatform.linux => _readLinuxDeviceInfo(
+            await deviceInfoPlugin.linuxInfo,
+          ),
+          TargetPlatform.windows => _readWindowsDeviceInfo(
+            await deviceInfoPlugin.windowsInfo,
+          ),
+          TargetPlatform.macOS => _readMacOsDeviceInfo(
+            await deviceInfoPlugin.macOsInfo,
+          ),
+		      TargetPlatform.ohos => (await deviceInfoPlugin.ohosDeviceInfo).data,
+          TargetPlatform.fuchsia => <String, dynamic>{
+            'Error:': 'Fuchsia platform isn\'t supported',
+          },
+        };
       }
     } on PlatformException {
       deviceData = <String, dynamic>{
@@ -146,6 +141,7 @@ class _MyAppState extends State<MyApp> {
       'identifierForVendor': data.identifierForVendor,
       'isPhysicalDevice': data.isPhysicalDevice,
       'isiOSAppOnMac': data.isiOSAppOnMac,
+      'isiOSAppOnVision': data.isiOSAppOnVision,
       'freeDiskSize': data.freeDiskSize,
       'totalDiskSize': data.totalDiskSize,
       'physicalRamSize': data.physicalRamSize,

@@ -138,4 +138,26 @@ class DeviceInfoPlugin {
     // allow for extension of the plugin
     return _platform.deviceInfo();
   }
+
+  /// Initializes the application metadata with mock values for testing.
+  @visibleForTesting
+  static DeviceInfoPlugin setMockInitialValues({
+    AndroidDeviceInfo? androidDeviceInfo,
+    IosDeviceInfo? iosDeviceInfo,
+    LinuxDeviceInfo? linuxDeviceInfo,
+    WebBrowserInfo? webBrowserInfo,
+    MacOsDeviceInfo? macOsDeviceInfo,
+    WindowsDeviceInfo? windowsDeviceInfo,
+    OhosDeviceInfo? ohosDeviceInfo,
+  }) {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    deviceInfoPlugin._cachedAndroidDeviceInfo = androidDeviceInfo;
+    deviceInfoPlugin._cachedIosDeviceInfo = iosDeviceInfo;
+    deviceInfoPlugin._cachedLinuxDeviceInfo = linuxDeviceInfo;
+    deviceInfoPlugin._cachedWebBrowserInfo = webBrowserInfo;
+    deviceInfoPlugin._cachedMacosDeviceInfo = macOsDeviceInfo;
+    deviceInfoPlugin._cachedWindowsDeviceInfo = windowsDeviceInfo;
+    deviceInfoPlugin._cachedOhosDeviceInfo = ohosDeviceInfo;
+    return deviceInfoPlugin;
+  }
 }

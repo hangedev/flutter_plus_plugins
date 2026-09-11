@@ -1,5 +1,26 @@
 # Changelog
 
+## device_info_plus-13.2.0-ohos-1.0.0 - 2026.9
+
+### Added
+
+* Version & Dependencies ([178](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/178)).
+Version number 12.3.0 → 13.2.0; device_info_plus_platform_interface ^7.0.3 → ^8.1.0, ffi ^2.2.0, and other dependencies upgraded accordingly (CHANGELOG supplemented with four version records: 12.4.0 / 13.0.0 / 13.1.0 / 13.2.0).
+13.0.0 is a breaking change: win32 upgraded to 6.0.0, with minimum requirements now Flutter 3.41.6 / Dart 3.11 / iOS 13 / macOS 10.15.
+
+* Dart‑Layer Features ([178](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/178)).
+IosDeviceInfo adds a new isiOSAppOnVision field (indicates that an iPad/iPhone app is running on visionOS).
+DeviceInfoPlugin adds a @visibleForTesting static setMockInitialValues(...) test‑stub method (pre‑injects cached values for six platforms).
+
+* Native / Platform Engineering ([178](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/178)).
+Android: Migrated Gradle from Groovy to Kotlin DSL (build.gradle.kts), with built‑in Kotlin support.
+iOS/macOS: Updated Swift Package Manager configuration; DeviceIdentifiers supplemented with new device model identifiers for 2026 (+112 lines in Swift).
+Windows: Adapted to win32 6.0.0; device_info_plus_windows.dart and the example’s runner/CMake templates fully updated.
+Example project: Refreshed platform project templates for Android, iOS, macOS, and Windows (Gradle Wrapper, Info.plist、 xcscheme, etc.).
+
+* Testing (this was a gap in the original commit) ([178](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/178)).
+Test fixtures did not keep up with isiOSAppOnVision and the new setMockInitialValues, resulting in 3 test failures — which is exactly what we fixed and supplemented in this round within the test/ directory.
+
 ## device_info_plus-12.3.0-ohos-1.0.0
 
 * release version device_info_plus-12.3.0-ohos-1.0.0

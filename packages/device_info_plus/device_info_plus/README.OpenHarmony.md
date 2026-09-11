@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/device_info_plus/device_info_plus
       # ref: Select the TAG version that matches your Flutter framework version from the table below
-      ref: device_info_plus-12.3.0-ohos-1.0.0
+      ref: device_info_plus-13.2.0-ohos-1.0.0
 ...
 ```
 
@@ -37,7 +37,7 @@ flutter pub get
 
 | Flutter Framework Version | TAG Name | Branch |
 |---|---|---|
-| 3.35 | device_info_plus-12.3.0-ohos-1.0.0 | br_device_info_plus-v12.3.0_ohos |
+| 3.41 | device_info_plus-13.2.0-ohos-1.0.0 | br_3.41 |
 
 <!-- tabs:end -->
 
@@ -87,7 +87,7 @@ try {
 
 This document is verified based on the following versions:
 
-1. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1.112(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+1. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 7.0.0.105 SP10;
 
 ## 3. API
 
