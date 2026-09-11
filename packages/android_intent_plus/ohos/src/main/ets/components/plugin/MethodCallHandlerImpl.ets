@@ -74,7 +74,15 @@ export class MethodCallHandlerImpl implements MethodCallHandler {
 
         case 'parseAndLaunch':
           const uri = call.argument('uri') as string;
-          want = this.sender.parse(uri);
+          try {
+            want = this.sender.parse(uri);
+          } catch (error) {
+            // 解析失败使用parse_error错误码，与Android端保持一致
+            const parseMessage = this.getErrorMessage(error);
+            Log.e(TAG, `Failed to parse URI: ${parseMessage}`);
+            result.error('parse_error', 'Failed to parse URI', parseMessage);
+            break;
+          }
           await this.sender.send(want);
           result.success(null);
           break;

@@ -18,8 +18,10 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that the new embedding example app builds
-    if (Platform.isAndroid) {
+    // Verify that the new embedding example app builds.
+    // The example renders the full demo UI on Android and OHOS,
+    // and the fallback text on other platforms (see lib/main.dart).
+    if (Platform.isAndroid || Platform.operatingSystem == 'ohos') {
       expect(
         find.byWidgetPredicate(
           (Widget widget) =>

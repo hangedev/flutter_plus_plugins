@@ -223,9 +223,10 @@ export class WantSender {
 
       return want;
     } catch (error) {
-      Log.e(TAG, 'Failed to parse JSON string: ' + this.getErrorMessage(error));
-      // 如果JSON解析失败，返回一个空的Want对象
-      return {};
+      const message = this.getErrorMessage(error);
+      Log.e(TAG, 'Failed to parse JSON string: ' + message);
+      // JSON解析失败时抛出异常，由调用方以parse_error错误码上报，与Android端Intent.parseUri行为保持一致
+      throw new Error(message);
     }
   }
 }
