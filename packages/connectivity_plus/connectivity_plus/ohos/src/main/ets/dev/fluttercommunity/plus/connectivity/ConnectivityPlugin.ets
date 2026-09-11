@@ -24,20 +24,20 @@ import ConnectivityMethodChannelHandler from './ConnectivityMethodChannelHandler
 import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
 import StandardMethodCodec from '@ohos/flutter_ohos/src/main/ets/plugin/common/StandardMethodCodec';
 
-const TAG: string = "ConnectivityPlugin";
+const TAG: string = 'ConnectivityPlugin';
 
 export default class ConnectivityPlugin implements FlutterPlugin {
   private methodChannel: MethodChannel | null = null;
   private eventChannel: EventChannel | null = null;
   private receiver: ConnectivityBroadcastReceiver | null = null;
-  private pluginBing: FlutterPluginBinding | null = null;
+  private pluginBinding: FlutterPluginBinding | null = null;
 
   getUniqueClassName(): string {
-    return "ConnectivityPlugin";
+    return 'ConnectivityPlugin';
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
-    Log.d(TAG, 'onAttachedToEngine connectivity plugin')
+    Log.d(TAG, 'onAttachedToEngine connectivity plugin');
 
     this.methodChannel = new MethodChannel(binding.getBinaryMessenger(), "dev.fluttercommunity.plus/connectivity", StandardMethodCodec.INSTANCE);
     this.eventChannel = new EventChannel(binding.getBinaryMessenger(), "dev.fluttercommunity.plus/connectivity_status", StandardMethodCodec.INSTANCE);
@@ -47,7 +47,7 @@ export default class ConnectivityPlugin implements FlutterPlugin {
     this.receiver = new ConnectivityBroadcastReceiver(binding.getApplicationContext(), connectivity);
     this.methodChannel.setMethodCallHandler(methodChannelHandler);
     this.eventChannel.setStreamHandler(this.receiver);
-    this.pluginBing = binding;
+    this.pluginBinding = binding;
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
@@ -58,6 +58,6 @@ export default class ConnectivityPlugin implements FlutterPlugin {
     this.methodChannel = null;
     this.eventChannel = null;
     this.receiver = null;
-    this.pluginBing = null;
+    this.pluginBinding = null;
   }
 }

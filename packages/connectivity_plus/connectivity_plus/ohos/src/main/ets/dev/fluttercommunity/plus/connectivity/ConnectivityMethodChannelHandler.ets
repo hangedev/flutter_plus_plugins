@@ -19,7 +19,7 @@ import Log from '@ohos/flutter_ohos/src/main/ets/util/Log';
 import { ArrayList } from '@kit.ArkTS';
 
 
-const TAG: string = "ConnectivityMethodChannelHandler";
+const TAG: string = 'ConnectivityMethodChannelHandler';
 
 export default class ConnectivityMethodChannelHandler implements MethodCallHandler {
   private connectivity: Connectivity;
@@ -32,7 +32,7 @@ export default class ConnectivityMethodChannelHandler implements MethodCallHandl
   onMethodCall(call: MethodCall, result: MethodResult): void {
     Log.d(TAG, 'onMethodCall step in')
     switch (call.method) {
-      case "check":
+      case 'check':
         this.handleCheckResult(result);
         break;
       default:
@@ -42,8 +42,15 @@ export default class ConnectivityMethodChannelHandler implements MethodCallHandl
   }
 
   async handleCheckResult(result: MethodResult): Promise<void> {
-    const networkType: ArrayList<String> = await this.connectivity.getNetworkType()
-    result.success(networkType)
+    // 与 Android 同步调用方式不同，OHOS 获取网络类型为异步操作，
+    // 需捕获异常并通过 result.error 返回，避免异常逃逸到 MethodChannel。
+    try {
+      const networkType: ArrayList<String> = await this.connectivity.getNetworkTypes();
+      result.success(networkType);
+    } catch (e) {
+      Log.e(TAG, `handleCheckResult failed: ${e}`);
+      result.error('UNAVAILABLE', 'Could not determine connectivity status', `${e}`);
+    }
   }
 }
 

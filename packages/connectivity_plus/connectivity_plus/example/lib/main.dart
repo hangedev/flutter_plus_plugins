@@ -11,6 +11,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'connectivity_demo.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -46,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
+  final ConnectivityDemo _demo = ConnectivityDemo();
+
   @override
   void initState() {
     super.initState();
@@ -53,11 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    _demo.start();
   }
 
   @override
   void dispose() {
     _connectivitySubscription.cancel();
+    _demo.dispose();
     super.dispose();
   }
 
