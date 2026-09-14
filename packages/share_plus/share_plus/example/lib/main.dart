@@ -17,8 +17,12 @@ import 'package:share_plus/share_plus.dart';
 
 import 'excluded_activity_type.dart';
 import 'image_previews.dart';
+import 'share_plus_coverage.dart';
 
 void main() {
+  // Exercises the full share_plus public surface for demo interface coverage.
+  // It renders no UI and never opens a real share sheet.
+  runSharePlusCoverage();
   runApp(const MyApp());
 }
 

@@ -31,21 +31,69 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
     Log.i(TAG, "onMethodCall step in");
     let method: string = call.method;
     Log.i(TAG, "Received '" + method + "' message.");
-    const isWithResult: boolean = call.method.endsWith('WithResult');
+
+    // --- Input validation (mirrors iOS guards) ---
+    // Reject empty text/uri/paths early to avoid undefined behaviour downstream.
+    const text = call.argument('text') as string | null;
+    if (text != null && text.length === 0) {
+      result.error('error', 'Non-empty text expected', null);
+      return;
+    }
+    const uri = call.argument('uri') as string | null;
+    if (uri != null && uri.length === 0) {
+      result.error('error', 'Non-empty uri expected', null);
+      return;
+    }
+    const title = call.argument('title') as string | null;
+    if (title != null && title.length === 0) {
+      result.error('error', 'Non-empty title expected', null);
+      return;
+    }
+    const paths = call.argument('paths') as string[] | null;
+    if (paths != null && paths.length === 0) {
+      result.error('error', 'Non-empty paths expected', null);
+      return;
+    }
+    const mimeTypes = call.argument('mimeTypes') as string[] | null;
+    // Mirror the iOS guard: paths and mimeTypes must be parallel arrays.
+    if (mimeTypes != null && paths != null && mimeTypes.length !== paths.length) {
+      result.error('error', 'Paths and mimeTypes should have same length', null);
+      return;
+    }
+
+    // --- Result tracking ---
+    // The Dart side always invokes the plain 'share'/'shareFiles'/'shareUri'
+    // methods on OHOS (never the *WithResult variants). To match Android's
+    // behaviour — where the share Future resolves with dismissed/unavailable
+    // instead of always unavailable — result-tracking is enabled for all
+    // three: startShare wires a dismiss callback on the ShareController, so
+    // the Dart Future resolves when the user closes the share sheet.
+    const isWithResult: boolean = call.method.endsWith('WithResult') ||
+      call.method === 'share' || call.method === 'shareFiles' ||
+      call.method === 'shareUri';
     try {
       switch (method) {
         case 'shareUri':
-          this.share?.share(call.argument('uri') as string, null, call.argument('title') as string, false, result);
+        case 'shareUriWithResult':
+          if (uri == null) {
+            result.error('error', 'uri is required for shareUri', null);
+            return;
+          }
+          this.share?.share(uri, null, title, isWithResult, result);
           if (!isWithResult) {
-            result.success(null);
+            result.success("dev.fluttercommunity.plus/share/unavailable");
           }
           break;
         case 'share':
         case 'shareWithResult':
+          if (text == null) {
+            result.error('error', 'text is required for share', null);
+            return;
+          }
           this.share?.share(
-            call.argument('text') as string,
-            call.argument('subject') as string,
-            call.argument('title') as string,
+            text,
+            call.argument('subject') as string | null,
+            title,
             isWithResult,
             result);
           if (!isWithResult) {
@@ -54,12 +102,16 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
           break;
         case 'shareFiles':
         case 'shareFilesWithResult':
+          if (paths == null) {
+            result.error('error', 'paths is required for shareFiles', null);
+            return;
+          }
           this.share?.shareFiles(
-            call.argument('paths'),
-            call.argument('mimeTypes'),
-            call.argument('text'),
-            call.argument('title'),
-            call.argument('subject'),
+            paths,
+            mimeTypes,
+            text,
+            call.argument('subject') as string | null,
+            title,
             isWithResult,
             result);
           if (!isWithResult) {
@@ -72,6 +124,12 @@ export default class MethodCallHandlerImpl implements MethodCallHandler {
       }
     } catch (err) {
       Log.e(TAG, 'err:' + JSON.stringify(err));
+      // Propagate the failure back to the Dart side so the pending
+      // share Future resolves with a PlatformException instead of hanging.
+      // Safe to reply here: a synchronous throw is only reachable before any
+      // result.success(...) line in the switch above, so `result` is still
+      // unreplied at this point.
+      result.error('share_error', 'share failed: ' + JSON.stringify(err), null);
     }
   }
 }
