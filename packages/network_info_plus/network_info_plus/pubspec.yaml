@@ -52,3 +52,4 @@ dev_dependencies:
   mockito: ^5.4.0
   plugin_platform_interface: ^2.1.4
   flutter_lints: ">=4.0.0 <6.0.0"
+  coverage: ^1.6.0

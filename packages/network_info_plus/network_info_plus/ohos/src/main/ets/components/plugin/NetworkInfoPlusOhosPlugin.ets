@@ -31,60 +31,55 @@ const SHIFT_16_BITS = 16;            // 右移16位，获取第二字节
 const SHIFT_8_BITS = 8;              // 右移8位，获取第三字节
 const IP_BYTES_COUNT = 4;            // IP地址由4个字节组成
 const RADIX_DECIMAL = 10;            // 十进制基数
+// 统一通道错误码：native 通过 result.error() 抛出后，Flutter 端会收到对应的 PlatformException
+const NETWORK_INFO_ERROR_CODE = 'network_info_error';
 
 /** NetworkInfoPlusOhosPlugin **/
 export default class NetworkInfoPlusOhosPlugin implements FlutterPlugin, MethodCallHandler {
   private channel: MethodChannel | null = null;
-  private wifiMessage: string | number | null = null;
   constructor() {
   }
 
   getUniqueClassName(): string {
-    return "NetworkInfoPlusOhosPlugin";
+    return 'NetworkInfoPlusOhosPlugin';
   }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
-    this.channel = new MethodChannel(binding.getBinaryMessenger(), "dev.fluttercommunity.plus/network_info");
+    // 通道名必须与 Dart 端 MethodChannel('dev.fluttercommunity.plus/network_info') 完全一致
+    this.channel = new MethodChannel(binding.getBinaryMessenger(), 'dev.fluttercommunity.plus/network_info');
     this.channel.setMethodCallHandler(this);
   }
 
   onDetachedFromEngine(binding: FlutterPluginBinding): void {
-    if (this.channel != null) {
+    if (this.channel !== null) {
       this.channel.setMethodCallHandler(null);
+      // 释放 MethodChannel 引用，避免分离后残留引用继续回调导致崩溃
+      this.channel = null;
     }
   }
 
-  async getWifiName() {
-    let dataSource: string | number = 0;
-    let wifiMessage = await wifiManager.getLinkedInfo().then(data => {
-      dataSource = data.ssid;
-      return dataSource;
-    }).catch((error: number) => {
-      console.info("get linked info error");
-    });
-    return wifiMessage;
+  async getWifiName(): Promise<string> {
+    // getLinkedInfo() 在权限未授予或系统异常时会 reject；这里不再吞掉异常，
+    // 直接抛出，由 onMethodCall 统一转为 PlatformException 回传 Flutter
+    const data = await wifiManager.getLinkedInfo();
+    return data.ssid;
   }
 
-  async getWifiBSSID() {
-    let dataSource: string | number = 0;
-    let wifiMessage = await wifiManager.getLinkedInfo().then(data => {
-      dataSource = data.bssid;
-      return dataSource;
-    }).catch((error: number) => {
-      console.info("get linked info error");
-    });
-    return wifiMessage;
+  async getWifiBSSID(): Promise<string> {
+    const data = await wifiManager.getLinkedInfo();
+    return data.bssid;
   }
 
-  getWifiIPAddress() {
-    // 获取Wi-Fi的IPv4地址（32位整数格式）
-    let ipv4 = wifiManager.getIpInfo().ipAddress;
-    
+  getWifiIPAddress(): string | null {
+    // 获取Wi-Fi的IPv4地址（32位整数格式）；权限未授予等异常会抛出，
+    // 由 onMethodCall 统一捕获并转为 PlatformException，避免直接崩溃
+    const ipv4 = wifiManager.getIpInfo().ipAddress;
+
     // 如果IP地址为0，表示未连接Wi-Fi或无有效IP，返回null
     if (ipv4 === 0) {
       return null;
     }
-    
+
     // 将32位整数形式的IP地址转换为4个字节的数组
     // 通过位运算提取每个字节：从高位到低位依次提取
     const bytes = [
@@ -93,26 +88,37 @@ export default class NetworkInfoPlusOhosPlugin implements FlutterPlugin, MethodC
       (ipv4 >>> SHIFT_8_BITS) & BYTE_MASK,       // 第3个字节
       ipv4 & BYTE_MASK                           // 第4个字节（最低位）
     ];
-    
+
     // 将字节数组转换为字符串数组，然后用点号连接成标准的IP地址格式（如：192.168.1.1）
-    let dataSource = bytes.map(byte => byte.toString()).join('.');
-    
-    // 返回格式化后的IP地址字符串
-    return dataSource;
+    return bytes.map(byte => byte.toString()).join('.');
   }
 
   ipToInt(ip: string): number {
+    // 校验输入：非空字符串，避免 ipToInt('') 产生 NaN
+    if (!ip) {
+      throw new Error('Invalid IP address: empty input');
+    }
     // 将IP地址字符串按点号分割成4个部分
-    let parts = ip.split('.');
+    const parts = ip.split('.');
+    // 校验必须为4段
+    if (parts.length !== IP_BYTES_COUNT) {
+      throw new Error('Invalid IP address: expected 4 octets, got ' + parts.length);
+    }
     let num = 0;
     // 遍历4个字节，将每个字节左移到对应位置并合并
-    for (let i = 0; i < parts.length; i++) {
-      // 将字符串转换为十进制数，然后左移到对应位置
+    for (let i = 0; i < IP_BYTES_COUNT; i++) {
+      // 将字符串转换为十进制数
+      const octet = parseInt(parts[i], RADIX_DECIMAL);
+      // 校验每段为有效整数且在 0–255 范围内，避免 parseInt 返回 NaN 导致位运算结果不可预测
+      if (Number.isNaN(octet) || octet < 0 || octet > BYTE_MASK) {
+        throw new Error('Invalid IP address: octet "' + parts[i] + '" out of range');
+      }
+      // 左移到对应位置：
       // i=0: 左移24位（最高字节）
       // i=1: 左移16位（第二字节）
       // i=2: 左移8位（第三字节）
       // i=3: 左移0位（最低字节）
-      num |= parseInt(parts[i], RADIX_DECIMAL) << (SHIFT_24_BITS - SHIFT_8_BITS * i);
+      num |= octet << (SHIFT_24_BITS - SHIFT_8_BITS * i);
     }
     return num;
   }
@@ -132,110 +138,128 @@ export default class NetworkInfoPlusOhosPlugin implements FlutterPlugin, MethodC
     return parts.join('.');
   }
 
-  getBroadcastIP() {
-    if (this.getWifiIPAddress()) {
-      const ipInt:number = this.ipToInt(this.getWifiIPAddress() as string);
-      const subnetMaskInt = this.ipToInt(this.getWifiSubnetMask() as string);
-      const broadcastInt = (ipInt & subnetMaskInt) | (~subnetMaskInt);
-      return this.intToIp(broadcastInt);
-    } else {
+  getBroadcastIP(): string | null {
+    // 获取本机 IP；可能抛出异常（由 onMethodCall 统一处理）
+    const ip = this.getWifiIPAddress();
+    if (ip === null) {
       return null;
     }
+    // 获取子网掩码；返回空串表示无有效子网掩码（如未连接 Wi-Fi），此时无法计算广播地址
+    const subnetMask = this.getWifiSubnetMask();
+    if (subnetMask === '') {
+      return null;
+    }
+    const ipInt = this.ipToInt(ip);
+    const subnetMaskInt = this.ipToInt(subnetMask);
+    const broadcastInt = (ipInt & subnetMaskInt) | (~subnetMaskInt);
+    return this.intToIp(broadcastInt);
   }
 
-  getWifiSubnetMask() {
-    try {
-      const binaryStr = wifiManager.getIpInfo().netmask.toString(2);
-      const info:number[] = [];
-      for (let i = 0; i < 4; i++) {
-        const octet = parseInt(binaryStr.slice(i * 8, (i + 1) * 8), 2);
-        info.push(octet);
-      }
-      if (wifiManager.getIpInfo().netmask ===0) {
-        return '';
-      }
-      return info.join('.');
-    }catch(error){
-      console.error("failed:" + JSON.stringify(error));
+  getWifiSubnetMask(): string {
+    // 直接读取子网掩码；权限未授予等异常会抛出，由 onMethodCall 统一处理
+    const netmask = wifiManager.getIpInfo().netmask;
+    // netmask 为 0 表示无有效子网掩码（如未连接 Wi-Fi），返回空串
+    if (netmask === 0) {
+      return '';
     }
-    return null;
+    const binaryStr = netmask.toString(2);
+    const info: number[] = [];
+    for (let i = 0; i < IP_BYTES_COUNT; i++) {
+      const octet = parseInt(binaryStr.slice(i * 8, (i + 1) * 8), 2);
+      info.push(octet);
+    }
+    return info.join('.');
   }
 
-  getGatewayIPAddress() {
-    try {
-      // 获取网关IP地址（32位整数格式）
-      const gatewayIp = wifiManager.getIpInfo().gateway;
-      
-      // 如果网关地址为0，表示无有效网关，返回null
-      if (gatewayIp === 0) {
-        return null;
-      }
-      
-      // 将32位整数形式的网关地址转换为4个字节的数组
-      // 通过位运算提取每个字节：从高位到低位依次提取
-      const parts = [
-        (gatewayIp >> SHIFT_24_BITS) & BYTE_MASK,  // 第1个字节（最高位）
-        (gatewayIp >> SHIFT_16_BITS) & BYTE_MASK,  // 第2个字节
-        (gatewayIp >> SHIFT_8_BITS) & BYTE_MASK,   // 第3个字节
-        gatewayIp & BYTE_MASK                      // 第4个字节（最低位）
-      ];
-      
-      // 将字节数组转换为字符串数组，然后用点号连接成标准的IP地址格式
-      return parts.map(part => part.toString()).join('.');
-    }catch(error){
-      console.error("failed:" + JSON.stringify(error));
+  getGatewayIPAddress(): string | null {
+    // 获取网关IP地址（32位整数格式）；权限未授予等异常会抛出，由 onMethodCall 统一处理
+    const gatewayIp = wifiManager.getIpInfo().gateway;
+
+    // 如果网关地址为0，表示无有效网关，返回null
+    if (gatewayIp === 0) {
+      return null;
     }
-    return null;
+
+    // 将32位整数形式的网关地址转换为4个字节的数组
+    // 通过位运算提取每个字节：从高位到低位依次提取
+    const parts = [
+      (gatewayIp >> SHIFT_24_BITS) & BYTE_MASK,  // 第1个字节（最高位）
+      (gatewayIp >> SHIFT_16_BITS) & BYTE_MASK,  // 第2个字节
+      (gatewayIp >> SHIFT_8_BITS) & BYTE_MASK,   // 第3个字节
+      gatewayIp & BYTE_MASK                      // 第4个字节（最低位）
+    ];
+
+    // 将字节数组转换为字符串数组，然后用点号连接成标准的IP地址格式
+    return parts.map(part => part.toString()).join('.');
   }
 
-  getIpV6() {
-    try {
-      let info = wifiManager.getIpv6Info().linkIpv6Address;
-      if (info === '') {
-        return null;
-      }
-      return info;
-    }catch(error){
-      console.error("failed:" + JSON.stringify(error));
+  getIpV6(): string | null {
+    // 获取IPv6地址；权限未授予等异常会抛出，由 onMethodCall 统一处理
+    const info = wifiManager.getIpv6Info().linkIpv6Address;
+    if (info === '') {
+      return null;
     }
-    return null;
+    return info;
+  }
+
+  // 将异常转为 PlatformException 回传 Flutter，并输出日志便于定位
+  private replyError(result: MethodResult, method: string, detail: string): void {
+    console.error(method + ' failed: ' + detail);
+    result.error(NETWORK_INFO_ERROR_CODE, 'Failed to get ' + method, detail);
+  }
+
+  // 同步获取网络信息并回传；异常转为 PlatformException，避免 native 崩溃
+  private replyWith(result: MethodResult, method: string, producer: () => string | null): void {
+    // 引擎已分离时不再操作 result，避免在分离后回调导致崩溃
+    if (this.channel === null) {
+      return;
+    }
+    try {
+      result.success(producer());
+    } catch (e) {
+      this.replyError(result, method, JSON.stringify(e));
+    }
+  }
+
+  // 异步获取网络信息并回传；rejected 转为 PlatformException，避免 native 崩溃
+  private replyWithAsync(result: MethodResult, method: string, future: Promise<string>): void {
+    future.then((data: string) => {
+      if (this.channel === null) {
+        return;
+      }
+      // 与原逻辑保持一致：无有效值（空串等）统一回传 null
+      result.success(data ? data : null);
+    }).catch((e: Object) => {
+      if (this.channel === null) {
+        return;
+      }
+      this.replyError(result, method, JSON.stringify(e));
+    });
   }
 
   //需要权限 ohos.permission.GET_WIFI_INFO
   onMethodCall(call: MethodCall, result: MethodResult): void {
     switch (call.method) {
-      case "wifiName":
-        this.getWifiName().then(data =>{
-          if (!data) {
-            result.success(null);
-            return;
-          }
-          result.success(data);
-        })
+      case 'wifiName':
+        this.replyWithAsync(result, 'wifiName', this.getWifiName());
         break;
-      case "wifiBSSID":
-        this.getWifiBSSID().then(data =>{
-          if (!data) {
-            result.success(null);
-            return;
-          }
-          result.success(data);
-        })
+      case 'wifiBSSID':
+        this.replyWithAsync(result, 'wifiBSSID', this.getWifiBSSID());
         break;
-      case "wifiIPAddress":
-        result.success(this.getWifiIPAddress());
+      case 'wifiIPAddress':
+        this.replyWith(result, 'wifiIPAddress', () => this.getWifiIPAddress());
         break;
-      case "wifiBroadcast":
-        result.success(this.getBroadcastIP());
+      case 'wifiBroadcast':
+        this.replyWith(result, 'wifiBroadcast', () => this.getBroadcastIP());
         break;
-      case "wifiSubmask":
-        result.success(this.getWifiSubnetMask());
+      case 'wifiSubmask':
+        this.replyWith(result, 'wifiSubmask', () => this.getWifiSubnetMask());
         break;
-      case "wifiGatewayAddress":
-        result.success(this.getGatewayIPAddress());
+      case 'wifiGatewayAddress':
+        this.replyWith(result, 'wifiGatewayAddress', () => this.getGatewayIPAddress());
         break;
-      case "wifiIPv6Address":
-        result.success(this.getIpV6());
+      case 'wifiIPv6Address':
+        this.replyWith(result, 'wifiIPv6Address', () => this.getIpV6());
         break;
       default:
         result.notImplemented();
