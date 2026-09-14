@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,9 @@ void main() {
   late MockMethodChannel mockChannel;
   setUp(() {
     mockChannel = MockMethodChannel();
+  });
+  tearDown(() {
+    reset(mockChannel);
   });
 
   group('AndroidIntent', () {
@@ -56,6 +61,57 @@ void main() {
         await androidIntent.launch();
         verify(mockChannel.invokeMethod<void>('launch', <String, Object>{
           'action': 'action_view',
+        }));
+      });
+
+      test('should pass category param when it is provided', () async {
+        androidIntent = AndroidIntent.private(
+          action: 'action_view',
+          category: 'android.intent.category.DEFAULT',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        expect(androidIntent.category, 'android.intent.category.DEFAULT');
+        await androidIntent.launch();
+        verify(mockChannel.invokeMethod<void>('launch', <String, Object>{
+          'action': 'action_view',
+          'category': 'android.intent.category.DEFAULT',
+        }));
+      });
+
+      test('should omit category key from arguments when category is null',
+          () async {
+        androidIntent = AndroidIntent.private(
+          action: 'action_view',
+          category: null,
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        expect(androidIntent.category, isNull);
+        await androidIntent.launch();
+        verify(mockChannel.invokeMethod<void>('launch', <String, Object>{
+          'action': 'action_view',
+        }));
+      });
+
+      test('should pass arguments and arrayArguments when they are provided',
+          () async {
+        androidIntent = AndroidIntent.private(
+          action: 'action_view',
+          arguments: <String, dynamic>{'key': 'value'},
+          arrayArguments: <String, List<dynamic>>{
+            'days': <int>[1, 2, 3],
+          },
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        await androidIntent.launch();
+        verify(mockChannel.invokeMethod<void>('launch', <String, Object>{
+          'action': 'action_view',
+          'arguments': <String, dynamic>{'key': 'value'},
+          'arrayArguments': <String, List<dynamic>>{
+            'days': <int>[1, 2, 3],
+          },
         }));
       });
 
@@ -263,6 +319,238 @@ void main() {
         }));
       });
     });
+
+    group('parseAndLaunch', () {
+      test('should return without invoking the channel when called on an '
+          'unsupported platform', () async {
+        TestWidgetsFlutterBinding.ensureInitialized();
+        var invoked = false;
+        const channel = MethodChannel('dev.fluttercommunity.plus/android_intent');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (MethodCall call) async {
+          invoked = true;
+          return null;
+        });
+        // 宿主机(Windows/macOS/Linux)上平台守卫直接返回, 不触发通道调用
+        await AndroidIntent.parseAndLaunch('intent://scan/#Intent;end');
+        expect(invoked, isFalse);
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
+      });
+    });
+
+    group('timeout handling', () {
+      test('should throw TimeoutException when launch never completes',
+          () async {
+        androidIntent = AndroidIntent.private(
+          action: 'action_view',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        when(mockChannel.invokeMethod<void>('launch', any))
+            .thenAnswer((_) => Completer<void>().future);
+        await expectLater(
+          androidIntent.launch().timeout(const Duration(milliseconds: 50)),
+          throwsA(isA<TimeoutException>()),
+        );
+      });
+
+      test('should throw TimeoutException when getResolvedActivity never '
+          'completes', () async {
+        androidIntent = AndroidIntent.private(
+          action: 'action_view',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        when(mockChannel.invokeMethod<Map<Object?, Object?>>(
+                'getResolvedActivity', any))
+            .thenAnswer(
+                (_) => Completer<Map<Object?, Object?>>().future);
+        await expectLater(
+          androidIntent
+              .getResolvedActivity()
+              .timeout(const Duration(milliseconds: 50)),
+          throwsA(isA<TimeoutException>()),
+        );
+      });
+    });
+
+    group('concurrent calls', () {
+      test('should handle concurrent launch calls of multiple intents',
+          () async {
+        final intents = <AndroidIntent>[
+          AndroidIntent.private(
+            action: 'action_one',
+            channel: mockChannel,
+            platform: FakePlatform(operatingSystem: 'android'),
+          ),
+          AndroidIntent.private(
+            action: 'action_two',
+            channel: mockChannel,
+            platform: FakePlatform(operatingSystem: 'android'),
+          ),
+          AndroidIntent.private(
+            action: 'action_three',
+            channel: mockChannel,
+            platform: FakePlatform(operatingSystem: 'android'),
+          ),
+        ];
+        await Future.wait(intents.map((intent) => intent.launch()));
+        verify(mockChannel.invokeMethod<void>('launch',
+            <String, Object>{'action': 'action_one'}));
+        verify(mockChannel.invokeMethod<void>('launch',
+            <String, Object>{'action': 'action_two'}));
+        verify(mockChannel.invokeMethod<void>('launch',
+            <String, Object>{'action': 'action_three'}));
+      });
+
+      test('should handle concurrent mixed method calls', () async {
+        final launchIntent = AndroidIntent.private(
+          action: 'action_launch',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        final broadcastIntent = AndroidIntent.private(
+          action: 'action_broadcast',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        final serviceIntent = AndroidIntent.private(
+          action: 'action_service',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        final chooserIntent = AndroidIntent.private(
+          action: 'action_chooser',
+          channel: mockChannel,
+          platform: FakePlatform(operatingSystem: 'android'),
+        );
+        await Future.wait(<Future<void>>[
+          launchIntent.launch(),
+          broadcastIntent.sendBroadcast(),
+          serviceIntent.sendService(),
+          chooserIntent.launchChooser('title'),
+        ]);
+        verify(mockChannel.invokeMethod<void>(
+            'launch', <String, Object>{'action': 'action_launch'}));
+        verify(mockChannel.invokeMethod<void>(
+            'sendBroadcast', <String, Object>{'action': 'action_broadcast'}));
+        verify(mockChannel.invokeMethod<void>(
+            'sendService', <String, Object>{'action': 'action_service'}));
+        verify(mockChannel.invokeMethod<void>('launchChooser', <String, Object>{
+          'action': 'action_chooser',
+          'chooserTitle': 'title',
+        }));
+      });
+    });
+  });
+
+  // === 鸿蒙平台测试 ===
+  group('Ohos AndroidIntent', () {
+    test('should send launch on ohos platform', () async {
+      androidIntent = AndroidIntent.private(
+        action: 'action_view',
+        channel: mockChannel,
+        platform: FakePlatform(operatingSystem: 'ohos'),
+      );
+      await androidIntent.launch();
+      verify(mockChannel.invokeMethod<void>('launch', <String, Object>{
+        'action': 'action_view',
+      }));
+    });
+
+    test('should send broadcast on ohos platform', () async {
+      androidIntent = AndroidIntent.private(
+        action: 'com.example.broadcast',
+        channel: mockChannel,
+        platform: FakePlatform(operatingSystem: 'ohos'),
+      );
+      await androidIntent.sendBroadcast();
+      verify(mockChannel.invokeMethod<void>('sendBroadcast', <String, Object>{
+        'action': 'com.example.broadcast',
+      }));
+    });
+
+    test('should launch chooser on ohos platform', () async {
+      androidIntent = AndroidIntent.private(
+        action: 'action_view',
+        channel: mockChannel,
+        platform: FakePlatform(operatingSystem: 'ohos'),
+      );
+      await androidIntent.launchChooser('title');
+      verify(mockChannel.invokeMethod<void>('launchChooser', <String, Object>{
+        'action': 'action_view',
+        'chooserTitle': 'title',
+      }));
+    });
+
+    test('should return channel result from canResolveActivity on ohos '
+        'platform', () async {
+      androidIntent = AndroidIntent.private(
+        action: 'action_view',
+        channel: mockChannel,
+        platform: FakePlatform(operatingSystem: 'ohos'),
+      );
+      when(mockChannel.invokeMethod<bool>('canResolveActivity', any))
+          .thenAnswer((_) async => true);
+      final result = await androidIntent.canResolveActivity();
+      expect(result, isTrue);
+    });
+  });
+
+  group('ResolvedActivity', () {
+    test('should compare equal when all fields match', () {
+      final a = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'activity name',
+        packageName: 'com.packagename',
+      );
+      final b = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'activity name',
+        packageName: 'com.packagename',
+      );
+      expect(a, equals(b));
+      expect(a == a, isTrue);
+      expect(a.hashCode, b.hashCode);
+    });
+
+    test('should not compare equal when any field differs', () {
+      final a = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'activity name',
+        packageName: 'com.packagename',
+      );
+      final b = ResolvedActivity(
+        appName: 'Other App',
+        activityName: 'activity name',
+        packageName: 'com.packagename',
+      );
+      final c = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'other activity',
+        packageName: 'com.packagename',
+      );
+      final d = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'activity name',
+        packageName: 'com.other',
+      );
+      expect(a == b, isFalse);
+      expect(a == c, isFalse);
+      expect(a == d, isFalse);
+    });
+
+    test('should include all fields in toString', () {
+      final a = ResolvedActivity(
+        appName: 'App Name',
+        activityName: 'activity name',
+        packageName: 'com.packagename',
+      );
+      expect(a.toString(), contains('appName: App Name'));
+      expect(a.toString(), contains('activityName: activity name'));
+      expect(a.toString(), contains('packageName: com.packagename'));
+    });
   });
 
   group('convertFlags ', () {
@@ -292,6 +580,18 @@ void main() {
       expect(
         androidIntent.convertFlags(flags),
         0,
+      );
+    });
+    test('should handle the smallest flag value', () async {
+      expect(
+        androidIntent.convertFlags(<int>[1]),
+        1,
+      );
+    });
+    test('should handle large flag values', () async {
+      expect(
+        androidIntent.convertFlags(<int>[0x40000000, 0x80000000]),
+        0xC0000000,
       );
     });
   });
