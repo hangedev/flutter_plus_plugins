@@ -1,3 +1,31 @@
+## 7.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **FEAT**(network_info_plus): Change Android compile SDK, update Android build config ([#3669](https://github.com/fluttercommunity/plus_plugins/issues/3669)). ([bcb42027](https://github.com/fluttercommunity/plus_plugins/commit/bcb420277b5907fa9aac3977c20fbac65284a4a8))
+
+## 6.1.4
+
+ - **FIX**(network_info_plus): fix deprecated member use in Windows implementation ([#3519](https://github.com/fluttercommunity/plus_plugins/issues/3519)). ([f723fad9](https://github.com/fluttercommunity/plus_plugins/commit/f723fad94e2a834cd0dbac861c6dc086b8dd71f2))
+
+## 6.1.3
+
+ - **FIX**(network_info_plus): Improve Wi-Fi IP address retrieval on iOS to avoid null ([#3408](https://github.com/fluttercommunity/plus_plugins/issues/3408)). ([7c8894b9](https://github.com/fluttercommunity/plus_plugins/commit/7c8894b99878ccbcc33845f9d19e0921470d5935))
+
+## 6.1.2
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+
+## 6.1.1
+
+ - **FIX**(network_info_plus): Update privacy manifest path on MacOS ([#3350](https://github.com/fluttercommunity/plus_plugins/issues/3350)). ([18c81efd](https://github.com/fluttercommunity/plus_plugins/commit/18c81efd0b9f510023c481965b5868184d435961))
+
 ## 6.1.0
 
  - **FEAT**(network_info_plus): Add Swift Package Manager support ([#3172](https://github.com/fluttercommunity/plus_plugins/issues/3172)). ([bcf7a5bb](https://github.com/fluttercommunity/plus_plugins/commit/bcf7a5bbd06d667cc6a4390c7cb79c349bdce6c7))

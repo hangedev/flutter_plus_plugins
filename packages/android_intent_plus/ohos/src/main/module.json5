@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "android_intent_plus",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

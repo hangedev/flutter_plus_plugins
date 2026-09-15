@@ -120,6 +120,7 @@ class AndroidIntent {
   /// See https://developer.android.com/reference/android/content/Intent.html#intent-structure.
   final String? type;
 
+
   bool _isPowerOfTwo(int x) {
     /* First x in the below expression is for the case when x is 0 */
     return x != 0 && ((x & (x - 1)) == 0);
@@ -143,7 +144,7 @@ class AndroidIntent {
   ///
   /// This works only on Android platforms.
   Future<void> launch() async {
-    if (!_platform.isAndroid) {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
       return;
     }
 
@@ -155,7 +156,7 @@ class AndroidIntent {
   /// Equivalent of native android Intent.parseUri(URI, Intent.URI_INTENT_SCHEME)
   /// This works only on Android platforms.
   static Future<void> parseAndLaunch(String uri) async {
-    if (!const LocalPlatform().isAndroid) {
+    if (!const LocalPlatform().isAndroid && const LocalPlatform().operatingSystem != 'ohos') {
       return;
     }
 
@@ -167,7 +168,7 @@ class AndroidIntent {
   ///
   /// This works only on Android platforms.
   Future<void> launchChooser(String title) async {
-    if (!_platform.isAndroid) {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
       return;
     }
 
@@ -179,11 +180,25 @@ class AndroidIntent {
     );
   }
 
+  /// Starts intent as service.
+  ///
+  /// This works only on Android platforms.
+  Future<void> sendService() async {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
+      return;
+    }
+
+    await _channel.invokeMethod<void>(
+      'sendService',
+      _buildArguments(),
+    );
+  }
+
   /// Sends intent as broadcast.
   ///
   /// This works only on Android platforms.
   Future<void> sendBroadcast() async {
-    if (!_platform.isAndroid) {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
       return;
     }
 
@@ -197,7 +212,7 @@ class AndroidIntent {
   ///
   /// This works only on Android platforms.
   Future<bool?> canResolveActivity() async {
-    if (!_platform.isAndroid) {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
       return false;
     }
 
@@ -212,7 +227,7 @@ class AndroidIntent {
   /// Note: ensure the calling app's AndroidManifest contains queries that match the intent.
   /// See: https://developer.android.com/guide/topics/manifest/queries-element
   Future<ResolvedActivity?> getResolvedActivity() async {
-    if (!_platform.isAndroid) {
+    if (!_platform.isAndroid && _platform.operatingSystem != 'ohos') {
       return null;
     }
 

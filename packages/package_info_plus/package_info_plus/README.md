@@ -10,7 +10,7 @@ This Flutter plugin provides an API for querying information about an applicatio
 
 ## Platform Support
 
-| Android |  iOS  | MacOS |  Web  | Linux | Windows |
+| Android |  iOS  | macOS |  Web  | Linux | Windows |
 | :-----: | :---: | :---: | :---: | :---: | :-----: |
 |✅|✅|✅|✅|✅|✅|
 
@@ -19,11 +19,11 @@ This Flutter plugin provides an API for querying information about an applicatio
 - Flutter >=3.19.0
 - Dart >=3.3.0 <4.0.0
 - iOS >=12.0
-- MacOS >=10.14
-- Android `compileSDK` 34
+- macOS >=10.14
 - Java 17
-- Android Gradle Plugin >=8.3.0
-- Gradle wrapper >=8.4
+- Kotlin 2.2.0
+- Android Gradle Plugin >=8.12.1
+- Gradle wrapper >=8.13
 
 ## Usage
 
@@ -48,6 +48,46 @@ String version = packageInfo.version;
 String buildNumber = packageInfo.buildNumber;
 ```
 
+### Installer Store
+
+The `installerStore` property indicates which app store installed the application. This is useful for directing users to the appropriate store page for ratings or updates.
+
+```dart
+PackageInfo packageInfo = await PackageInfo.fromPlatform();
+String? installerStore = packageInfo.installerStore;
+```
+
+#### iOS
+
+On iOS, the `installerStore` value is determined by checking the app store receipt path:
+
+| Environment | `installerStore` value |
+|-------------|------------------------|
+| App Store | `com.apple` |
+| TestFlight | `com.apple.testflight` |
+| Simulator | `com.apple.simulator` |
+
+#### Android
+
+On Android, the value is the package name of the app store that installed the application, obtained via `PackageManager.getInstallSourceInfo()` (Android 11+) or `PackageManager.getInstallerPackageName()` (older versions).
+
+| Store | `installerStore` value |
+|-------|------------------------|
+| Google Play Store | `com.android.vending` |
+| Amazon Appstore | `com.amazon.venezia` |
+| Samsung Galaxy Store | `com.sec.android.app.samsungapps` |
+| Huawei AppGallery | `com.huawei.appmarket` |
+| Xiaomi GetApps | `com.xiaomi.mipicks` |
+| OPPO App Market | `com.oppo.market` |
+| VIVO App Store | `com.vivo.appstore` |
+| Manual/ADB install | `null` |
+
+**Note:** Some stores may not properly implement the installer package name API, which could result in `null` being returned even for store installations.
+
+#### Other Platforms
+
+On MacOS, Linux, Windows, and Web, `installerStore` returns `null`.
+
 ## Known Issues
 
 ### iOS
@@ -55,7 +95,7 @@ String buildNumber = packageInfo.buildNumber;
 #### Plugin returns incorrect app version
 
 Flutter build tools allow only digits and `.` (dot) symbols to be used in `version`
-of `pubspec.yaml` on iOS/MacOS to comply with official version format from Apple.
+of `pubspec.yaml` on iOS/macOS to comply with official version format from Apple.
 
 More info available in [this comment](https://github.com/fluttercommunity/plus_plugins/issues/389#issuecomment-1106764429)
 
@@ -76,7 +116,7 @@ See https://github.com/fluttercommunity/plus_plugins/issues/309
 #### I see wrong version on Windows platform
 
 There was an [issue](https://github.com/flutter/flutter/issues/73652) in Flutter, which is already resolved since Flutter 3.3.
-If your project was created before Flutter 3.3 you need to migrate the project according to [this guide] (https://docs.flutter.dev/release/breaking-changes/windows-version-information) first to get correct version with `package_info_plus`
+If your project was created before Flutter 3.3 you need to migrate the project according to [this guide](https://docs.flutter.dev/release/breaking-changes/windows-version-information) first to get correct version with `package_info_plus`
 
 ### Web
 

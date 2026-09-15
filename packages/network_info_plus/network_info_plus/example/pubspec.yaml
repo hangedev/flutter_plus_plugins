@@ -7,8 +7,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  network_info_plus: ^6.1.0
-  permission_handler: ^11.3.0
+  network_info_plus:
+    path: ../
+  permission_handler: ^12.0.0+1
+  cupertino_icons: ^1.0.2
+  # The headless demo (lib/network_info_demo.dart) drives the plugin's FFI
+  # Windows implementation directly, so it needs these as direct deps.
+  ffi: ^2.0.1
+  win32: ^5.5.3
 
 dev_dependencies:
   flutter_test:
@@ -16,7 +22,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   test: ^1.21.0
-  flutter_lints: ^5.0.0
+  flutter_lints: ">=4.0.0 <6.0.0"
 
 flutter:
   uses-material-design: true

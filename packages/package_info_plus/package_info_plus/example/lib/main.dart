@@ -9,6 +9,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'package_info_api_demo.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -50,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initPackageInfo();
+    // Exercises the full documented API surface (incl. the `data` map).
+    // Results go to the debug log only; nothing is shown in the UI.
+    const PackageInfoApiDemo().run();
   }
 
   Future<void> _initPackageInfo() async {
@@ -83,6 +88,16 @@ class _MyHomePageState extends State<MyHomePage> {
           _infoTile(
             'Installer store',
             _packageInfo.installerStore ?? 'not available',
+          ),
+          _infoTile(
+            'Install time',
+            _packageInfo.installTime?.toIso8601String() ??
+                'Install time not available',
+          ),
+          _infoTile(
+            'Update time',
+            _packageInfo.updateTime?.toIso8601String() ??
+                'Update time not available',
           ),
         ],
       ),
