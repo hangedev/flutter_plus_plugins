@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
-      # ref: connectivity_plus-7.0.0-ohos.1.0.1
+      # ref: connectivity_plus-7.2.0-ohos.1.0.0
       ref: TAG  # Select the TAG according to the TAG version mapping table below
 
 ...
@@ -36,12 +36,13 @@ flutter pub get
 
 ### TAG Version Mapping
 
-| Flutter Framework Version | TAG                                          | Branch                            |
-|---------------------------|----------------------------------------------|-----------------------------------|
-| 3.7                       | connectivity_plus-5.0.1-ohos-1.0.0-beta.1    | master                            |
-| 3.22                      | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
-| 3.27                      | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
-| 3.35                      | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
+| Flutter Framework Version | TAG                                       | Branch   |
+|---------------------------|-------------------------------------------|----------|
+| 3.7                       | connectivity_plus-5.0.1-ohos-1.0.0-beta.1 | master   |
+| 3.22                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
+| 3.27                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
+| 3.35                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
+| 3.41                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
 
 <!-- tabs:end -->
 
@@ -91,6 +92,7 @@ This document is verified based on the following versions:
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 2. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+4. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 7.0.0.105 SP10;
 
 
 ### 2.2 Permission Requirements
@@ -134,6 +136,7 @@ Open  `entry/src/main/module.json5` and add the following information:
 | none                | Device not connected to any network | enum     | /     | /       | yes          |
 | vpn                 | Device connected to a VPN (Note: iOS/macOS returns [other]) | enum | / | / | yes      |
 | other               | Device is connected to an unknown network | enum | /     | /       | yes          |
+| satellite           | Device connected to a satellite network (supported on Android 15+ and iOS; not supported on OHOS and never reported) | enum | /     | /       | no           |
 
 ## 5. Known Issues
 

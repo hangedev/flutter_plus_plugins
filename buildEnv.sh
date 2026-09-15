@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-BUILD_PKG_DIR=packages/device_info_plus/device_info_plus/example
-FLUTTER_SDK_VERSION=oh-3.41.9-release
+BUILD_PKG_DIR=packages/connectivity_plus/connectivity_plus/example
+FLUTTER_SDK_VERSION=("oh-3.41.9-release" "oh-3.35.7-release" "oh-3.27.0-release" "oh-3.22.3-release")
