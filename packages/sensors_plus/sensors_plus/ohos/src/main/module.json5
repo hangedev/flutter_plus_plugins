@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "sensors_plus",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

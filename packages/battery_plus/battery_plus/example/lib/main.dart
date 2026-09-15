@@ -6,6 +6,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:battery_plus/battery_plus.dart';
 
+import 'battery_demo_coverage.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -45,6 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _battery.batteryState.then(_updateBatteryState);
     _batteryStateSubscription =
         _battery.onBatteryStateChanged.listen(_updateBatteryState);
+    // Exercise the full battery_plus API surface (every BatteryState enum
+    // value and the BatteryPlusLinuxPlugin entry points) for demo coverage.
+    // Renders no UI; failures are swallowed inside the helper.
+    runBatteryDemoCoverage();
   }
 
   void _updateBatteryState(BatteryState state) {
@@ -79,20 +85,22 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 _battery.batteryLevel.then(
                   (batteryLevel) {
-                    showDialog<void>(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        content: Text('Battery: $batteryLevel%'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          )
-                        ],
-                      ),
-                    );
+                    if (context.mounted) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          content: Text('Battery: $batteryLevel%'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            )
+                          ],
+                        ),
+                      );
+                    }
                   },
                 );
               },
@@ -103,27 +111,29 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 _battery.isInBatterySaveMode.then(
                   (isInPowerSaveMode) {
-                    showDialog<void>(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: const Text(
-                          'Is in Battery Save mode?',
-                          style: TextStyle(fontSize: 20),
+                    if (context.mounted) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text(
+                            'Is in Battery Save mode?',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          content: Text(
+                            "$isInPowerSaveMode",
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Close'),
+                            )
+                          ],
                         ),
-                        content: Text(
-                          "$isInPowerSaveMode",
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Close'),
-                          )
-                        ],
-                      ),
-                    );
+                      );
+                    }
                   },
                 );
               },

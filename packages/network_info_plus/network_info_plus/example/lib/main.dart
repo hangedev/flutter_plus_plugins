@@ -14,6 +14,9 @@ import 'package:flutter/services.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+// Headless demo that exercises the full plugin API; logs results without UI.
+import 'network_info_demo.dart';
+
 // Sets a platform override for desktop to avoid exceptions. See
 // https://flutter.dev/desktop#target-platform-override for more info.
 void _enablePlatformOverrideForDesktop() {
@@ -61,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initNetworkInfo();
+    // Run the headless full-API demo (logs only; no UI page is rendered).
+    runNetworkInfoDemo();
   }
 
   @override
@@ -124,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
           wifiBSSID = 'Unauthorized to get Wifi BSSID';
         }
       } else {
-        wifiName = await _networkInfo.getWifiName();
+        wifiBSSID = await _networkInfo.getWifiBSSID();
       }
     } on PlatformException catch (e) {
       developer.log('Failed to get Wifi BSSID', error: e);

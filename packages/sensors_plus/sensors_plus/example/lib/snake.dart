@@ -8,10 +8,11 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:sensors_plus/sensors_plus.dart';
+import 'package:sensors_plus/sensors_plus_ohos.dart';
 
 class Snake extends StatefulWidget {
-  Snake({super.key, this.rows = 20, this.columns = 20, this.cellSize = 10.0}) {
+  Snake({Key? key, this.rows = 20, this.columns = 20, this.cellSize = 10.0})
+      : super(key: key) {
     assert(10 <= rows);
     assert(10 <= columns);
     assert(5.0 <= cellSize);
@@ -74,16 +75,16 @@ class SnakeState extends State<Snake> {
 
   @override
   void dispose() {
-    super.dispose();
     _streamSubscription.cancel();
     _timer.cancel();
+    super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
     _streamSubscription =
-        accelerometerEventStream().listen((AccelerometerEvent event) {
+        accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
         acceleration = event;
       });

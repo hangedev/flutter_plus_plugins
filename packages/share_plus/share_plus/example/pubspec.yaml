@@ -4,9 +4,40 @@ description: Demonstrates how to use the share_plus plugin.
 dependencies:
   flutter:
     sdk: flutter
-  share_plus: ^10.1.0
-  image_picker: ^1.1.2
-  file_selector: ^1.0.3
+  share_plus:
+    path: ../
+  image_picker:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: master
+      path: packages/image_picker/image_picker
+  file_selector:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: master
+      path: packages/file_selector/file_selector
+  path_provider:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: master
+      path: packages/path_provider/path_provider
+
+dependency_overrides:
+  image_picker_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: br_optimize_har_structure
+      path: packages/image_picker/image_picker_ohos
+  file_selector_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: br_optimize_har_structure
+      path: packages/file_selector/file_selector_ohos
+  path_provider_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      ref: br_optimize_har_structure
+      path: packages/path_provider/path_provider_ohos
 
 dev_dependencies:
   flutter_driver:
@@ -15,7 +46,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true

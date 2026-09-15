@@ -1,3 +1,31 @@
+## 6.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **BREAKING** **FEAT**(android_intent_plus): Change Android compile SDK, update Android build config ([#3673](https://github.com/fluttercommunity/plus_plugins/issues/3673)). ([7a228c3e](https://github.com/fluttercommunity/plus_plugins/commit/7a228c3e29e92ffba068422709136b55a05a0e33))
+
+## 5.3.1
+
+ - **DOCS**(all): improve documentation across multiple README files ([#3630](https://github.com/fluttercommunity/plus_plugins/issues/3630)). ([643e12df](https://github.com/fluttercommunity/plus_plugins/commit/643e12dfe0389dc21b49bd31ec03e7f38844d339))
+
+## 5.3.0
+
+ - **FIX**(android_intent_plus): adds error catching and forwarding ([#3452](https://github.com/fluttercommunity/plus_plugins/issues/3452)). ([37f533c7](https://github.com/fluttercommunity/plus_plugins/commit/37f533c7a6c16fc55ed743b78108b479fc2565c3))
+ - **FEAT**(android_intent_plus): adds sendService method ([#3410](https://github.com/fluttercommunity/plus_plugins/issues/3410)). ([ea72b632](https://github.com/fluttercommunity/plus_plugins/commit/ea72b632486a8f1a3416424017774a0fd9fc1a8d))
+
+## 5.2.2
+
+ - **FIX**(android_intent_plus): set correct environment versions ([#3421](https://github.com/fluttercommunity/plus_plugins/issues/3421)). ([dc3ba17a](https://github.com/fluttercommunity/plus_plugins/commit/dc3ba17a3948329de546c373aababb2401e556bb))
+
+## 5.2.1
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+
 ## 5.2.0
 
  - **FEAT**(android_intent_plus): add getResolvedActivity method ([#3313](https://github.com/fluttercommunity/plus_plugins/issues/3313)). ([8ad1c6d9](https://github.com/fluttercommunity/plus_plugins/commit/8ad1c6d9e061a59383f82f9b4a7703ef03e4c04c))

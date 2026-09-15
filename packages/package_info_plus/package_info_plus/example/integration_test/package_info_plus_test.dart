@@ -16,6 +16,8 @@ const android14SDK = 34;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  final testStartTime = DateTime.now();
+
   testWidgets('fromPlatform', (WidgetTester tester) async {
     final info = await PackageInfo.fromPlatform();
     // These tests are based on the example app. The tests should be updated if any related info changes.
@@ -26,6 +28,8 @@ void main() {
       expect(info.packageName, 'package_info_plus_example');
       expect(info.version, '1.2.3');
       expect(info.installerStore, null);
+      expect(info.installTime, null);
+      expect(info.updateTime, null);
     } else {
       if (Platform.isAndroid) {
         final androidVersionInfo = await DeviceInfoPlugin().androidInfo;
@@ -41,6 +45,22 @@ void main() {
         } else {
           expect(info.installerStore, null);
         }
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       } else if (Platform.isIOS) {
         expect(info.appName, 'Package Info Plus Example');
         expect(info.buildNumber, '4');
@@ -48,6 +68,22 @@ void main() {
         expect(info.packageName, 'io.flutter.plugins.packageInfoExample');
         expect(info.version, '1.2.3');
         expect(info.installerStore, 'com.apple.simulator');
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       } else if (Platform.isMacOS) {
         expect(info.appName, 'Package Info Plus Example');
         expect(info.buildNumber, '4');
@@ -55,12 +91,44 @@ void main() {
         expect(info.packageName, 'io.flutter.plugins.packageInfoExample');
         expect(info.version, '1.2.3');
         expect(info.installerStore, null);
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       } else if (Platform.isLinux) {
         expect(info.appName, 'package_info_plus_example');
         expect(info.buildNumber, '4');
         expect(info.buildSignature, isEmpty);
         expect(info.packageName, 'package_info_plus_example');
         expect(info.version, '1.2.3');
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       } else if (Platform.isWindows) {
         expect(info.appName, 'example');
         expect(info.buildNumber, '4');
@@ -68,8 +136,49 @@ void main() {
         expect(info.packageName, 'example');
         expect(info.version, '1.2.3');
         expect(info.installerStore, null);
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: the OHOS runner reports none of the stock platform
+        // flags above. Values come from the OHOS implementation, based on
+        // example/ohos/AppScope/app.json5 (label "example", bundleName
+        // "io.flutter.plugins.example", versionName "1.2.3", versionCode 4).
+        expect(info.appName, 'example');
+        expect(info.buildNumber, '4');
+        expect(info.buildSignature, isNotEmpty); // signing certificate fingerprint
+        expect(info.packageName, 'io.flutter.plugins.example');
+        expect(info.version, '1.2.3');
+        expect(info.installerStore, isNull); // no store information reported
+        expect(
+          info.installTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just installed',
+            lessThanOrEqualTo(1),
+          ),
+        );
+        expect(
+          info.updateTime,
+          isA<DateTime>().having(
+            (d) => d.difference(DateTime.now()).inMinutes,
+            'Was just updated',
+            lessThanOrEqualTo(1),
+          ),
+        );
       }
     }
   });
@@ -83,7 +192,17 @@ void main() {
       expect(find.text('4'), findsOneWidget);
       expect(find.text('Not set'), findsOneWidget);
       expect(find.text('not available'), findsOneWidget);
+      expect(find.text('Install time not available'), findsOneWidget);
+      expect(find.text('Update time not available'), findsOneWidget);
     } else {
+      final expectedInstallTimeIso = testStartTime.toIso8601String();
+      final installTimeRegex = RegExp(
+        expectedInstallTimeIso.replaceAll(
+          RegExp(r'\d:\d\d\..+$'),
+          r'.+$',
+        ),
+      );
+
       if (Platform.isAndroid) {
         final androidVersionInfo = await DeviceInfoPlugin().androidInfo;
 
@@ -101,6 +220,7 @@ void main() {
         } else {
           expect(find.text('not available'), findsOneWidget);
         }
+        expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else if (Platform.isIOS) {
         expect(find.text('Package Info Plus Example'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
@@ -109,6 +229,7 @@ void main() {
         expect(find.text('1.2.3'), findsOneWidget);
         expect(find.text('Not set'), findsOneWidget);
         expect(find.text('com.apple.simulator'), findsOneWidget);
+        expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else if (Platform.isMacOS) {
         expect(find.text('Package Info Plus Example'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
@@ -117,19 +238,43 @@ void main() {
         expect(find.text('1.2.3'), findsOneWidget);
         expect(find.text('Not set'), findsOneWidget);
         expect(find.text('not available'), findsOneWidget);
+        expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else if (Platform.isLinux) {
         expect(find.text('package_info_plus_example'), findsNWidgets(2));
         expect(find.text('1.2.3'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
         expect(find.text('Not set'), findsOneWidget);
+        expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else if (Platform.isWindows) {
         expect(find.text('example'), findsNWidgets(2));
         expect(find.text('1.2.3'), findsOneWidget);
         expect(find.text('4'), findsOneWidget);
         expect(find.text('Not set'), findsOneWidget);
         expect(find.text('not available'), findsOneWidget);
+        expect(find.textContaining(installTimeRegex), findsNWidgets(2));
       } else {
-        throw (UnsupportedError('platform not supported'));
+        // OpenHarmony: mirrors the OHOS branch of the fromPlatform test
+        // above (label "example", bundleName "io.flutter.plugins.example").
+        expect(find.text('example'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('io.flutter.plugins.example'), findsOneWidget);
+        expect(find.text('1.2.3'), findsOneWidget);
+        // Every version field is populated on OHOS.
+        expect(find.text('Not set'), findsNothing);
+        // installerStore is null on OHOS.
+        expect(find.text('not available'), findsOneWidget);
+        // On OHOS installTime is the FIRST install of the bundle and can
+        // long predate this run (updateTime is the reinstall that just
+        // happened), so both time tiles are checked for a rendered
+        // ISO-8601 timestamp instead of matching the test start time.
+        expect(find.text('Install time not available'), findsNothing);
+        expect(find.text('Update time not available'), findsNothing);
+        expect(
+          find.textContaining(
+            RegExp(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}'),
+          ),
+          findsNWidgets(2),
+        );
       }
     }
   });
