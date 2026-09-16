@@ -2,12 +2,7 @@
 // Use of this source is governed by a BSD-style license that can
 // be found in the LICENSE file.
 
-#if os(iOS)
 import Flutter
-#elseif os(macOS)
-import Cocoa
-import FlutterMacOS
-#endif
 
 public class ConnectivityPlusPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private let connectivityProvider: ConnectivityProvider
@@ -20,11 +15,7 @@ public class ConnectivityPlusPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-    #if os(iOS)
     let binaryMessenger = registrar.messenger()
-    #elseif os(macOS)
-    let binaryMessenger = registrar.messenger
-    #endif
 
     let channel = FlutterMethodChannel(
       name: "dev.fluttercommunity.plus/connectivity",
@@ -63,6 +54,8 @@ public class ConnectivityPlusPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
       return "mobile"
     case .wiredEthernet:
       return "ethernet"
+    case .satellite:
+      return "satellite"
     case .other:
         return "other"
     case .none:

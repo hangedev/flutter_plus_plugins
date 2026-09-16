@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/connectivity_plus/connectivity_plus
-      # ref: connectivity_plus-7.0.0-ohos.1.0.1
+      # ref: connectivity_plus-7.2.0-ohos.1.0.0 
       ref: TAG  # 请根据下方TAG版本对应表选择TAG
 
 ...
@@ -36,12 +36,13 @@ flutter pub get
 
 ### TAG 版本对应表
 
-| Flutter 框架版本     | TAG                                          | 分支                              |
-|------------------|----------------------------------------------|-----------------------------------|
-| 3.7              | connectivity_plus-5.0.1-ohos-1.0.0-beta.1    | master                            |
-| 3.22             | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
-| 3.27             | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
-| 3.35             | connectivity_plus-7.0.0-ohos.1.0.1           | br_connectivity_plus-v7.0.0_ohos  |
+| Flutter 框架版本 | TAG                                       | 分支    |
+|------------------|-------------------------------------------|---------|
+| 3.7              | connectivity_plus-5.0.1-ohos-1.0.0-beta.1 | master  |
+| 3.22             | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41 |
+| 3.27             | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41 |
+| 3.35             | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41 |
+| 3.41             | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41 |
 
 <!-- tabs:end -->
 
@@ -91,6 +92,7 @@ subscription.cancel();
 1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 2. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+4. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 7.0.0.105 SP10;
 
 ### 2.2 权限要求
 
@@ -132,6 +134,7 @@ subscription.cancel();
 | none                | 未连接到任何网络的设备 | enum     | /     | /       | yes          |
 | vpn                 | 连接到 VPN 的设备（注意：iOS/macOS 返回 [other]） | enum | / | / | yes      |
 | other               | 连接到未知网络的设备 | enum | /     | /       | yes          |
+| satellite           | 通过卫星网络连接的设备（Android 15+ / iOS 支持；OHOS 不支持，不会上报该类型） | enum | /     | /       | no           |
 
 ## 5. 遗留问题
 

@@ -1,3 +1,25 @@
+## connectivity_plus-7.2.0-ohos.1.0.0 - 2026.9
+
+### Added
+
+* Version and Dependencies
+pubspec.yaml: version number 7.0.0 → 7.2.0; connectivity_plus_platform_interface ^2.0.1 → ^2.1.0; removed the sharedDarwinSource declaration
+CHANGELOG.md: added three upstream change records at the top for 7.1.0, 7.1.1, and 7.2.0
+* Android Side
+New feature: added the CONNECTIVITY_SATELLITE constant in Connectivity.java, detecting TRANSPORT_SATELLITE satellite networks on Android 15 (VANILLA_ICE_CREAM) and above
+Fix: ConnectivityBroadcastReceiver switched to ContextCompat.registerReceiver with the RECEIVER_NOT_EXPORTED flag, fixing the broadcast registration method (corresponding to upstream #3781)
+Build: minSdk 19 → 21; build.gradle migrated to the new assignment syntax (group =, lint {}); added the androidx.core:core:1.18.0 dependency; added android.useAndroidX=true to gradle.properties; removed the redundant gradle-wrapper.properties (8.4)
+* iOS / macOS Side
+Race condition fix: PathMonitorConnectivityProvider (macOS version, +72 lines) switched to a serial queue to handle NWPathMonitor callbacks, preventing race condition crashes (corresponding to upstream #3752)
+SPM adaptation for Flutter 3.44 (corresponding to upstream #3893): the shared source code under darwin/ was split into independent ios/ and macos/ directories, each with its own podspec and Package.swift; iOS added ConnectivityPlusPlugin.swift (+94 lines); added the PrivacyInfo.xcprivacy privacy manifest file
+* platform_interface Side
+enums.dart added the satellite enum value (+11 lines), and utils.dart was adapted accordingly
+Added corresponding unit tests (method_channel tests +20 lines), version 2.0.1 → 2.1.0
+* example Project
+Android-side build.gradle adaptation (minSdk, dependencies, etc., 34 lines changed)
+iOS project files and AppFrameworkInfo.plist minimum version updated
+Integration test case adaptation: API threshold assertion changed from "Android 5 (API 21)" to "Android 7 (API 24)"
+
 ## connectivity_plus-7.0.0-ohos.1.0.1 - 2026.9
 
 ### Fixed
