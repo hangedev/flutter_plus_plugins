@@ -8,15 +8,22 @@ import 'dart:async';
 
 import 'package:sensors_plus/sensors_plus.dart';
 
+// WebSensorsPlugin 依赖 dart:js_interop（仅浏览器可编译），
+// 通过条件导入在非 Web 平台使用空实现，保证 demo 可编译可运行。
+import 'web_sensors_demo_stub.dart'
+    if (dart.library.js_interop) 'web_sensors_demo_web.dart';
+
 /// 一个覆盖全部公开接口的演示集合，不在界面上展示任何内容，
 /// 仅在后台驱动每个 API 以验证鸿蒙化实现的可用性。
 ///
 /// 覆盖目标：
-/// - [Sensors] 单例与 4 个 *EventStream() 方法
+/// - [Sensors] 单例与 5 个 *EventStream() 方法（含 barometerEventStream）
 /// - 4 个废弃顶层属性（accelerometerEvents / gyroscopeEvents /
 ///   userAccelerometerEvents / magnetometerEvents）
 /// - 4 个顶层 *EventStream() 函数
 /// - [SensorInterval] 全部常量（normal/ui/game/fastest）
+/// - [WebSensorsPlugin] 全部 6 个方法与 Duration.frequency 频率换算
+///   （仅 Web 平台实际执行，见 web_sensors_demo_web.dart）
 /// - 异常场景（onError）、并发订阅、重复订阅/取消、采样周期切换
 class SensorsCoverageDemo {
   SensorsCoverageDemo();
@@ -50,6 +57,12 @@ class SensorsCoverageDemo {
     print('[SensorsCoverageDemo] === 顶层 *EventStream() 函数 ===');
     await _demonstrateTopLevelStreams();
 
+    print('[SensorsCoverageDemo] === Sensors.barometerEventStream ===');
+    await _demonstrateSensorsBarometerStream();
+
+    print('[SensorsCoverageDemo] === WebSensorsPlugin（仅 Web 平台实际执行） ===');
+    await runWebSensorsDemo();
+
     print('[SensorsCoverageDemo] === 废弃顶层属性 ===');
     await _demonstrateDeprecatedGetters();
 
@@ -81,7 +94,8 @@ class SensorsCoverageDemo {
     print('  Sensors() 单例一致性: ${identical(a, b)}');
   }
 
-  /// 覆盖 [Sensors] 类的 5 个 *EventStream() 方法。
+  /// 覆盖 [Sensors] 类的 4 个 *EventStream() 方法
+  /// （barometerEventStream 单独演示，见 _demonstrateSensorsBarometerStream）。
   Future<void> _demonstrateSensorsClassStreams() async {
     final sensors = Sensors();
     await _subscribeOnce('Sensors.accelerometerEventStream',
@@ -104,6 +118,21 @@ class SensorsCoverageDemo {
         gyroscopeEventStream(samplingPeriod: SensorInterval.normalInterval));
     await _subscribeOnce('magnetometerEventStream',
         magnetometerEventStream(samplingPeriod: SensorInterval.normalInterval));
+  }
+
+  /// 覆盖 [Sensors] 类的 barometerEventStream 方法。
+  ///
+  /// 标准入口的 [Sensors] 委托给平台实现；OHOS 入口的 Sensors 类未重写
+  /// 该方法时调用会抛 UnimplementedError，属预期行为，这里捕获并记录。
+  Future<void> _demonstrateSensorsBarometerStream() async {
+    try {
+      await _subscribeOnce(
+          'Sensors.barometerEventStream',
+          Sensors().barometerEventStream(
+              samplingPeriod: SensorInterval.normalInterval));
+    } catch (e) {
+      print('  Sensors.barometerEventStream: 平台不支持（预期）: $e');
+    }
   }
 
   /// 覆盖 4 个废弃顶层属性。

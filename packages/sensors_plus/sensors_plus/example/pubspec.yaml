@@ -28,6 +28,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # Web 平台插件注册入口（flutter_web_plugins），供
+  # lib/web_sensors_demo_web.dart 驱动 WebSensorsPlugin 使用；
+  # 非 Web 平台该包导出为空，不影响 Android/OHOS 构建。
+  flutter_web_plugins:
+    sdk: flutter
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
