@@ -13,7 +13,6 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:network_info_plus/src/windows_structs.dart';
 import 'package:network_info_plus_platform_interface/network_info_plus_platform_interface.dart';
 import 'package:win32/win32.dart';
-import 'package:win32/winsock2.dart';
 
 /// A regex that matches a dotted-quad IPv4 address with each octet 0–255.
 final RegExp _ipv4RegExp = RegExp(
@@ -95,7 +94,9 @@ void main() {
     });
 
     test('should start closed (NULL) on a fresh plugin instance', () {
-      expect(plugin.clientHandle, NULL);
+      // win32 6.x: HANDLE is a Pointer-backed extension type, not an int, so
+      // assert closed-ness via isValid instead of comparing against NULL (0).
+      expect(plugin.clientHandle.isValid, isFalse);
     });
 
     test('should return to NULL after an openHandle/closeHandle round-trip',
@@ -105,13 +106,17 @@ void main() {
       // handle. Either way `closeHandle` must leave the handle closed.
       plugin.openHandle();
       plugin.closeHandle();
-      expect(plugin.clientHandle, NULL);
+      // win32 6.x: HANDLE is a Pointer-backed extension type, not an int, so
+      // assert closed-ness via isValid instead of comparing against NULL (0).
+      expect(plugin.clientHandle.isValid, isFalse);
     });
 
     test('should remain NULL when closeHandle is called repeatedly', () {
       plugin.closeHandle();
       plugin.closeHandle();
-      expect(plugin.clientHandle, NULL);
+      // win32 6.x: HANDLE is a Pointer-backed extension type, not an int, so
+      // assert closed-ness via isValid instead of comparing against NULL (0).
+      expect(plugin.clientHandle.isValid, isFalse);
     });
   });
 
@@ -134,7 +139,9 @@ void main() {
     test('should close the client handle when the query finishes', () {
       plugin.query((pGuid, pAttributes) => null);
       // `query` always closes the handle it opened, even on failure paths.
-      expect(plugin.clientHandle, NULL);
+      // win32 6.x: HANDLE is a Pointer-backed extension type, not an int, so
+      // assert closed-ness via isValid instead of comparing against NULL (0).
+      expect(plugin.clientHandle.isValid, isFalse);
     });
   });
 
@@ -511,7 +518,12 @@ class _LiveAdapterFixture {
 
     // Grow the buffer until GetAdaptersAddresses fits the adapter list.
     while (true) {
-      final hr = GetAdaptersAddresses(AF_UNSPEC, 0, nullptr, adapters, size);
+      final hr = GetAdaptersAddresses(
+        AF_UNSPEC,
+        GET_ADAPTERS_ADDRESSES_FLAGS(0),
+        adapters,
+        size,
+      );
       if (hr == NO_ERROR) {
         break;
       }

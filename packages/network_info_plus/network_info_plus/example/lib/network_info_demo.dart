@@ -19,7 +19,6 @@ import 'package:network_info_plus/network_info_plus.dart';
 // ignore: implementation_imports
 import 'package:network_info_plus/src/windows_structs.dart';
 import 'package:win32/win32.dart';
-import 'package:win32/winsock2.dart';
 
 // The web plugin class can only be compiled for the browser
 // (flutter_web_plugins needs dart:ui_web), so it lives behind a conditional
@@ -226,7 +225,13 @@ String _demoGetAdapterAddress(NetworkInfoPlusWindowsPlugin plugin) {
     1 + size.value ~/ sizeOf<IP_ADAPTER_ADDRESSES_LH>(),
   );
   try {
-    if (GetAdaptersAddresses(AF_UNSPEC, 0, nullptr, adapters, size) != NO_ERROR ||
+    if (GetAdaptersAddresses(
+          AF_UNSPEC,
+          GET_ADAPTERS_ADDRESSES_FLAGS(0),
+          adapters,
+          size,
+        ) !=
+            NO_ERROR ||
         adapters == nullptr) {
       return '<no adapters>';
     }

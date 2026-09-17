@@ -69,14 +69,15 @@ Future<void> readNetworkInfo() async {
 
 | Flutter 框架版本 | TAG 名称 | 分支名 |
 | --- | --- | --- |
-| 3.27 | network_info_plus-7.0.0-ohos-1.0.1 | br_network_info_plus_v7.0.0_ohos |
-| 3.35 | network_info_plus-7.0.0-ohos-1.0.1 | br_network_info_plus_v7.0.0_ohos |
+| 3.41 | network_info_plus-8.2.1-ohos-1.0.1 | br_3.41 |
+| 3.44 | network_info_plus-8.2.1-ohos-1.0.1 | br_3.41 |
 
 ### 2.2 兼容性
 在以下版本中已测试通过:
 
-1. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
-2. Flutter: 3.35.8-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+1. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.1.0.830; ROM: 6.23.0.100 SP6;
+2. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
+
 
 ### 2.3 权限要求
 

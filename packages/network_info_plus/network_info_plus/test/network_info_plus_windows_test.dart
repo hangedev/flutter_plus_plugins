@@ -6,6 +6,14 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:network_info_plus_platform_interface/network_info_plus_platform_interface.dart';
 
 void main() {
+  // The three value tests below need a live WLAN connection. On hosts without
+  // one (Ethernet-only desktops, CI runners) every Wi-Fi getter legitimately
+  // returns null, so they skip instead of failing — mirroring the
+  // "skipped when none" live-adapter group in test/src. `query` runs its
+  // callback only for a connected interface, so it doubles as the probe.
+  final wlanConnected =
+      NetworkInfoPlusWindowsPlugin().query((_, _) => 'connected') != null;
+
   test('registered instance', () {
     NetworkInfoPlusWindowsPlugin.registerWith();
     expect(NetworkInfoPlatform.instance, isA<NetworkInfoPlusWindowsPlugin>());
@@ -15,13 +23,13 @@ void main() {
     final plugin = NetworkInfoPlusWindowsPlugin();
     final bssID = await plugin.getWifiBSSID();
     expect(bssID, matches(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$'));
-  });
+  }, skip: !wlanConnected ? 'no WLAN connection on this host' : false);
 
   test('Wifi name', () async {
     final plugin = NetworkInfoPlusWindowsPlugin();
     final wifiName = await plugin.getWifiName();
     expect(wifiName, isNotEmpty);
-  });
+  }, skip: !wlanConnected ? 'no WLAN connection on this host' : false);
 
   test('IP Address', () async {
     final plugin = NetworkInfoPlusWindowsPlugin();
@@ -30,5 +38,5 @@ void main() {
         ipAddress,
         matches(
             r'^(?=\d+\.\d+\.\d+\.\d+$)(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.?){4}$'));
-  });
+  }, skip: !wlanConnected ? 'no WLAN connection on this host' : false);
 }

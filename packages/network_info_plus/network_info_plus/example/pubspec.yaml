@@ -14,7 +14,7 @@ dependencies:
   # The headless demo (lib/network_info_demo.dart) drives the plugin's FFI
   # Windows implementation directly, so it needs these as direct deps.
   ffi: ^2.0.1
-  win32: ^5.5.3
+  win32: ^6.4.0
 
 dev_dependencies:
   flutter_test:
