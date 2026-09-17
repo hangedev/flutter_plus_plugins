@@ -1,4 +1,17 @@
-sensors_plus-7.0.0-ohos-1.0.1
+### sensors_plus-7.1.0-ohos-1.0.0 -2026.9
+
+### Added
+
+* sensors_plus upgrade (7.0.0 -> 7.1.0) ([186](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/186))
+1: Android: Gradle migrated from Groovy to Kotlin DSL (build.gradle.kts / settings.gradle.kts), and support for Flutter's built-in Kotlin.
+2: iOS: Swift Package Manager configuration adapted to Flutter 3.44, streamlined the Xcode project (pbxproj -139 lines) and podspec.
+3: Fixes: incorrect method call during cleanup; lint issues found by melos analyze.
+4: Supporting upgrades: sensors_plus_platform_interface 2.0.0 -> 2.0.2 (lint fixes, flutter_lints switched to a version range to relax compatibility).
+5: pubspec streamlined, README greatly expanded (+203 lines), example iOS configuration updated, minor web-side refactoring, removed the outdated widget_test.
+
+### sensors_plus-7.0.0-ohos-1.0.1
+
+### Fixed
 
 * Consistency
 The incomplete OHOS entry API contract is the core issue. In lib/src/sensors_ohos.dart, the Sensors class overrides only 4 sensor methods, missing barometerEventStream(), causing Sensors().barometerEventStream() to fall back to the base class and throw UnimplementedError — the barometer feature is actually unavailable on OHOS, even though the native layer SensorsPlusOhosPlugin.ets already implements BAROMETER support, creating an inconsistency between the Dart layer and native layer capabilities. At the same time, lib/sensors_plus_ohos.dart only exports 4 deprecated getters at the top level, missing barometerEvents and all 5 *EventStream() functions, and the deprecated getters lack @Deprecated annotations, inconsistent with the main entry sensors_plus.dart behavior, preventing users from accessing the barometer through the standard entry point. The fix is to complete the Sensors class overrides, supplement all functional API entries for OHOS, and add @Deprecated annotations to the deprecated getters. Additionally, the Snake game previously adapted x/y swapping due to assumptions about the OHOS accelerometer coordinate system, but after confirmation those assumptions were invalid, the adaptation has been fully reverted to maintain behavior consistent with upstream. The stopSensor fix also unified the semantics of "update state only on success," consistent with startSensor.
