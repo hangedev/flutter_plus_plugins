@@ -1,4 +1,14 @@
-network_info_plus-7.0.0-ohos-1.0.1 - 2026.9
+## network_info_plus-8.2.1-ohos-1.0.1 - 2026.9
+
+### Added
+* Upgrade content ([185](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/185)).
+After upgrading the plugin network_info_plus to 8.2.1, the SDK constraints were raised to Dart >=3.10.0 <4.0.0, Flutter >=3.38.1, and it requires win32 >=6.0.1.
+example's win32 dependency was upgraded from ^5.5.3 to ^6.4.0 (actually resolved to 6.4.0).
+example/lib/network_info_demo.dart: removed the deleted winsock2.dart import; GetAdaptersAddresses was changed to the 4-parameter signature.
+test/src/network_info_plus_windows_test.dart: the same two fixes as above; the clientHandle assertion was changed to use isValid (in 6.x, HANDLE is a Pointer-type extension type and cannot be compared with NULL).
+test/network_info_plus_windows_test.dart: skip 3 Wi-Fi integration tests when there is no WLAN connection (this machine has no wireless network adapter, which is an environment limitation rather than a code bug).
+
+## network_info_plus-7.0.0-ohos-1.0.1 - 2026.9
 
 ### Fixed
 
