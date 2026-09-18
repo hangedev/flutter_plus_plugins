@@ -1,3 +1,20 @@
+## share_plus-13.3.0-ohos-1.0.0 - 2026.9
+
+### Added
+
+* Version and dependencies ([187](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/187)).
+share_plus 12.0.1 → 13.3.0; share_plus_platform_interface 6.1.0 → 7.2.0
+SDK thresholds: Dart ≥3.10, Flutter ≥3.38.1
+Dependency upgrades: mime ^2.0, cross_file ^0.3.5+2, meta ^1.17, win32 ^6, web ^1.1, the url_launcher series, flutter_lints ^6
+* Build system modernization ([187](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/187)).
+The Android plugin and example were fully migrated from Groovy build.gradle to Kotlin DSL build.gradle.kts, and the gradle wrapper/properties were updated accordingly.
+* Source synchronization with upstream ([187](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/187)).
+lib/src: web implementation (js_interop style), linux/windows fallback implementation, and windows_version_helper aligned with 13.3.0
+platform_interface: method_channel parameter encoding and platform interface fine-tuning, with tests rewritten accordingly
+* example project ([187](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/187)).
+iOS/macOS project files streamlined (removed obsolete xcconfig, added xcscheme), Info.plist updated
+Integration tests, test_driver, image_previews, etc. adjusted for the new API
+
 ## share_plus-12.0.1-ohos-1.0.1 - 2026.9
 
 * fix: Consistency ([179](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/179)).
