@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart'
     hide XFile; // hides to test if share_plus exports XFile
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'excluded_activity_type.dart';
@@ -136,36 +137,54 @@ class MyHomePageState extends State<MyHomePage> {
             ElevatedButton.icon(
               label: const Text('Add image'),
               onPressed: () async {
-                // Using `package:image_picker` to get image from gallery.
-                if (!kIsWeb &&
-                    (Platform.isMacOS ||
-                        Platform.isLinux ||
-                        Platform.isWindows ||
-                        defaultTargetPlatform == TargetPlatform.ohos)) {
-                  // Using `package:file_selector` on windows, macos & Linux, since `package:image_picker` is not supported.
-                  const XTypeGroup typeGroup = XTypeGroup(
-                    label: 'images',
-                    extensions: <String>['jpg', 'jpeg', 'png', 'gif'],
-                  );
-                  final file = await openFile(
-                      acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-                  if (file != null) {
-                    setState(() {
-                      imagePaths.add(file.path);
-                      imageNames.add(file.name);
-                    });
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                try {
+                  // Using `package:image_picker` to get image from gallery.
+                  if (!kIsWeb &&
+                      (Platform.isMacOS ||
+                          Platform.isLinux ||
+                          Platform.isWindows)) {
+                    // Using `package:file_selector` on windows, macos & Linux,
+                    // since `package:image_picker` is not supported.
+                    const XTypeGroup typeGroup = XTypeGroup(
+                      label: 'images',
+                      extensions: <String>['jpg', 'jpeg', 'png', 'gif'],
+                    );
+                    final file = await openFile(
+                        acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+                    if (file != null) {
+                      final readablePath =
+                          await _readablePathForPickedFile(file);
+                      setState(() {
+                        imagePaths.add(readablePath);
+                        imageNames.add(file.name);
+                      });
+                    }
+                  } else {
+                    // On Android, iOS and OHOS `package:image_picker` is
+                    // supported. Its OHOS implementation copies the picked
+                    // image into the app cache and returns a real filesystem
+                    // path, which both `Image.file` and the later share call
+                    // can read (unlike file_selector_ohos, which surfaces the
+                    // picker's media-library URI).
+                    final imagePicker = ImagePicker();
+                    final pickedFile = await imagePicker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (pickedFile != null) {
+                      final readablePath =
+                          await _readablePathForPickedFile(pickedFile);
+                      setState(() {
+                        imagePaths.add(readablePath);
+                        imageNames.add(pickedFile.name);
+                      });
+                    }
                   }
-                } else {
-                  final imagePicker = ImagePicker();
-                  final pickedFile = await imagePicker.pickImage(
-                    source: ImageSource.gallery,
+                } catch (e) {
+                  // Surface picking failures instead of failing silently.
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(content: Text('Add image failed: $e')),
                   );
-                  if (pickedFile != null) {
-                    setState(() {
-                      imagePaths.add(pickedFile.path);
-                      imageNames.add(pickedFile.name);
-                    });
-                  }
                 }
               },
               icon: const Icon(Icons.add),
@@ -232,6 +251,35 @@ class MyHomePageState extends State<MyHomePage> {
       imagePaths.removeAt(position);
       imageNames.removeAt(position);
     });
+  }
+
+  /// Returns a path that dart:io can actually read for [file].
+  ///
+  /// Some pickers do not expose a regular filesystem path: on OHOS the
+  /// file/image pickers return a media-library URI (e.g.
+  /// `file://media/Photo/...`) in [XFile.path] while the content is only
+  /// available as bytes. `Image.file` (and later share calls) cannot read such
+  /// URIs, so in that case the bytes are persisted to a temporary file and
+  /// that path is returned instead.
+  Future<String> _readablePathForPickedFile(XFile file) async {
+    final String path = file.path;
+    if (path.isNotEmpty) {
+      try {
+        if (File(path).existsSync()) {
+          return path;
+        }
+      } catch (_) {
+        // Not a regular path (e.g. a `file://` media URI); materialize the
+        // bytes below.
+      }
+    }
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(
+      '${tempDir.path}${Platform.pathSeparator}'
+      'picked_${DateTime.now().microsecondsSinceEpoch}_${file.name}',
+    );
+    await tempFile.writeAsBytes(await file.readAsBytes());
+    return tempFile.path;
   }
 
   void _onSelectExcludedActivityType() async {

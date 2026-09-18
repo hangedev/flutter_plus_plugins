@@ -24,7 +24,6 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/share_plus/share_plus
-      # ref: share_plus-12.0.1-ohos-1.0.0
       ref: TAG   # 请根据下方TAG版本对应表选择TAG
 ...
 ```
@@ -37,10 +36,8 @@ flutter pub get
 
 | Flutter 框架版本 | TAG 名称 | 分支名 |
 |---|---|---|
-|3.7	| share_plus-7.2.0-ohos.1.0.0	 |  master                     |
-|3.22	| share_plus-12.0.1-ohos-1.0.1 |	br_share_plus-v12.0.1_ohos |
-|3.27	| share_plus-12.0.1-ohos-1.0.1 |	br_share_plus-v12.0.1_ohos |
-|3.35	| share_plus-12.0.1-ohos-1.0.1 |	br_share_plus-v12.0.1_ohos |
+|3.41	| share_plus-13.3.0-ohos-1.0.0 |	br_3.41 |
+|3.44	| share_plus-13.3.0-ohos-1.0.0 |	br_3.41 |
 <!-- tabs:end -->
 
 ### 1.2 调用方式
@@ -142,9 +139,8 @@ await Share.shareXFiles([XFile('/path/to/file.png')]);
 
 在以下版本中已测试通过
 
-1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.27.5-ohos-0.0.2; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+1. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.1.0.830; ROM: 6.23.0.100 SP6;
+2. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
 
 ### 2.2 鸿蒙平台行为差异
 

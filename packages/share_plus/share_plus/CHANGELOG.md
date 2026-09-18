@@ -1,3 +1,88 @@
+## 13.3.0
+
+ - **FIX**(share_plus): Do not do I/O operations on the main thread on Android ([#3931](https://github.com/fluttercommunity/plus_plugins/issues/3931)). ([2c5b4935](https://github.com/fluttercommunity/plus_plugins/commit/2c5b4935c85fdbfeffea2bd68c9286c064ed8b7c))
+ - **FEAT**(share_plus): Avoid exceptions on iPads with no sharePositionOrigin ([#3769](https://github.com/fluttercommunity/plus_plugins/issues/3769)). ([d3ba3f36](https://github.com/fluttercommunity/plus_plugins/commit/d3ba3f36a865d3ba7c8e5d1e48396ca3a13541b0))
+
+## 13.2.1
+
+ - **FIX**(share_plus): raise Apple platform minimums in SPM manifests to match FlutterFramework ([#3923](https://github.com/fluttercommunity/plus_plugins/issues/3923)). ([949e7717](https://github.com/fluttercommunity/plus_plugins/commit/949e7717ca32fc57dffc4638aeaf154d0fcea0cb))
+
+## 13.2.0
+
+ - **REFACTOR**(share_plus): Change Android Gradle from Groovy to Kotlin ([#3860](https://github.com/fluttercommunity/plus_plugins/issues/3860)). ([d9b6f299](https://github.com/fluttercommunity/plus_plugins/commit/d9b6f299dec2c61673a9e4650e9fd554d44422a5))
+ - **FIX**(share_plus): resolve js interop lint and maintain minimum sdk ([#3846](https://github.com/fluttercommunity/plus_plugins/issues/3846)). ([09d75d8f](https://github.com/fluttercommunity/plus_plugins/commit/09d75d8f822831ffb07f81234365accc7e8593de))
+ - **FEAT**(share_plus): Updated Swift Package Manager setup for Flutter 3.44 ([#3911](https://github.com/fluttercommunity/plus_plugins/issues/3911)). ([cf006091](https://github.com/fluttercommunity/plus_plugins/commit/cf00609169e791d41e21a59826dcfa574ce12fe6))
+ - **FEAT**(share_plus): Add support of built-in Kotlin ([#3896](https://github.com/fluttercommunity/plus_plugins/issues/3896)). ([0c9b0ad0](https://github.com/fluttercommunity/plus_plugins/commit/0c9b0ad0e596adff407d61cefbbf1088b56783da))
+
+## 13.1.0
+
+ - **FEAT**(share_plus): Lower requirements to Dart 3.10 and Flutter 3.38.1 ([#3801](https://github.com/fluttercommunity/plus_plugins/issues/3801)). ([d965e00e](https://github.com/fluttercommunity/plus_plugins/commit/d965e00e5082d4e32e25cacad0b193a735d51c5f))
+
+## 13.0.0
+
+> Note: This release has breaking changes.
+>
+> Due to an update of win32 to 6.0.0, package requirements were also changed to match this update:
+> - Minimum Flutter version is 3.41.6
+> - Minimum Dart version is 3.11.0
+> - Min iOS is 13.0
+> - Min macOS is 10.15
+>
+> Since this release was already breaking, the rest of the dependencies were also updated to the latest possible versions.
+
+ - **BREAKING** **FEAT**(share_plus): Bump win32 from 5.15.0 to 6.0.0 ([#3762](https://github.com/fluttercommunity/plus_plugins/issues/3762)). ([0e3eb918](https://github.com/fluttercommunity/plus_plugins/commit/0e3eb918e77fcc500b6124167a905f026ffc374a))
+
+## 12.0.2
+
+ - **FIX**(share_plus): Avoid crash on iOS during file and text sharing in add-to-app scenario ([#3738](https://github.com/fluttercommunity/plus_plugins/issues/3738)). ([ae6330bb](https://github.com/fluttercommunity/plus_plugins/commit/ae6330bbf579fe411b503be84fcfc202d2496625))
+
+## 12.0.1
+
+ - **FIX**(share_plus): Avoid crash on iOS 26 on iPhones with no sharePositionOrigin param([#3699](https://github.com/fluttercommunity/plus_plugins/issues/3699)). ([42b079bd](https://github.com/fluttercommunity/plus_plugins/commit/42b079bd5fa56c9983a5a4fcf351190884f5c540))
+
+## 12.0.0
+
+> Note: This release has breaking changes.
+>
+> On Android plugin now requires the following:
+> - Android Gradle Plugin >=8.12.1
+> - Gradle wrapper >=8.13
+> - Kotlin 2.2.0
+
+ - **FIX**(share_plus): unable to get the correct result on iOS ([#3660](https://github.com/fluttercommunity/plus_plugins/issues/3660)). ([3bd253b0](https://github.com/fluttercommunity/plus_plugins/commit/3bd253b04021a932fa79412a5da2318c22cfdbe2))
+ - **DOCS**(all): replace MacOS by macOS in package READMEs ([#3658](https://github.com/fluttercommunity/plus_plugins/issues/3658)). ([72b6234c](https://github.com/fluttercommunity/plus_plugins/commit/72b6234c25315c30d8efc9f15a9258b0bb7273a8))
+ - **BREAKING** **FEAT**(share_plus): Change Android compile SDK, update Android build config ([#3671](https://github.com/fluttercommunity/plus_plugins/issues/3671)). ([24363e27](https://github.com/fluttercommunity/plus_plugins/commit/24363e270d3c8219b9516fe57474a448f6c5fd48))
+
+## 11.1.0
+
+ - **FEAT**(share_plus): Added `excludedCupertinoActivities` share parameter ([#3376](https://github.com/fluttercommunity/plus_plugins/issues/3376)). ([f9fdadb4](https://github.com/fluttercommunity/plus_plugins/commit/f9fdadb41242ad2e36ddbf1ade82be6c5bb78ec4))
+ - **DOCS**(all): improve documentation across multiple README files ([#3630](https://github.com/fluttercommunity/plus_plugins/issues/3630)). ([643e12df](https://github.com/fluttercommunity/plus_plugins/commit/643e12dfe0389dc21b49bd31ec03e7f38844d339))
+ - **DOCS**(share-plus): Update README.md. ([2aa9f7e0](https://github.com/fluttercommunity/plus_plugins/commit/2aa9f7e0c7b471dc581d6fbd334633d16eb2da03))
+
+## 11.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**(share_plus): SharePlus refactor ([#3404](https://github.com/fluttercommunity/plus_plugins/issues/3404)). ([0a19d460](https://github.com/fluttercommunity/plus_plugins/commit/0a19d46010b6ecf5c2f10771e33a39823f7c30b7))
+
+This version introduces the new `SharePlus` class with the `share(params)` method.
+It replaces the old `Share` class, which has been deprecated but can still be used.
+Check the section "Migrating from `Share` to `SharePlus`" in the `README.md`.
+
+## 10.1.4
+
+ - **FIX**(share_plus): fallback for shareXFiles() to use download on web ([#3388](https://github.com/fluttercommunity/plus_plugins/issues/3388)). ([95a12ee3](https://github.com/fluttercommunity/plus_plugins/commit/95a12ee3982dd61de5d07005de62f81c2e99eb08))
+
+## 10.1.3
+
+ - **REFACTOR**(all): Use range of flutter_lints for broader compatibility ([#3371](https://github.com/fluttercommunity/plus_plugins/issues/3371)). ([8a303add](https://github.com/fluttercommunity/plus_plugins/commit/8a303add3dee1acb8bac5838246490ed8a0fe408))
+ - **FIX**(share_plus): A function declaration without a prototype is deprecated in all versions of C ([#3375](https://github.com/fluttercommunity/plus_plugins/issues/3375)). ([40f9c421](https://github.com/fluttercommunity/plus_plugins/commit/40f9c42138bf1c80e6283f46e12109a0e66c0816))
+ - **FIX**(share_plus): Set correct Flutter and Dart versions requirements ([#3363](https://github.com/fluttercommunity/plus_plugins/issues/3363)). ([65616668](https://github.com/fluttercommunity/plus_plugins/commit/6561666885f547725f6e88ebaae498832b53efed))
+
+## 10.1.2
+
+ - **FIX**(share_plus): Update privacy manifest path ([#3349](https://github.com/fluttercommunity/plus_plugins/issues/3349)). ([d884a991](https://github.com/fluttercommunity/plus_plugins/commit/d884a9917769e11daa66c1aaa3ebd0d015506e77))
+
 ## 10.1.1
 
  - **FIX**(share_plus): [#3322](https://github.com/fluttercommunity/plus_plugins/issues/3322) Downscale previews on iOS to avoid issues with huge images ([#3320](https://github.com/fluttercommunity/plus_plugins/issues/3320)). ([d8c95c2c](https://github.com/fluttercommunity/plus_plugins/commit/d8c95c2cffaf882cf0670cc5daf889eebd249a77))

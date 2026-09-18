@@ -3,15 +3,19 @@
 // This file exists purely to exercise every public surface of share_plus from
 // the demo, so the demo achieves full interface coverage. It is invoked from
 // `main.dart` and deliberately renders no UI and triggers no real share sheet:
-// all `SharePlus.share` calls go through a no-op custom platform, and the
-// deprecated `Share` helpers are driven with inputs rejected at the validation
-// layer (or guarded) so they never reach the native platform.
+// all `SharePlus.share` calls go through a no-op custom platform, the
+// deprecated `Share` helpers run while a delegating platform acts as a no-op
+// (it is re-pointed at the real platform afterwards, so the interactive demo
+// keeps sharing for real), and the Linux/Windows fallback plugins are driven
+// with a recording url launcher that keeps the mailto fallback in-process.
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:share_plus/share_plus.dart';
 import 'package:share_plus_platform_interface/method_channel/method_channel_share.dart';
 import 'package:share_plus_platform_interface/share_plus_platform_interface.dart';
+import 'package:url_launcher_platform_interface/link.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import 'coverage/native_coverage_stub.dart'
     if (dart.library.io) 'coverage/native_coverage_io.dart' as native;
@@ -61,28 +65,59 @@ Future<void> _runSharePlusCoverage() async {
     ),
   );
 
-  // SharePlus.instance getter (freezes to the real platform, which is what the
-  // interactive demo expects).
-  exercised['instance'] = SharePlus.instance;
+  // --- SharePlusLinuxPlugin (pure-Dart fallback, exported everywhere) ---
+  // Constructing the plugin with a recording launcher instead of the real
+  // UrlLauncherLinux keeps the mailto fallback inside the process: the URL is
+  // captured and no external application is ever opened.
+  final linuxLauncher = _RecordingUrlLauncher();
+  final SharePlusLinuxPlugin linuxPlugin = SharePlusLinuxPlugin(linuxLauncher);
+
+  exercised['linuxPluginUrlLauncher'] = linuxPlugin.urlLauncher;
+  exercised['linuxShareText'] = await linuxPlugin.share(
+    ShareParams(text: 'linux-coverage-text', subject: 'linux-subject'),
+  );
+  exercised['linuxShareUri'] = await linuxPlugin.share(
+    ShareParams(uri: Uri.parse('https://coverage.example/linux')),
+  );
+  exercised['linuxShareMailto'] = linuxLauncher.launchedUrls;
 
   // --- Deprecated Share class ---
-  // All deprecated helpers route through SharePlus.instance, which is a *frozen*
-  // static singleton bound to the real platform. To avoid opening the real OS
-  // share sheet from the coverage demo, every call here is driven with inputs
-  // that the SharePlus.share() validation layer rejects — so they throw before
-  // ever reaching the native platform.
-  //   • Share.share('')     -> throws (assert in debug / ArgumentError in release)
-  //   • Share.shareXFiles([]) -> throws (assert in debug / ArgumentError in release)
-  // shareUri has no validation path that rejects a real uri, so invoking it
-  // with any uri WOULD reach the platform; we therefore reference the member
-  // (tear-off) to exercise it in source without invoking the share sheet.
+  // All deprecated helpers route through the SharePlus.instance singleton,
+  // which freezes to whatever SharePlatform.instance is on first access. A
+  // delegating platform is therefore installed BEFORE the singleton is first
+  // touched: while its delegate is null it behaves like the no-op platform
+  // above, so the helpers can be invoked with real, valid inputs without ever
+  // reaching the OS. Afterwards the delegate is pointed back at the real
+  // platform and the global instance is restored, so the interactive demo
+  // keeps sharing for real.
+  final previousPlatform = SharePlatform.instance;
+  final delegatingPlatform = _DelegatingSharePlatform();
+  SharePlatform.instance = delegatingPlatform;
   try {
-    await Share.share('');
-  } catch (_) {}
-  try {
-    await Share.shareXFiles([]);
-  } catch (_) {}
-  exercised['shareUri'] = Share.shareUri; // tear-off: reference without calling
+    // Freezes the singleton against the delegating platform (no-op window).
+    exercised['instance'] = SharePlus.instance;
+
+    exercised['shareUriResult'] = await Share.shareUri(
+      Uri.parse('https://coverage.example/deprecated-share-uri'),
+      sharePositionOrigin: const Rect.fromLTWH(0, 0, 100, 100),
+    );
+    exercised['shareResult'] = await Share.share(
+      'coverage-deprecated-text',
+      subject: 'coverage-deprecated-subject',
+      sharePositionOrigin: const Rect.fromLTWH(0, 0, 100, 100),
+    );
+    exercised['shareXFilesResult'] = await Share.shareXFiles(
+      [
+        XFile.fromData(Uint8List.fromList([7, 7, 7]), name: 'deprecated.bin'),
+      ],
+      subject: 'coverage-deprecated-file-subject',
+      text: 'coverage-deprecated-file-text',
+      fileNameOverrides: ['deprecated-override.bin'],
+    );
+  } finally {
+    delegatingPlatform.delegate = previousPlatform;
+    SharePlatform.instance = previousPlatform;
+  }
   final previousFallback = Share.downloadFallbackEnabled;
   Share.downloadFallbackEnabled = !previousFallback;
   Share.downloadFallbackEnabled = previousFallback;
@@ -121,4 +156,40 @@ Future<void> _runSharePlusCoverage() async {
 class _NoOpSharePlatform extends SharePlatform {
   @override
   Future<ShareResult> share(ShareParams params) async => ShareResult.unavailable;
+}
+
+/// A [SharePlatform] that forwards every share to [delegate].
+///
+/// While [delegate] is null it acts as a no-op platform (every share resolves
+/// to [ShareResult.unavailable] without reaching the OS). It is installed as
+/// the global [SharePlatform.instance] before the [SharePlus.instance]
+/// singleton freezes, so the deprecated `Share` helpers can be invoked with
+/// real inputs inside the coverage demo; once the delegate is pointed at the
+/// real platform, the frozen singleton transparently forwards to it again.
+class _DelegatingSharePlatform extends SharePlatform {
+  SharePlatform? delegate;
+
+  @override
+  Future<ShareResult> share(ShareParams params) {
+    final SharePlatform? target = delegate;
+    if (target != null) {
+      return target.share(params);
+    }
+    return Future<ShareResult>.value(ShareResult.unavailable);
+  }
+}
+
+/// Records every launchUrl call and reports success, so plugin fallbacks can
+/// be exercised without opening a real mail client or browser.
+class _RecordingUrlLauncher extends UrlLauncherPlatform {
+  final launchedUrls = <String>[];
+
+  @override
+  LinkDelegate? get linkDelegate => throw UnimplementedError();
+
+  @override
+  Future<bool> launchUrl(String url, LaunchOptions options) async {
+    launchedUrls.add(url);
+    return true;
+  }
 }
