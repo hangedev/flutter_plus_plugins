@@ -1,6 +1,10 @@
 ## connectivity_plus-7.2.0-ohos.1.0.0 - 2026.9
 
 ### Added
+* adaptation for 3.44 ([188](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/188)).
+* adaptation for 3.41 ([188](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/188)).
+
+### Added
 
 * Version and Dependencies
 pubspec.yaml: version number 7.0.0 → 7.2.0; connectivity_plus_platform_interface ^2.0.1 → ^2.1.0; removed the sharedDarwinSource declaration
