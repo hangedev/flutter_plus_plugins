@@ -4,6 +4,10 @@
 
 ### Added
 
+* adaptation for 3.44 ([189](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/189)).
+
+* adaptation for 3.41 ([189](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/189)).
+
 * Version & Dependencies ([178](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/178)).
 Version number 12.3.0 → 13.2.0; device_info_plus_platform_interface ^7.0.3 → ^8.1.0, ffi ^2.2.0, and other dependencies upgraded accordingly (CHANGELOG supplemented with four version records: 12.4.0 / 13.0.0 / 13.1.0 / 13.2.0).
 13.0.0 is a breaking change: win32 upgraded to 6.0.0, with minimum requirements now Flutter 3.41.6 / Dart 3.11 / iOS 13 / macOS 10.15.
