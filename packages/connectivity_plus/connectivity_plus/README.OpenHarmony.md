@@ -43,6 +43,7 @@ flutter pub get
 | 3.27                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
 | 3.35                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
 | 3.41                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
+| 3.44                      | connectivity_plus-7.2.0-ohos.1.0.0        | br_3.41  |
 
 <!-- tabs:end -->
 
@@ -93,6 +94,7 @@ This document is verified based on the following versions:
 2. Flutter: 3.27.5-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
 3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
 4. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 7.0.0.105 SP10;
+5. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
 
 
 ### 2.2 Permission Requirements
