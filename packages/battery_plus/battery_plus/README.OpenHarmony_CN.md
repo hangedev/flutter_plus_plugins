@@ -20,7 +20,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/battery_plus/battery_plus
-      ref: battery_plus-7.0.0-ohos-1.0.1
+      ref: TAG # 请根据下方TAG版本对应表选择TAG
 ```
 
 执行：
@@ -35,9 +35,11 @@ flutter pub get
 
 | Flutter 框架版本 | TAG 名称 | 分支名 |
 | --- | --- | --- |
-| 3.22 | battery_plus-7.0.0-ohos-1.0.1 | br_battery_plus-v7.0.0_ohos |
-| 3.27 | battery_plus-7.0.0-ohos-1.0.1 | br_battery_plus-v7.0.0_ohos |
-| 3.35 | battery_plus-7.0.0-ohos-1.0.1 | br_battery_plus-v7.0.0_ohos |
+| 3.22 | battery_plus-7.1.1-ohos-1.0.0 | br_3.41 |
+| 3.27 | battery_plus-7.1.1-ohos-1.0.0 | br_3.41 |
+| 3.35 | battery_plus-7.1.1-ohos-1.0.0 | br_3.41 |
+| 3.41 | battery_plus-7.1.1-ohos-1.0.0 | br_3.41 |
+| 3.44 | battery_plus-7.1.1-ohos-1.0.0 | br_3.41 |
 
 ### 1.3 OHOS 环境配置
 
@@ -106,9 +108,11 @@ void dispose() {
 
 在以下版本中已测试通过：
 
-1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-2. Flutter: 3.27.5-ohos-0.0.2; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
-3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.0(12); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+1. Flutter: 3.22.1-ohos-1.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+2. Flutter: 3.27.5-ohos-0.0.2; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+3. Flutter: 3.35.7-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 5.0.13.200; ROM: 5.1.0.120 SP3;
+4. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.1.0.830; ROM: 6.23.0.100 SP6;
+5. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
 
 ## 3. API
 
