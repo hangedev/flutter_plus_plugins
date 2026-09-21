@@ -198,5 +198,51 @@ void main() {
         expect(identical(Battery(), Battery()), isTrue);
       });
     });
+
+    // Drives the four public properties through an explicitly typed
+    // instance variable (instead of the `Battery().x` chained form) so the
+    // full API surface is referenced once in a single place.
+    group('API surface via typed instance', () {
+      late FakeBatteryPlatform platform;
+
+      setUp(() {
+        platform = FakeBatteryPlatform();
+        BatteryPlatform.instance = platform;
+      });
+
+      tearDown(() {
+        BatteryPlatform.instance = defaultPlatform;
+      });
+
+      test('batteryLevel forwards the platform value', () async {
+        platform.batteryLevelResult = 64;
+        final Battery battery = Battery();
+        expect(await battery.batteryLevel, 64);
+      });
+
+      test('isInBatterySaveMode forwards the platform value', () async {
+        platform.isInBatterySaveModeResult = false;
+        final Battery battery = Battery();
+        expect(await battery.isInBatterySaveMode, isFalse);
+      });
+
+      test('batteryState forwards the platform value', () async {
+        platform.batteryStateResult = BatteryState.connectedNotCharging;
+        final Battery battery = Battery();
+        expect(await battery.batteryState, BatteryState.connectedNotCharging);
+      });
+
+      test('onBatteryStateChanged forwards the platform stream', () async {
+        platform.onBatteryStateChangedStream = Stream.fromIterable([
+          BatteryState.charging,
+          BatteryState.full,
+        ]);
+        final Battery battery = Battery();
+        expect(
+          await battery.onBatteryStateChanged.toList(),
+          [BatteryState.charging, BatteryState.full],
+        );
+      });
+    });
   });
 }

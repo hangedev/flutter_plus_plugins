@@ -1,3 +1,19 @@
+## battery_plus-7.1.1-ohos-1.0.0 - 2026.9
+
+### Added
+
+* battery_plus 7.0.0 → 7.1.1, aligned with the upstream plus_plugins) Changes: ([190](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/190)).
+Android
+Comprehensive migration of build scripts from Groovy to Kotlin DSL: the build.gradle/settings.gradle files for both the plugin and the example have been changed to .kts, and the plugin side has removed its bundled Gradle wrapper.
+Adaptation to built-in Kotlin: android.newDsl=false and android.builtInKotlin=false have been added to the example's gradle.properties.
+Example Gradle wrapper 8.13 → 8.14.
+iOS / macOS (adaptation to Flutter 3.44's SPM)
+Package.swift refactoring: added a local FlutterFramework dependency.
+Minimum Apple platform version iOS 12.0 → 13.0, with the README documentation updated accordingly.
+The example iOS project files (pbxproj / Info.plist / AppDelegate.swift) have been adjusted in sync with the SPM changes.
+
+
+
 battery_plus-7.0.0-ohos-1.0.1
 
 * Consistency Issues
