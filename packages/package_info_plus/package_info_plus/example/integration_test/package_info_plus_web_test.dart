@@ -6,14 +6,20 @@ import 'dart:ui_web' as ui_web;
 
 import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart' show Registrar;
 import 'package:http/http.dart' as http;
 import 'package:integration_test/integration_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/src/package_info_plus_web.dart';
+import 'package:package_info_plus_platform_interface/package_info_platform_interface.dart';
 
 import 'package_info_plus_test.dart' as common_tests;
 import 'package_info_plus_web_test.mocks.dart';
+
+/// Lightweight stand-in for the framework [Registrar]: [registerWith] never
+/// touches it, so [Fake] is enough to exercise the registration path.
+class _FakeRegistrar extends Fake implements Registrar {}
 
 @GenerateMocks([http.Client, ui_web.AssetManager])
 void main() {
@@ -320,6 +326,24 @@ void main() {
           expect(versionMap.packageName, VERSION_JSON['package_name']);
           expect(versionMap.buildSignature, VERSION_JSON['build_signature']);
         });
+      },
+    );
+  });
+
+  group('Package Info Web registration', () {
+    testWidgets(
+      'should register as the default platform instance',
+      (tester) async {
+        // Keep the platform instance intact for any test declared earlier.
+        final PackageInfoPlatform previousInstance =
+            PackageInfoPlatform.instance;
+        addTearDown(
+          () => PackageInfoPlatform.instance = previousInstance,
+        );
+
+        PackageInfoPlusWebPlugin.registerWith(_FakeRegistrar());
+
+        expect(PackageInfoPlatform.instance, isA<PackageInfoPlusWebPlugin>());
       },
     );
   });
