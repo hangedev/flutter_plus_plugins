@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/package_info_plus/package_info_plus
-      ref: TAG 
+      ref: TAG # Please select the TAG to the TAG Version Mapping
 ...
 ```
 
@@ -41,6 +41,8 @@ TAG Version Mapping
 |3.22	|package_info_plus-4.2.0-ohos.1.0.0-beta.1	|master                           |
 |3.27	|package_info_plus-4.2.0-ohos.1.0.0-beta.1	|master                           |
 |3.35	|package_info_plus-9.0.0-ohos-1.0.1	        |br_package_info_plus-v9.0.0_ohos |
+|3.41	| package_info_plus-10.2.1-ohos-1.0.0 |	br_3.41 |
+|3.44	| package_info_plus-10.2.1-ohos-1.0.0 |	br_3.41 |
 <!-- tabs:end -->
 
 ### 1.2 Usage
@@ -130,7 +132,8 @@ Future<void> reportVersion() async {
 
 This document is verified based on the following versions:
 
-1. Flutter: 3.35.7-ohos-0.0.1; SDK: 6.0.1(21); IDE: DevEco Studio: 6.0.1.260; ROM: 6.0.0.120 SP6;
+1. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.1.0.830; ROM: 6.23.0.100 SP6;
+2. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
 
 
 ## 3. API
