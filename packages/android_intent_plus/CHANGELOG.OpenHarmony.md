@@ -1,5 +1,22 @@
 # Changelog for OpenHarmony
 
+## ## android_intent_plus-6.1.0-ohos-1.0.0 - 2026.9
+
+### Added
+
+* Version: pubspec.yaml 6.0.0 → 6.1.0 ([192](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/192)).
+Support AGP built-in Kotlin
+AGP 8.12.1 → 8.13.0 (android/build.gradle:11)
+Added android.builtInKotlin=false (android/gradle.properties:2)
+Suppress unchecked cast warnings
+Added @SuppressWarnings("unchecked") in 3 places in MethodCallHandlerImpl.java (onMethodCall, convertArguments, convertArrayArguments)
+Build script modernization (included with the upgrade)
+build.gradle switched to assignment syntax (namespace =, minSdk =, etc.), lintOptions → lint
+example project synchronized upgrade of Gradle wrapper / build configuration
+No breaking changes: no changes to the Dart API, purely Android-side build configuration and code warning fixes.
+
+
+
 ## android_intent_plus-6.0.0-ohos-1.0.1 - 2026.9
 
 ### Fixed
