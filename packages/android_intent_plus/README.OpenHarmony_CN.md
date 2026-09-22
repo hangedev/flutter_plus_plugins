@@ -23,7 +23,7 @@ dependencies:
       url: https://gitcode.com/CPF-Flutter/flutter_plus_plugins.git
       path: packages/android_intent_plus
       # ref: 根据下方表格选择不同框架适配的TAG版本
-      ref: android_intent_plus-6.0.0-ohos-1.0.1
+      ref: TAG
 
 ...
 ```
@@ -31,9 +31,11 @@ dependencies:
 ### TAG 版本对应表
 | Flutter 框架版本 | TAG                | 分支     |
 |--------------|--------------------|--------|
-| 3.22        | android_intent_plus-6.0.0-ohos-1.0.1  | br_android_intent_plus-v6.0.0_ohos |
-| 3.27        | android_intent_plus-6.0.0-ohos-1.0.1   | br_android_intent_plus-v6.0.0_ohos |
-| 3.35        | android_intent_plus-6.0.0-ohos-1.0.1   | br_android_intent_plus-v6.0.0_ohos |
+| 3.22        | android_intent_plus-6.1.0-ohos-1.0.0  | br_3.41 |
+| 3.27        | android_intent_plus-6.1.0-ohos-1.0.0  | br_3.41 |
+| 3.35        | android_intent_plus-6.1.0-ohos-1.0.0  | br_3.41 |
+| 3.41        | android_intent_plus-6.1.0-ohos-1.0.0  | br_3.41 |
+| 3.44        | android_intent_plus-6.1.0-ohos-1.0.0  | br_3.41 |
 
 执行命令
 
@@ -103,6 +105,8 @@ Future<void> openLink() async {
 1. Flutter: 3.22.1-ohos-1.0.3; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.251; ROM: 6.0.0.115 SP16;
 2. Flutter: 3.27.5-ohos-1.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.1.251; ROM: 6.0.0.115 SP16;
 3. Flutter: 3.35.8-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.0.2.640; ROM: 6.0.0.328 SP22;
+4. Flutter: 3.41.10-ohos-0.0.1; SDK: 5.0.5(17); IDE: DevEco Studio: 6.1.0.830; ROM: 6.23.0.100 SP6;
+5. Flutter: 3.44.9+ohos-0.0.1-canary1; SDK: 5.0.5(17); IDE: DevEco Studio 26.0.0 Beta2; ROM: 6.23.0.100 SP6;
 
 ## 3. API
 
