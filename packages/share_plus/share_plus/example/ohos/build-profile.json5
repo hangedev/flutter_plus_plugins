@@ -22,6 +22,24 @@
           ]
         }
       ]
+    },
+    {
+      "name": "share_plus",
+      "srcPath": "../../ohos",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        },
+        {
+          "name": "ohosTest",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }

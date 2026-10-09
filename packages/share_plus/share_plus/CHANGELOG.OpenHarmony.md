@@ -1,7 +1,8 @@
-## share_plus-13.3.0-ohos-1.0.0 - 2026.9
+## share_plus-13.3.0-ohos-1.0.0 - 2026.10
 
 ### Added
 
+* fix:Add unit tests for the OHOS plugin.([193](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/193)).
 * Version and dependencies ([187](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/187)).
 share_plus 12.0.1 → 13.3.0; share_plus_platform_interface 6.1.0 → 7.2.0
 SDK thresholds: Dart ≥3.10, Flutter ≥3.38.1
