@@ -22,6 +22,9 @@
     },
     {
       "name": "connectivity_plus",
+    },
+    {
+      "name": "ohosTest",
     }
   ]
 }
