@@ -1,6 +1,8 @@
-## connectivity_plus-7.2.0-ohos.1.0.0 - 2026.9
+## connectivity_plus-7.2.0-ohos.1.0.0 - 2026.10
 
 ### Added
+
+* Add unit tests for the OHOS plugin.([194](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/194)).
 * adaptation for 3.44 ([188](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/188)).
 * adaptation for 3.41 ([188](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/188)).
 

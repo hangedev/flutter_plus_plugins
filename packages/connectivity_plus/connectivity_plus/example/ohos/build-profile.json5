@@ -37,6 +37,24 @@
           ]
         }
       ]
+    },
+    {
+      "name": "connectivity_plus",
+      "srcPath": "../../ohos",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        },
+        {
+          "name": "ohosTest",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }
