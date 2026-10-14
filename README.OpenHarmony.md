@@ -193,12 +193,12 @@ dependencies:
 
 can use branch hyperlinks to jump to the corresponding directory to view the code and documentation.
 
-| Flutter Framework Version   | TAG                                  | Branch                                                                                                                                                     |
-|-----------------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 3.7                         | sensors_plus-3.1.0-ohos.1.0.0-beta.1 | [master](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/packages/sensors_plus/sensors_plus)                                              |
-| 3.22                        | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://raw.gitcode.com/CPF-Flutter/flutter_plus_plugins/raw/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus/sensors_plus) |
-| 3.27                        | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://raw.gitcode.com/CPF-Flutter/flutter_plus_plugins/raw/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus/sensors_plus) |
-| 3.35                        | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://raw.gitcode.com/CPF-Flutter/flutter_plus_plugins/raw/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus/sensors_plus) |
+| Flutter Framework Version | TAG                                  | Branch                                                       |
+| ------------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| 3.7                       | sensors_plus-3.1.0-ohos.1.0.0-beta.1 | [master](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/blob/master/packages/sensors_plus/sensors_plus) |
+| 3.22                      | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/tree/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus) |
+| 3.27                      | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/tree/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus) |
+| 3.35                      | sensors_plus-7.0.0-ohos.1.0.0-beta.1 | [br_sensors_plus-v7.0.0_ohos](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/tree/br_sensors_plus-v7.0.0_ohos/packages/sensors_plus) |
 
 ---
 
