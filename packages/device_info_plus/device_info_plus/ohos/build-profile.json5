@@ -5,6 +5,12 @@
   "targets": [
     {
       "name": "default"
+    },
+    {
+      "name": "device_info_plus",
+    },
+    {
+      "name": "ohosTest",
     }
   ]
 }

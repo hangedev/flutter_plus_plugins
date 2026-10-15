@@ -1,8 +1,10 @@
 # Changelog
 
-## device_info_plus-13.2.0-ohos-1.0.0 - 2026.9
+## device_info_plus-13.2.0-ohos-1.0.0 - 2026.10
 
 ### Added
+
+* fix:Add unit tests for the OHOS plugin.([200](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/200)).
 
 * adaptation for 3.44 ([189](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/189)).
 
