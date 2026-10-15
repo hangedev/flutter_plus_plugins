@@ -14,13 +14,18 @@
 */
 
 {
-  "apiType": 'stageMode',
+  "apiType": "stageMode",
   "buildOption": {
   },
   "targets": [
     {
-      "name": "default",
-      "runtimeOS": "HarmonyOS"
+      "name": "default"
+    },
+    {
+      "name": "share_plus",
+    },
+    {
+      "name": "ohosTest",
     }
   ]
 }

@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-BUILD_PKG_DIR=packages/connectivity_plus/connectivity_plus/example
+BUILD_PKG_DIR=packages/share_plus/share_plus/example
 FLUTTER_SDK_VERSION=("oh-3.44.9-dev" "oh-3.41.9-release")
