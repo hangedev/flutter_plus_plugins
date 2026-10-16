@@ -1,7 +1,8 @@
-## package_info_plus-10.2.1-ohos-1.0.0 - 2026.9
+## package_info_plus-10.2.1-ohos-1.0.0 - 2026.10
 
 ### Added
 
+* Add unit tests for the OHOS plugin.([201](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/201)).
 * Versions and Dependencies ([191](https://gitcode.com/CPF-Flutter/flutter_plus_plugins/pull/191)).
 Main package 9.0.0 → 10.2.1, platform interface package 3.2.1 → 4.1.0
 Higher environment requirements: Dart ≥3.10, Flutter ≥3.38.1
