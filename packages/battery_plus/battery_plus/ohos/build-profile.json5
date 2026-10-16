@@ -5,6 +5,12 @@
   "targets": [
     {
       "name": "default"
+    },
+    {
+      "name": "battery_plus",
+    },
+    {
+      "name": "ohosTest",
     }
   ]
 }
